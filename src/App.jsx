@@ -13,6 +13,9 @@ import ViewProduct from './pages/ViewProduct';
 import SignIn from './pages/SignIn';
 import Home from './pages/Home';
 import UserContext from './Contexts/userContext';
+import Header from './Components/Header';
+import SignUp from './pages/SignUp';
+import Navbar from './Components/Navbar';
 
 
 export default function App() {
@@ -20,10 +23,12 @@ export default function App() {
     <UserContext.Provider value={{}}>
       <BrowserRouter>
       <ToastContainer />
+      <Header/>
+      <Navbar/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<SignIn />} />
-          <Route path="/cadastro" element={<SingUp />} />
+          <Route path="/cadastro" element={<SignUp />} />
           <Route path="/visualizar-produto/:id" element={<ViewProduct />} />
           <Route path="/editar-produto/:id" element={<EditProduct />} />
           <Route path="/adicionar-produto" element={<AddProduct />} />
