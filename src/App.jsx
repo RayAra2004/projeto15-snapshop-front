@@ -10,12 +10,12 @@ import BuyProduct from './pages/BuyProduct';
 import AddProduct from './pages/AddProduct';
 import EditProduct from './pages/EditProduct';
 import ViewProduct from './pages/ViewProduct';
-import SignIn from './pages/SignIn';
 import Home from './pages/Home';
 import UserContext from './Contexts/userContext';
 import Header from './Components/Header';
 import SignUp from './pages/SignUp';
 import Navbar from './Components/Navbar';
+import SignIn from './pages/SignIn';
 
 
 export default function App() {
@@ -23,8 +23,8 @@ export default function App() {
     <UserContext.Provider value={{}}>
       <BrowserRouter>
       <ToastContainer />
-      <Header/>
-      <Navbar/>
+      {/* <Header/> */}
+      {/* <Navbar/> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<SignIn />} />
