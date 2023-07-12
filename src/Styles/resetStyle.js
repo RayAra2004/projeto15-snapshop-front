@@ -48,6 +48,14 @@ const ResetStyle = createGlobalStyle`
     *{
         font-family: 'Mulish', sans-serif;
     }
+
+    html,body{
+        height: 100%;
+    }
+
+    #root{
+        height: 100%;
+    }
 `
 
 export default ResetStyle
