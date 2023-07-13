@@ -60,12 +60,10 @@ export default function Navbar() {
             }
         });
     }
-
     return (
-
         <>
             {location.pathname !== '/cadastro' && location.pathname !== '/login' && location.pathname !== '/adicionar-produto' &&
-            
+
                 <NavContainer onMouseEnter={closeDropdowns} onMouseLeave={closeDropdowns}>
                     <div className="content">
                         <div className="actions">
