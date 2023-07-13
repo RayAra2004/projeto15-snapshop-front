@@ -5,12 +5,14 @@ import UserContext from "../Contexts/userContext";
 import styled from "styled-components";
 import { backgroundProduct, installmentsColor, mainColor } from "../Colors/colors";
 import Footer from "../Components/Footer";
+import { toast } from "react-toastify";
 
 export default function ViewProduct() {
     const { product } = useLocation().state;
     const { name, value, picture, description, _id, stock } = product;
     const [selectedQuantity, setSelectedQuantity] = useState(0);
     const { user ,cartItems,setCartItems } = useContext(UserContext);
+    const itemsFound = cartItems.filter(item => item._id == _id);
     const navigate = useNavigate();
 
 
@@ -18,6 +20,8 @@ export default function ViewProduct() {
         if (stock && stock > 0) {
             setSelectedQuantity(1);
         }
+
+       
     }, [])
 
     function updateQuantity() {
@@ -35,13 +39,29 @@ export default function ViewProduct() {
     }
 
     function buy() {
-        navigate(`/comprar/${_id}`,{state:{product,quantity:selectedQuantity}});
+        navigate(`/comprar/${_id}`,{state:{name:product.name , quantity:selectedQuantity,value:product.value, picture:product.picture }});
     }
 
     function addToCart() {
         // ADICIONAR SÓ SE O ITEM NÃO EXISTE NO CARRINHO
-       if(true){
-        setCartItems([...cartItems,{name,picture}]);
+        const itemsFound = cartItems.filter(item => item._id == _id);
+       if(itemsFound.length == 0){
+            const newCartItem = {name,picture,_id,quantity:selectedQuantity};
+            // ATUALIZAR NO BANCO DE DADOS
+            setCartItems([...cartItems,newCartItem]);
+       }
+       else
+       {
+        toast.error( 'Produto já existe no carrinho!', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: false,
+            progress: undefined,
+            theme: "colored",
+        });
        }
     }
 
@@ -72,7 +92,7 @@ export default function ViewProduct() {
                                     <span className="available"> ({stock ? stock : 0} disponíveis)</span> </p>
                             </div>
                             <button onClick={buy} disabled={stock && stock > 0 ? false : true}>{stock && stock > 0 ? 'Comprar agora' : 'Produto indisponível'}</button>
-                            <button onClick={addToCart} disabled={stock && stock > 0 ? false : true}>Carrinho</button>
+                            <button onClick={addToCart} disabled={stock && stock > 0  && itemsFound == 0 ? false : true}>{stock && stock > 0  && itemsFound == 0 ? 'Carrinho' : 'Ja está no carrinho!'}</button>
                         </div>
                     </div>
                 </div>
@@ -192,6 +212,11 @@ const SCProduct = styled.div`
             font-size: 30px;
             font-weight: normal;
             color: ${installmentsColor};
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
         }
 
         .price-container{
@@ -212,11 +237,16 @@ const SCProduct = styled.div`
     }
 
     input{
-        width: 40px;
+        width: 30px;
         margin-left: 3px;
         &:focus{
             outline: 1px solid #FF1493;
         }
+        &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
     }
 
     button{

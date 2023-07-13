@@ -22,7 +22,7 @@ import 'react-toastify/dist/ReactToastify.css';
 export default function App() {
 
   const [user,setUser] = useState();
-  const [cartItems,setCartItems] = useState([{name:'Furadeira', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true'}]);
+  const [cartItems,setCartItems] = useState([]);
 
 
   return (
