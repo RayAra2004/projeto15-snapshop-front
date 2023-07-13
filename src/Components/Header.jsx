@@ -27,7 +27,7 @@ export default function Header() {
                     <h1>SnapShop</h1>
                 </Logo>
 
-                {location.pathname !== '/cadastro' && location.pathname !== '/login' &&
+                {location.pathname !== '/cadastro' && location.pathname !== '/login' && location.pathname !== '/adicionar-produto' &&
 
                     <SearchBar>
                         <input ref={searchRef} type="text" placeholder="Buscar produtos, marcas e muito mais…" />
