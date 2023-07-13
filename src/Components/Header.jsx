@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { mainColor } from "../Colors/colors.js";
-import favicon from "../../public/favicon.png"
+import favicon from "../assets/favicon.png"
 import { BsSearch } from 'react-icons/bs';
 import { useLocation, useNavigate } from "react-router";
-import banner from '../../public/banner.png'
+import banner from '../assets/banner.png'
 import { useRef } from "react";
 
 export default function Header() {
@@ -11,6 +11,7 @@ export default function Header() {
     const navigate = useNavigate();
     const location = useLocation();
     const searchRef = useRef();
+    
  
     function search()
     {
@@ -34,7 +35,7 @@ export default function Header() {
                     </SearchBar>
                 }
 
-                    <img className="banner" src={banner} title="Loyalty" alt="Loyalty" />
+                <img className="banner" src={banner} title="Loyalty" alt="Loyalty" />
             </div>
         </HeaderContainer>
     );
@@ -65,6 +66,7 @@ const HeaderContainer = styled.header`
         width: 300px;
         height: 40px;
         cursor: pointer;
+        user-select: none;
         
     }
 `;
@@ -107,6 +109,7 @@ const Logo = styled.div`
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    user-select: none;
 
     .favicon{
         width: 60px;
