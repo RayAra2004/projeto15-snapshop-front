@@ -1,11 +1,9 @@
 import axios from "axios";
-import { useLocation, useParams } from "react-router-dom";
-import { useContext, useState, useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useContext, useState} from "react";
 import UserContext from "../Contexts/userContext";
-import dayjs from "dayjs";
-import Header from "../Components/Header";
 import styled from "styled-components";
-import { backgroundProduct, mainColor } from "../Colors/colors";
+import { mainColor } from "../Colors/colors";
 
 export default function BuyProduct(){
     
@@ -20,24 +18,14 @@ export default function BuyProduct(){
     const [expiration, setExpiration] = useState('');
     const [cvv, setCvv] = useState('');
     const [nameHolder, setNameHolder] = useState('');
-
+    const navigate = useNavigate();
     const { id } = useParams();
     const {user, setUser} =  useContext(UserContext);
     //const { token } = user;
     const token = "f1496ae3-5ff7-4f3e-856a-68aa36e84c4a"
-    const [product, setProduct] = useState(undefined);
-    //idProduto: 64af47c9a0ae3db062b83125
+    const location = useLocation();
 
-    //const location = useLocation();
-
-    //const {name,value,picture,quantity} = location.state;
-
-    const productMock = {
-        name: "Tênis Puma Masculino BMW M Motorsport Smash Vulcanised Marinho/Preto",
-        value: "400",
-        quantity: 3,
-        picture: "https://cdn.dooca.store/946/products/sfbmpnd6v0retwnpbxy77ca4sxzlip7nusit_450x600+fill_ffffff.jpg?v=1634820795&webp=0"
-    }
+    const {name,value,picture,quantity} = location.state;
 
     
     const config = {
@@ -62,23 +50,22 @@ export default function BuyProduct(){
         
         let body;
         if(paymentMethod === 'pix' || paymentMethod === 'boleto'){
-            body = {amount: productMock.quantity, cep, city, neighborhood, state, street, number, paymentMethod } 
+            body = {amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod } 
         }else{
-            body = {amount: productMock.quantity, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder } 
+            body = {amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder } 
         }
         axios.post(`${import.meta.env.VITE_API_URL}/comprar/${id}`, body, config)
             .then(res => {
-
-                console.log('foii')
+                navigate('/')
             })
             .catch(res => console.log(res))
     }
 
     function fillIn(v){
         if(v === 'pix' || v === 'boleto'){
-            setCardNumber('null')
+            setCardNumber(0)
             setExpiration('null')
-            setCvv('null')
+            setCvv(0)
             setNameHolder('null')
         }
     }
@@ -139,21 +126,21 @@ export default function BuyProduct(){
                     </select>
                     <SCMethod method = {paymentMethod}>
                         <label htmlFor="cardNumber">Número do Cartão</label>
-                        <input id="cardNumber" name="cardNumber" type="number" placeholder="Número do Cartão" value={cardNumber} onChange={e => setCardNumber(e.target.value)}/>
+                        <input id="cardNumber" name="cardNumber" type="number" placeholder="Número do Cartão" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required/>
                         <label htmlFor="expiration">Data de Vencimento</label>
-                        <input id="expiration" name="expiration" placeholder="MM/AA" value={expiration} onChange={e => setExpiration(e.target.value)} />
+                        <input id="expiration" name="expiration" placeholder="MM/AA" value={expiration} onChange={e => setExpiration(e.target.value)} required/>
                         <label htmlFor="cvv">CVV</label>
-                        <input id="cvv" name="cvv" type="number" placeholder="Ex: 241" value={cvv} onChange={e => setCvv(e.target.value)}/>
+                        <input id="cvv" name="cvv" type="number" placeholder="Ex: 241" value={cvv} onChange={e => setCvv(e.target.value)} required/>
                         <label htmlFor="nameHolder">Nome do Titular</label>
-                        <input id="nameHolder" name="nameHolder" placeholder="Nome do Titular" value={nameHolder} onChange={e => setNameHolder(e.target.value)}/>
+                        <input id="nameHolder" name="nameHolder" placeholder="Nome do Titular" value={nameHolder} onChange={e => setNameHolder(e.target.value)} required/>
                     </SCMethod>
                 </div>
             </SCForm>
             <SCProduct>
-                <img src={productMock.picture}/>
-                <h1>{productMock.name}</h1>
-                <span>Quantidade: {productMock.quantity}</span>
-                <h2>R${String(Number(productMock.value).toFixed(2)).replace('.', ',')}</h2> 
+                <img src={picture}/>
+                <h1>{name}</h1>
+                <span>Quantidade: {quantity}</span>
+                <h2>R${String(Number(value).toFixed(2)).replace('.', ',')}</h2> 
                 <button form="form">Finalizar Compra</button>
             </SCProduct>
         </SCBuy>
@@ -226,6 +213,8 @@ const SCProduct = styled.div`
         height: 100px;
         border-radius: 160px;
         margin-bottom: 20px;
+        background-image: #FFFFFF;
+        background-color: #FFFFFF;
     }
 
     h1{
