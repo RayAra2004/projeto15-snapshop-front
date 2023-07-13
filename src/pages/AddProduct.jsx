@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import { mainColor } from "../Colors/colors";
-import { useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import productIllustration from '../assets/product.svg';
+import { ThreeDots } from "react-loader-spinner";
+import axios from "axios";
+import { useNavigate } from "react-router";
+import UserContext from "../Contexts/userContext";
+import { toast } from "react-toastify";
 
 export default function AddProduct() {
 
@@ -11,18 +16,46 @@ export default function AddProduct() {
     const stockRef = useRef();
     const categoryRef = useRef();
     const pictureRef = useRef();
+    const isNewRef = useRef();
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const {user} = useContext(UserContext);
 
     function createProduct(e) {
         e.preventDefault();
+        setIsLoading(true);
 
         const newProduct = {
             name: nameRef.current.value,
-            value: pValueRef.current.value,
+            value: Number(pValueRef.current.value),
             description: descriptionRef.current.value,
-            stock: stockRef.current.value,
+            stock: Number(stockRef.current.value),
+            available: Number(stockRef.current.value) > 0,
             category: categoryRef.current.value,
             picture: pictureRef.current.value,
+            is_new:isNewRef.current.checked
         }
+
+        axios.post(`${import.meta.env.VITE_API_URL}/adicionar-produto`, newProduct,{headers:{Authorization:`Bearer ${user ? user.token : 'dsadlkasjdlaksjd'}`}})
+            .then(() => {
+                setIsLoading(false);
+                toast.success( 'Produto cadastrado!', {
+                    position: "bottom-left",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                });
+                navigate('/');
+            })
+            .catch(err => {
+                console.log(err); 
+                alert('Erro ao cadastrar produto, olhe o console para mais informações!')
+                setIsLoading(false);
+            })
     }
 
     return (
@@ -41,6 +74,10 @@ export default function AddProduct() {
                         <div>
                             <label htmlFor="pstock">Estoque</label>
                             <Input type="number" required id="pstock" name="pstock" ref={stockRef} placeholder="e.g: 500 unidades" max={99999} pattern="[0-9]*" />
+                        </div>
+                        <div className="check">
+                            <label htmlFor="is-new">Usado</label>
+                            <input ref={isNewRef} id="is-new" name="is-new" type="checkbox" />
                         </div>
                     </div>
                     <label htmlFor="pdesc">Descrição</label>
@@ -78,7 +115,7 @@ export default function AddProduct() {
                             <Input type="text" required id="ppicture" name="ppicture" ref={pictureRef} placeholder="e.g: https://photo.jpg" max={8} />
                         </div>
                     </div>
-                    <button className="create-product">Criar Produto</button>
+                    <button disabled={isLoading} className="create-product">{isLoading ? <ThreeDots type="ThreeDots" color="#FFFFFF" height={20} width={40} /> : "Criar Produto"}</button>
                 </NewProductForm>
             </div>
         </PageContainer>
@@ -95,6 +132,18 @@ const PageContainer = styled.div`
     align-items: center;
     flex-direction: column;
     gap: 30px;
+
+    .check{
+        input[type="checkbox"]{
+            accent-color: ${mainColor};
+            margin-top: 12px;
+            width: 35px;
+            aspect-ratio: 1;
+            cursor: pointer;
+            outline:0;
+            margin-left: 5px;
+        }
+    }
 
     h1{
         color: white;
@@ -192,11 +241,20 @@ const NewProductForm = styled.form`
         margin-top: 5px;
         cursor: pointer;
         transition: all 200ms;
+        &:disabled{
+            cursor: not-allowed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #8b305e;
+        }
+       &:enabled{
         &:hover{
             color: #FF1493;
             background-color: white;
             border: 1px solid #FF1493;
         }
+       }
     }
 `;
 
