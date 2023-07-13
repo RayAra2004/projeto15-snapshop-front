@@ -16,6 +16,7 @@ import Header from './Components/Header';
 import SignUp from './pages/SignUp';
 import Navbar from './Components/Navbar';
 import SignIn from './pages/SignIn';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function App() {
