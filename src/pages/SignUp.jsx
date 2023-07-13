@@ -1,9 +1,43 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { mainColor } from "../Colors/colors"
 import Shop from "../assets/shopping.svg"
+import { useState } from "react";
+import { ThreeDots } from "react-loader-spinner"
+import axios from "axios";
+
 
 export default function SignUp(){
+    const [form, setForm] = useState({name: "", email: "", password: "", confirmPassword: "", photo: ""})
+    const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
+
+    console.log(form)
+    function handleForm(e) {
+        setForm({...form, [e.target.name]: e.target.value})
+    }
+    function submitForm(e){
+        e.preventDefault()
+        console.log(form)
+
+        if(form.password !== form.confirmPassword) return alert("Senhas incompatíveis, tente novamente.")
+
+        delete form.confirmPassword
+
+        axios
+            .post(`${import.meta.env.VITE_API_URL}/cadastro`, form)
+            .then(res => {
+                setIsLoading(false)
+                navigate(`/login`)
+                })
+            .catch(err => 
+                console.log(err), 
+                //setIsLoading(false)
+                )
+
+        setIsLoading(true)
+    }
+
     return(
         <Body>
             <SideBarr>
@@ -11,46 +45,59 @@ export default function SignUp(){
                 <img src={Shop} alt="cadastrar" />
             </SideBarr>
             <Container>
-                <Form>
+                <Form onSubmit={submitForm}>
                     <Input 
                         required 
-                        type="text" 
                         placeholder="Nome" 
                         name="name"
+                        value={form.name}
+                        onChange={handleForm}
+                        disabled={isLoading}
                     />
-
                     <Input 
                         required 
                         type="email" 
                         placeholder="E-mail" 
                         autoComplete="username" 
                         name="email"
+                        value={form.email}
+                        onChange={handleForm}
+                        disabled={isLoading}
                     />
-
                     <Input 
                         required 
                         type="password" 
+                        minLength={3}
                         placeholder="Senha" 
                         autoComplete="new-password" 
                         name="password"
+                        value={form.password}
+                        onChange={handleForm}
+                        disabled={isLoading}
                     />
-
                     <Input 
                         required 
                         type="password"
+                        minLength={3}
                         placeholder="Confirme a senha" 
                         autoComplete="new-password" 
-                        name="password"
+                        name="confirmPassword"
+                        value={form.confirmPassword}
+                        onChange={handleForm}
+                        disabled={isLoading}
                     />
-
                     <Input 
                         required 
                         type="text" 
                         placeholder="Foto de usuário" 
                         name="photo"
+                        value={form.photo}
+                        onChange={handleForm}
+                        disabled={isLoading}
                     />
-
-                    <Button>Cadastrar</Button>
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? <ThreeDots type="ThreeDots" color="#FFFFFF" height={20} width={40} /> : "Cadastro"}
+                    </Button>
                 </Form>
                 <Link to={"/login"}>
                     <p>Já possui uma conta? Faça login!</p>
@@ -60,6 +107,8 @@ export default function SignUp(){
     );
 }
 
+//styles for the SignUp page
+
 const Body = styled.div`
     width: 100%;
     height: 100%;
@@ -68,10 +117,9 @@ const Body = styled.div`
     align-items: center;
     justify-content: center;
 `
-
 const Container = styled.div`
     width: 400px;
-    height: 500px;
+    height: 400px;
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -93,7 +141,6 @@ const Container = styled.div`
         }
     }
 `
-
 const Form = styled.form`
     width: 300px;
     box-sizing: border-box;
