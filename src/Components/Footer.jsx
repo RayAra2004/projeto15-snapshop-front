@@ -37,27 +37,29 @@ export default function Footer() {
 
 
 const FooterContainer = styled.footer`
+    height: 90px;
+    width: 100%;
+    background-color: lightgray;
 
-position: fixed;
-left: 0;
-bottom: 0;
-height: 90px;
-width: 100%;
-background-color: lightgray;
-padding:10px;
-display: flex;
-
-.wrapper{
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    overflow: hidden;
 
-    .primaryinfo{
+    .wrapper{
         display: flex;
         flex-direction: column;
         gap: 10px;
+        padding:10px;
+
+        .primaryinfo{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
     }
-}
+
+    @media (max-width:1130px) {
+        display: none;
+    }
 
 .link,.secondaryinfo,.copyright{
     color: black;

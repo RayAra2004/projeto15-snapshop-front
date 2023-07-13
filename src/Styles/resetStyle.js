@@ -56,6 +56,10 @@ const ResetStyle = createGlobalStyle`
     #root{
         height: 100%;
     }
+
+	strong{
+		font-weight: bold;
+	}
 `
 
 export default ResetStyle
