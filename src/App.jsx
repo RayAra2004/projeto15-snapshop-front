@@ -28,8 +28,8 @@ export default function App() {
     <UserContext.Provider value={{user,setUser,cartItems,setCartItems}}>
       <BrowserRouter>
       <ToastContainer />
-       <Header/> 
-        <Navbar/>
+      <Header/>
+      <Navbar/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<SignIn />} />
