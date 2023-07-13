@@ -8,6 +8,8 @@ import logoutIcon from '../assets/logout.svg';
 import UserContext from "../Contexts/userContext.js";
 import { v4 as uuidv4 } from 'uuid';
 import trash from '../assets/trash.svg';
+import { toast } from "react-toastify";
+import CartItem from "./CartItem.jsx";
 
 export default function Navbar() {
 
@@ -15,7 +17,7 @@ export default function Navbar() {
     const [showUserInfo, setShowUserInfo] = useState(false);
     const [showCartItems, setShowCartItems] = useState(false);
     const location = useLocation();
-    const { user, setUser, cartItems, setCartItems } = useContext(UserContext);
+    const { user, cartItems } = useContext(UserContext);
     function logout() {
         Swal.fire({
             title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Deseja sair?</span>`,
@@ -42,24 +44,7 @@ export default function Navbar() {
         setShowCartItems(false);
     }
 
-    function deleteCartItem(item) {
-        Swal.fire({
-            title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Remover ${item.name} do carrinho?</span>`,
-            showCancelButton: true,
-            confirmButtonColor: '#c9c9c9',
-            cancelButtonColor: `${mainColor}`,
-            confirmButtonText: 'Sim',
-            cancelButtonText: 'Cancelar',
-            width: 300,
-            heightAuto: false,
-            imageUrl: item.picture,
-            imageWidth: 200,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-            }
-        });
-    }
+   
     return (
         <>
             {location.pathname !== '/cadastro' && location.pathname !== '/login' && location.pathname !== '/adicionar-produto' &&
@@ -67,16 +52,16 @@ export default function Navbar() {
                 <NavContainer onMouseEnter={closeDropdowns} onMouseLeave={closeDropdowns}>
                     <div className="content">
                         <div className="actions">
-                            <Navbutton title="Categorias" onClick={() => navigate('#')}>
+                            <Navbutton title="Categorias">
                                 <p>Categorias</p>
                             </Navbutton>
-                            <Navbutton title="Histórico" onClick={() => navigate('#')}>
+                            <Navbutton title="Histórico">
                                 <p>Histórico</p>
                             </Navbutton>
                             <Navbutton title="Vender" onClick={() => navigate('/meus-produtos')}>
                                 <p>Vender</p>
                             </Navbutton>
-                            <Navbutton title="Contato" onClick={() => navigate('#')}>
+                            <Navbutton title="Contato">
                                 <p>Contato</p>
                             </Navbutton>
                         </div>
@@ -122,17 +107,7 @@ export default function Navbar() {
                                 {
                                     showCartItems &&
                                     <div onMouseLeave={closeDropdowns} className="cart-items">
-                                        {cartItems && 
-                                            cartItems.length > 0 && 
-                                            cartItems.map(item => {
-                                            return (
-                                                <div key={uuidv4()} className="cart-item">
-                                                    <img src={item.picture} alt={item.name} />
-                                                    <p>{item.name}</p>
-                                                    <BsFillTrashFill className="delete-btn" onClick={() => deleteCartItem(item)} />
-                                                </div>
-                                            );
-                                        })}
+                                        {cartItems && cartItems.length > 0 && cartItems.map(cartItem => <CartItem key={uuidv4()} item={cartItem} />)}
                                     </div>
                                 }
                             </div>
@@ -197,7 +172,7 @@ const NavContainer = styled.header`
 
             .cart-items{
                 position: absolute;
-                width: 200px;
+                width: 300px;
                 background-color: white;
                 border-bottom-left-radius: 5px;
                 border-bottom-right-radius: 5px;
@@ -206,41 +181,7 @@ const NavContainer = styled.header`
                 right: 0;
                 overflow: hidden;
                 box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -3px 0px 3px rgba(0, 0, 0, 0.1);
-
-                .cart-item{
-                    color: black;
-                    width: 100%;
-                    height: 40px;
-                    background-color: white;
-                    border-bottom:1px solid lightgray;
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    img{
-                        height: 80%;
-                        padding-left: 10px;
-                        
-                    }
-                    
-                    .delete-btn{
-                        width: 20%;
-                        color: red;
-                        transition: all 200ms;
-                        &:hover{
-                            color: lightpink;
-                        }
-                    }
-
-                    cursor: pointer;
-                    transition: all 200ms;
-                    font-family: 'Mulish';
-                    P{
-                        width: 80%;
-                        text-align: center;
-                    }
-                }
-        }
+            }
     }
 }
 

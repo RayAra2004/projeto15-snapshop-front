@@ -46,7 +46,7 @@ export default function ViewProduct() {
         // ADICIONAR SÓ SE O ITEM NÃO EXISTE NO CARRINHO
         const itemsFound = cartItems.filter(item => item._id == _id);
        if(itemsFound.length == 0){
-            const newCartItem = {name,picture,_id,quantity:selectedQuantity};
+            const newCartItem = {name,picture,_id,value,quantity:selectedQuantity};
             // ATUALIZAR NO BANCO DE DADOS
             setCartItems([...cartItems,newCartItem]);
        }
