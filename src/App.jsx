@@ -16,7 +16,6 @@ import Header from './Components/Header';
 import SignUp from './pages/SignUp';
 import Navbar from './Components/Navbar';
 import SignIn from './pages/SignIn';
-import Footer from './Components/Footer';
 
 
 export default function App() {
@@ -31,7 +30,6 @@ export default function App() {
       <ToastContainer />
        <Header/> 
         <Navbar/>
-        <Footer/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<SignIn />} />
@@ -45,6 +43,7 @@ export default function App() {
           <Route path="/minhas-compras" element={<MyPurchases />} />
           <Route path="/meus-produtos" element={<MyProducts />} />
         </Routes>
+        
       </BrowserRouter>
     </UserContext.Provider>
   )

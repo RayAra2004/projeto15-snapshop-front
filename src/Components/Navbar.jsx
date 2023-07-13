@@ -6,6 +6,7 @@ import { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import logoutIcon from '../assets/logout.svg';
 import UserContext from "../Contexts/userContext.js";
+import { v4 as uuidv4 } from 'uuid';
 import trash from '../assets/trash.svg';
 
 export default function Navbar() {
@@ -51,9 +52,8 @@ export default function Navbar() {
             cancelButtonText: 'Cancelar',
             width: 300,
             heightAuto: false,
-            imageUrl: trash,
+            imageUrl: item.picture,
             imageWidth: 200,
-            imageHeight: 100,
         }).then((result) => {
             if (result.isConfirmed) {
                 
@@ -67,16 +67,16 @@ export default function Navbar() {
                 <NavContainer onMouseEnter={closeDropdowns} onMouseLeave={closeDropdowns}>
                     <div className="content">
                         <div className="actions">
-                            <Navbutton onClick={() => navigate('#')}>
+                            <Navbutton title="Categorias" onClick={() => navigate('#')}>
                                 <p>Categorias</p>
                             </Navbutton>
-                            <Navbutton onClick={() => navigate('#')}>
+                            <Navbutton title="Histórico" onClick={() => navigate('#')}>
                                 <p>Histórico</p>
                             </Navbutton>
-                            <Navbutton onClick={() => navigate('/meus-produtos')}>
+                            <Navbutton title="Vender" onClick={() => navigate('/meus-produtos')}>
                                 <p>Vender</p>
                             </Navbutton>
-                            <Navbutton onClick={() => navigate('#')}>
+                            <Navbutton title="Contato" onClick={() => navigate('#')}>
                                 <p>Contato</p>
                             </Navbutton>
                         </div>
@@ -84,15 +84,15 @@ export default function Navbar() {
                         <div className="user-actions">
                             {
                                 user &&
-                                <Navbutton onMouseEnter={() => setShowUserInfo(true)} >
+                                <Navbutton title="Usuario" onMouseEnter={() => setShowUserInfo(true)} >
                                     <BsPersonCircle />
-                                    <p className="user">Usuário <BsFillCaretDownFill className="drop" /></p>
+                                    <p className="user">{user.name}<BsFillCaretDownFill className="drop" /></p>
                                     {showUserInfo &&
                                         <div onMouseLeave={closeDropdowns} className="user-info">
-                                            <div className="btn" onClick={() => navigate('/editar-usuario')}>Editar informações</div>
-                                            <div className="btn" onClick={() => navigate('/minhas-compras')}>Compras</div>
-                                            <div className="btn" onClick={() => navigate('/meus-produtos')}>Vender</div>
-                                            <div className="btn" onClick={logout}>Sair</div>
+                                            <div title="Editar usuário" className="btn" onClick={() => navigate('/editar-usuario')}>Editar informações</div>
+                                            <div title="Minhas compras"className="btn" onClick={() => navigate('/minhas-compras')}>Compras</div>
+                                            <div title="Vender" className="btn" onClick={() => navigate('/meus-produtos')}>Vender</div>
+                                            <div title="Sair" className="btn" onClick={logout}>Sair</div>
                                         </div>
                                     }
 
@@ -101,18 +101,18 @@ export default function Navbar() {
                             {
                                 !user &&
                                 <>
-                                    <Navbutton onMouseEnter={closeDropdowns} onClick={() => navigate('/login')}>
+                                    <Navbutton title="Entrar" onMouseEnter={closeDropdowns} onClick={() => navigate('/login')}>
                                         <p>Entre</p>
                                     </Navbutton>
-                                    <Navbutton onMouseEnter={closeDropdowns} onClick={() => navigate('/cadastro')}>
+                                    <Navbutton title="Criar uma conta" onMouseEnter={closeDropdowns} onClick={() => navigate('/cadastro')}>
                                         <p>Crie uma conta</p>
                                     </Navbutton>
                                 </>
                             }
-                            <Navbutton onMouseEnter={closeDropdowns} onClick={() => navigate('/minhas-compras')}>
+                            <Navbutton title="Compras" onMouseEnter={closeDropdowns} onClick={() => navigate('/minhas-compras')}>
                                 <p>Compras</p>
                             </Navbutton>
-                            <Navbutton onMouseEnter={closeDropdowns} onClick={() => navigate('#')}>
+                            <Navbutton title="Favoritos" onMouseEnter={closeDropdowns} onClick={() => navigate('#')}>
                                 <p>Favoritos</p>
                             </Navbutton>
                             <BsFillBellFill onClick={() => navigate('#')} className="notifications-btn" />
@@ -126,7 +126,7 @@ export default function Navbar() {
                                             cartItems.length > 0 && 
                                             cartItems.map(item => {
                                             return (
-                                                <div className="cart-item">
+                                                <div key={uuidv4()} className="cart-item">
                                                     <img src={item.picture} alt={item.name} />
                                                     <p>{item.name}</p>
                                                     <BsFillTrashFill className="delete-btn" onClick={() => deleteCartItem(item)} />
@@ -310,4 +310,3 @@ const Navbutton = styled.button`
         }
     }
 `;
-

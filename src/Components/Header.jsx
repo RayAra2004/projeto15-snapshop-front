@@ -5,12 +5,14 @@ import { BsSearch } from 'react-icons/bs';
 import { useLocation, useNavigate } from "react-router";
 import banner from '../assets/banner.png'
 import { useRef } from "react";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 export default function Header() {
 
     const navigate = useNavigate();
     const location = useLocation();
     const searchRef = useRef();
+    const size = useWindowSize();
     
  
     function search()
@@ -30,7 +32,7 @@ export default function Header() {
                 {location.pathname !== '/cadastro' && location.pathname !== '/login' && location.pathname !== '/adicionar-produto' &&
 
                     <SearchBar>
-                        <input ref={searchRef} type="text" placeholder="Buscar produtos, marcas e muito mais…" />
+                        <input ref={searchRef} type="text" placeholder={size.width < 500 ? 'Buscar produtos...' : "Buscar produtos, marcas e muito mais…"} />
                         <BsSearch onClick={search} className="search-icon" />
                     </SearchBar>
                 }
@@ -59,6 +61,10 @@ const HeaderContainer = styled.header`
         align-items: center;
         width: 100%;
         max-width: 1200px;
+
+        @media (max-width:815px) {
+            justify-content: center;
+        }
     }
 
     .banner{
@@ -67,7 +73,9 @@ const HeaderContainer = styled.header`
         height: 40px;
         cursor: pointer;
         user-select: none;
-        
+        @media (max-width:815px) {
+            display: none;
+        }
     }
 `;
 
@@ -84,9 +92,16 @@ const SearchBar = styled.div`
         max-width: 580px;
         padding-left: 10px;
         min-width: 340px;
+        border-radius: 20px;
+        border: 0;
 
         &:focus{
             outline: 0.5px solid blue;
+        }
+
+        @media (max-width:500px) {
+            min-width: 250px;
+            width: 80%;
         }
     }
 
@@ -112,13 +127,29 @@ const Logo = styled.div`
     user-select: none;
 
     .favicon{
+        transition: all 200ms;
         width: 60px;
+        @media (max-width:840px) {
+            position: fixed;
+            left: 10px;
+            top: -5px;
+        }
+
+        @media (max-width:500px) {
+            left: 10px;
+            top: 10px;
+            width: 40px;
+        }
+       
     }
 
     h1{
         font-family: 'Mulish', sans-serif;
         font-weight: 700px;
         color: white;
+        @media (max-width:840px) {
+            display: none;
+        }
     }
 
 `;
