@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 
 export default function ProductItem(props)
 {
-    const {name,value,picture,description} = props.product;
+    const {name,value,picture,description, _id} = props.product;
     const navigate = useNavigate();
 
     function open()
     {
-        navigate('/visualizar-produto/:id');
+        navigate(`/visualizar-produto/${_id}`,{state:{product: props.product}});
     }
     
     return(

@@ -6,21 +6,21 @@ import Footer from "../Components/Footer";
 export default function Home(){
 
     const [allProducts,setAllProducts] = useState([
-    {id:uuidv4(),name:'Bola', picture:'https://cirilocabos.vtexassets.com/arquivos/ids/171405/8810-01-bola-de-futebol-de-campo-em-couro-tamanho-e-peso-oficial-verde-cirilocabos.jpg?v=636379649178230000' ,value:50},
-    {id:uuidv4(),name:'Tênis', picture:'https://www.kompletacalcados.com.br/6148-large_default/tenis-feminino-ramarim-casual-jogging--branco-2180204.jpg' ,value:400},
-    {id:uuidv4(),name:'Capacete', picture:'https://cdn.awsli.com.br/600x700/1173/1173972/produto/173740174/809a782ffe.jpg' ,value:250},
-    {id:uuidv4(),name:'Furadeira Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi officia quae aut laudantium in totam, et neque inventore nihil odio quod dicta doloremque saepe ipsam, atque iure assumenda quas cum?', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true' ,value:150},
-    {id:uuidv4(),name:'Carrinho de bebê', picture:'https://http2.mlstatic.com/D_Q_NP_910299-MLB54340245742_032023-P.webp' ,value:99.90},
-    {id:uuidv4(),name:'Bola', picture:'https://cirilocabos.vtexassets.com/arquivos/ids/171405/8810-01-bola-de-futebol-de-campo-em-couro-tamanho-e-peso-oficial-verde-cirilocabos.jpg?v=636379649178230000' ,value:50},
-    {id:uuidv4(),name:'Tênis', picture:'https://www.kompletacalcados.com.br/6148-large_default/tenis-feminino-ramarim-casual-jogging--branco-2180204.jpg' ,value:400},
-    {id:uuidv4(),name:'Capacete', picture:'https://cdn.awsli.com.br/600x700/1173/1173972/produto/173740174/809a782ffe.jpg' ,value:250},
-    {id:uuidv4(),name:'Furadeira Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi officia quae aut laudantium in totam, et neque inventore nihil odio quod dicta doloremque saepe ipsam, atque iure assumenda quas cum?', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true' ,value:150},
-    {id:uuidv4(),name:'Carrinho de bebê', picture:'https://http2.mlstatic.com/D_Q_NP_910299-MLB54340245742_032023-P.webp' ,value:99.90},
-    {id:uuidv4(),name:'Bola', picture:'https://cirilocabos.vtexassets.com/arquivos/ids/171405/8810-01-bola-de-futebol-de-campo-em-couro-tamanho-e-peso-oficial-verde-cirilocabos.jpg?v=636379649178230000' ,value:50},
-    {id:uuidv4(),name:'Tênis', picture:'https://www.kompletacalcados.com.br/6148-large_default/tenis-feminino-ramarim-casual-jogging--branco-2180204.jpg' ,value:400},
-    {id:uuidv4(),name:'Capacete', picture:'https://cdn.awsli.com.br/600x700/1173/1173972/produto/173740174/809a782ffe.jpg' ,value:250},
-    {id:uuidv4(),name:'Furadeira Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi officia quae aut laudantium in totam, et neque inventore nihil odio quod dicta doloremque saepe ipsam, atque iure assumenda quas cum?', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true' ,value:150},
-    {id:uuidv4(),name:'Carrinho de bebê', picture:'https://http2.mlstatic.com/D_Q_NP_910299-MLB54340245742_032023-P.webp' ,value:99.90},
+    {_id:uuidv4(),name:'Bola', picture:'https://cirilocabos.vtexassets.com/arquivos/ids/171405/8810-01-bola-de-futebol-de-campo-em-couro-tamanho-e-peso-oficial-verde-cirilocabos.jpg?v=636379649178230000' ,value:50,stock:100},
+    {_id:uuidv4(),name:'Tênis', picture:'https://www.kompletacalcados.com.br/6148-large_default/tenis-feminino-ramarim-casual-jogging--branco-2180204.jpg' ,value:400,stock:100},
+    {_id:uuidv4(),name:'Capacete', picture:'https://cdn.awsli.com.br/600x700/1173/1173972/produto/173740174/809a782ffe.jpg' ,value:250,stock:100},
+    {_id:uuidv4(),name:'Furadeira', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true' ,value:150,stock:100},
+    {_id:uuidv4(),name:'Carrinho de bebê', picture:'https://http2.mlstatic.com/D_Q_NP_910299-MLB54340245742_032023-P.webp' ,value:99.90,stock:100},
+    {_id:uuidv4(),name:'Bola', picture:'https://cirilocabos.vtexassets.com/arquivos/ids/171405/8810-01-bola-de-futebol-de-campo-em-couro-tamanho-e-peso-oficial-verde-cirilocabos.jpg?v=636379649178230000' ,value:50,stock:100},
+    {_id:uuidv4(),name:'Tênis', picture:'https://www.kompletacalcados.com.br/6148-large_default/tenis-feminino-ramarim-casual-jogging--branco-2180204.jpg' ,value:400,stock:100},
+    {_id:uuidv4(),name:'Capacete', picture:'https://cdn.awsli.com.br/600x700/1173/1173972/produto/173740174/809a782ffe.jpg' ,value:250,stock:100},
+    {_id:uuidv4(),name:'Furadeira', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true' ,value:150,stock:100},
+    {_id:uuidv4(),name:'Carrinho de bebê', picture:'https://http2.mlstatic.com/D_Q_NP_910299-MLB54340245742_032023-P.webp' ,value:99.90,stock:100},
+    {_id:uuidv4(),name:'Bola', picture:'https://cirilocabos.vtexassets.com/arquivos/ids/171405/8810-01-bola-de-futebol-de-campo-em-couro-tamanho-e-peso-oficial-verde-cirilocabos.jpg?v=636379649178230000' ,value:50,stock:100},
+    {_id:uuidv4(),name:'Tênis', picture:'https://www.kompletacalcados.com.br/6148-large_default/tenis-feminino-ramarim-casual-jogging--branco-2180204.jpg' ,value:400,stock:100},
+    {_id:uuidv4(),name:'Capacete', picture:'https://cdn.awsli.com.br/600x700/1173/1173972/produto/173740174/809a782ffe.jpg' ,value:250,stock:100},
+    {_id:uuidv4(),name:'Furadeira', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true' ,value:150,stock:100},
+    {_id:uuidv4(),name:'Carrinho de bebê', picture:'https://http2.mlstatic.com/D_Q_NP_910299-MLB54340245742_032023-P.webp' ,value:99.90,stock:100},
 
 ]);
 

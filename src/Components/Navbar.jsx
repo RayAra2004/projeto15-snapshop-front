@@ -145,7 +145,7 @@ export default function Navbar() {
 }
 
 const NavContainer = styled.header`
-
+    z-index: 1;
     width: 100%;
     height: 40px;
     background-color: ${mainColor};
@@ -192,6 +192,7 @@ const NavContainer = styled.header`
                 font-size: 10px;
                 font-weight: bold;
                 pointer-events: none;
+                
             }
 
             .cart-items{
@@ -203,6 +204,7 @@ const NavContainer = styled.header`
                 top: 29px;
                 transition: all 200ms;
                 right: 0;
+                overflow: hidden;
                 box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -3px 0px 3px rgba(0, 0, 0, 0.1);
 
                 .cart-item{

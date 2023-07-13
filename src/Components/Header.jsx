@@ -54,6 +54,7 @@ const HeaderContainer = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1;
 
     .content{
         display: flex;
