@@ -1,28 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ProductItem from "../Components/ProductItem";
-import { v4 as uuidv4 } from 'uuid';
 import Footer from "../Components/Footer";
+import axios from "axios";
 export default function Home(){
 
-    const [allProducts,setAllProducts] = useState([
-    {_id:uuidv4(),name:'Bola', picture:'https://cirilocabos.vtexassets.com/arquivos/ids/171405/8810-01-bola-de-futebol-de-campo-em-couro-tamanho-e-peso-oficial-verde-cirilocabos.jpg?v=636379649178230000' ,value:50,stock:100},
-    {_id:uuidv4(),name:'Tênis', picture:'https://www.kompletacalcados.com.br/6148-large_default/tenis-feminino-ramarim-casual-jogging--branco-2180204.jpg' ,value:400,stock:100},
-    {_id:uuidv4(),name:'Capacete', picture:'https://cdn.awsli.com.br/600x700/1173/1173972/produto/173740174/809a782ffe.jpg' ,value:250,stock:100},
-    {_id:uuidv4(),name:'Furadeira', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true' ,value:150,stock:100},
-    {_id:uuidv4(),name:'Carrinho de bebê', picture:'https://http2.mlstatic.com/D_Q_NP_910299-MLB54340245742_032023-P.webp' ,value:99.90,stock:100},
-    {_id:uuidv4(),name:'Bola', picture:'https://cirilocabos.vtexassets.com/arquivos/ids/171405/8810-01-bola-de-futebol-de-campo-em-couro-tamanho-e-peso-oficial-verde-cirilocabos.jpg?v=636379649178230000' ,value:50,stock:100},
-    {_id:uuidv4(),name:'Tênis', picture:'https://www.kompletacalcados.com.br/6148-large_default/tenis-feminino-ramarim-casual-jogging--branco-2180204.jpg' ,value:400,stock:100},
-    {_id:uuidv4(),name:'Capacete', picture:'https://cdn.awsli.com.br/600x700/1173/1173972/produto/173740174/809a782ffe.jpg' ,value:250,stock:100},
-    {_id:uuidv4(),name:'Furadeira', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true' ,value:150,stock:100},
-    {_id:uuidv4(),name:'Carrinho de bebê', picture:'https://http2.mlstatic.com/D_Q_NP_910299-MLB54340245742_032023-P.webp' ,value:99.90,stock:100},
-    {_id:uuidv4(),name:'Bola', picture:'https://cirilocabos.vtexassets.com/arquivos/ids/171405/8810-01-bola-de-futebol-de-campo-em-couro-tamanho-e-peso-oficial-verde-cirilocabos.jpg?v=636379649178230000' ,value:50,stock:100},
-    {_id:uuidv4(),name:'Tênis', picture:'https://www.kompletacalcados.com.br/6148-large_default/tenis-feminino-ramarim-casual-jogging--branco-2180204.jpg' ,value:400,stock:100},
-    {_id:uuidv4(),name:'Capacete', picture:'https://cdn.awsli.com.br/600x700/1173/1173972/produto/173740174/809a782ffe.jpg' ,value:250,stock:100},
-    {_id:uuidv4(),name:'Furadeira', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true' ,value:150,stock:100},
-    {_id:uuidv4(),name:'Carrinho de bebê', picture:'https://http2.mlstatic.com/D_Q_NP_910299-MLB54340245742_032023-P.webp' ,value:99.90,stock:100},
-
-]);
+    const [allProducts,setAllProducts] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    useEffect(()=>{
+        setIsLoading(true);
+        axios.get(`${import.meta.env.VITE_API_URL}/all-products`)
+        .then((res) => {
+            setAllProducts(res.data);
+            setIsLoading(false);
+        })
+        .catch(err => {
+            console.log(err); 
+            alert('Erro ao buscar produtos, olhe o console para mais info!')
+            setIsLoading(false);
+        })
+    },[])
 
     return(
         <PageContainer>
@@ -31,8 +28,11 @@ export default function Home(){
                 <ProductsContainer>
                     {
                         allProducts && allProducts.length > 0 && allProducts.map((product) =>{
-                            return <ProductItem key={uuidv4()} product={product}/>
+                            return <ProductItem key={product._id} product={product}/>
                         })
+                    }
+                    {
+                        isLoading && <p>Carregando..</p>
                     }
                 </ProductsContainer>
             }

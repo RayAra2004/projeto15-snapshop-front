@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function ProductItem(props)
 {
-    const {name,value,picture,description, _id} = props.product;
+    const {name,value,picture, _id} = props.product;
     const navigate = useNavigate();
 
     function open()
@@ -17,7 +17,7 @@ export default function ProductItem(props)
         <ProductContainer onClick={open} title={name} >
             <img src={picture} alt={name} />
             <p className="value">R$ {value.toFixed(2).toString().replace('.',',')}</p>
-            <p className="installments"><span>em </span>10x de R$ {(value.toFixed(2) / 10).toString().replace('.',',')} sem juros</p>
+            <p className="installments"><span>em </span>10x de R$ {(value.toFixed(2) / 10).toFixed(2).toString().replace('.',',')} sem juros</p>
             { value > 79.90 && <strong className="shipment">Frete grátis</strong>}
             <p className="name">{name.substring(0,100).trim()}{name.length > 99 ? '...' : ''}</p>
         </ProductContainer>
