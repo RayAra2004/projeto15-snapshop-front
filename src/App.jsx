@@ -19,12 +19,17 @@ import SignIn from './pages/SignIn';
 
 
 export default function App() {
+
+  const [user,setUser] = useState();
+  const [cartItems,setCartItems] = useState([{name:'Furadeira', picture:'https://lojamondial.vtexassets.com/arquivos/ids/158336-800-800?v=637826014763230000&width=800&height=800&aspect=true'}]);
+
+
   return (
-    <UserContext.Provider value={{}}>
+    <UserContext.Provider value={{user,setUser,cartItems,setCartItems}}>
       <BrowserRouter>
       <ToastContainer />
-      {/* <Header/> */}
-      {/* <Navbar/> */}
+       <Header/> 
+        <Navbar/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<SignIn />} />
