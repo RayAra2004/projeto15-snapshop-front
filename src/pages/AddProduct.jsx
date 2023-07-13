@@ -19,11 +19,50 @@ export default function AddProduct() {
     const isNewRef = useRef();
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const [invalidImage, setInvalidImage] = useState(false);
     const {user} = useContext(UserContext);
 
-    function createProduct(e) {
+    async function validarUrlImagem(url) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = function() {
+            resolve(true);
+          };
+          img.onerror = function() {
+            reject(false);
+          };
+          img.src = url;
+        });
+      }
+
+      async function createProduct(e) {
         e.preventDefault();
         setIsLoading(true);
+        let valid = true;
+
+        await validarUrlImagem(pictureRef.current.value)
+        .catch(() => {
+            valid = false;
+        });
+
+        setInvalidImage(!valid);
+
+        if(!valid){
+
+            toast.error( 'Url da imagem de produto inserida é invalida!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
+            
+            setIsLoading(false);
+            return;
+        }
 
         const newProduct = {
             name: nameRef.current.value,
@@ -65,11 +104,11 @@ export default function AddProduct() {
                 <img className="product-ilus" src={productIllustration} alt="" />
                 <NewProductForm onSubmit={createProduct}>
                     <label htmlFor="pname">Nome</label>
-                    <Input type="text" required id="pname" name="pname" ref={nameRef} placeholder="e.g: Furadeira" />
+                    <Input type="text" required id="pname" name="pname" maxLength={20} minLength={5} ref={nameRef} placeholder="e.g: Furadeira" />
                     <div className="values">
                         <div>
                             <label htmlFor="pvalue">Valor</label>
-                            <Input type="number" required id="pvalue" name="pvalue" ref={pValueRef} placeholder="e.g: R$: 50,00" pattern="[0-9.]*" />
+                            <Input type="number" required id="pvalue" max={9999} min={1} name="pvalue" ref={pValueRef} placeholder="e.g: R$: 50,00" pattern="[0-9.]*" />
                         </div>
                         <div>
                             <label htmlFor="pstock">Estoque</label>
@@ -81,7 +120,7 @@ export default function AddProduct() {
                         </div>
                     </div>
                     <label htmlFor="pdesc">Descrição</label>
-                    <textarea type="text" required id="pdesc" name="pdesc" ref={descriptionRef} placeholder="e.g: O produto contém: 1 furadeira bosch.." />
+                    <textarea autoComplete="description" type="text" required id="pdesc" name="pdesc" ref={descriptionRef} maxLength={2000} minLength={0} placeholder="e.g: O produto contém: 1 furadeira bosch.." />
 
                     <div className="bottom">
                         <div>
@@ -112,7 +151,7 @@ export default function AddProduct() {
                         </div>
                         <div>
                             <label htmlFor="ppicture">Foto do produto</label>
-                            <Input type="text" required id="ppicture" name="ppicture" ref={pictureRef} placeholder="e.g: https://photo.jpg" max={8} />
+                            <Input onChange={()=> setInvalidImage(false)} className={invalidImage ? 'invalid' : ''} type="text" required id="ppicture" name="ppicture" ref={pictureRef} placeholder="e.g: https://photo.jpg" max={8} />
                         </div>
                     </div>
                     <button disabled={isLoading} className="create-product">{isLoading ? <ThreeDots type="ThreeDots" color="#FFFFFF" height={20} width={40} /> : "Criar Produto"}</button>
@@ -181,6 +220,14 @@ const NewProductForm = styled.form`
     .bottom{
         display: flex;
         gap: 20px;
+
+        .invalid{
+            border: 2px solid red;
+            color:  red;
+            &::placeholder{
+                color:  red;
+            }
+        }
     }
 
     .values{
