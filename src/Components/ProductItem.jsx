@@ -14,7 +14,7 @@ export default function ProductItem(props)
     }
     
     return(
-        <ProductContainer onClick={open} title={name} >
+        <ProductContainer show={props.show.toString()} onClick={open} title={name} >
             <img src={picture} alt={name} />
             <p className="value">R$ {value.toFixed(2).toString().replace('.',',')}</p>
             <p className="installments"><span>em </span>10x de R$ {(value.toFixed(2) / 10).toFixed(2).toString().replace('.',',')} sem juros</p>
@@ -29,7 +29,7 @@ const ProductContainer = styled.div`
     width: 210px;
     height: 400px;
     background-color: white;
-   
+    display: ${(props) => props.show == 'true' ? 'block' : 'none'};
     border-radius: 10px;
     cursor: pointer;
     box-sizing: border-box;

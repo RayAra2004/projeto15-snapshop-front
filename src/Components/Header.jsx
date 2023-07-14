@@ -6,6 +6,8 @@ import { useLocation, useNavigate } from "react-router";
 import banner from '../assets/banner.png'
 import { useRef } from "react";
 import { useWindowSize } from "@uidotdev/usehooks";
+import { useContext } from "react";
+import UserContext from "../Contexts/userContext.js";
 
 
 
@@ -13,8 +15,8 @@ export default function Header() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const searchRef = useRef();
     const size = useWindowSize();
+    const {clientSearchValue,setClientSearchValue} = useContext(UserContext);
  
     function search()
     {
@@ -33,7 +35,7 @@ export default function Header() {
                 {location.pathname !== '/cadastro' && location.pathname !== '/login' && location.pathname !== '/adicionar-produto' && 
 
                     <SearchBar>
-                        <input ref={searchRef} type="text" placeholder={size.width < 500 ? 'Buscar produtos...' : "Buscar produtos, marcas e muito mais…"} />
+                        <input value={clientSearchValue} onChange={(e)=> setClientSearchValue(e.target.value)} type="text" placeholder={size.width < 500 ? 'Buscar produtos...' : "Buscar produtos, marcas e muito mais…"} />
                         <BsSearch onClick={search} className="search-icon" />
                     </SearchBar>
                 }

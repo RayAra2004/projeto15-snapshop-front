@@ -3,10 +3,13 @@ import styled from "styled-components";
 import ProductItem from "../Components/ProductItem";
 import Footer from "../Components/Footer";
 import axios from "axios";
+import { useContext } from "react";
+import UserContext from "../Contexts/userContext";
 export default function Home(){
 
     const [allProducts,setAllProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const {clientSearchValue} = useContext(UserContext);
     useEffect(()=>{
         setIsLoading(true);
         axios.get(`${import.meta.env.VITE_API_URL}/all-products`)
@@ -28,7 +31,7 @@ export default function Home(){
                 <ProductsContainer>
                     {
                         allProducts && allProducts.length > 0 && allProducts.map((product) =>{
-                            return <ProductItem key={product._id} product={product}/>
+                            return <ProductItem show={product.name.toLowerCase().includes(clientSearchValue.toLowerCase()) || product.category.toLowerCase().includes(clientSearchValue.toLowerCase())} key={product._id} product={product}/>
                         })
                     }
                     {
@@ -48,8 +51,6 @@ const PageContainer = styled.div`
     height: auto;
     min-height: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
     background-color: white;
 
