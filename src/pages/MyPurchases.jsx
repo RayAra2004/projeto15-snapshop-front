@@ -4,13 +4,13 @@ import { mainColor } from "../Colors/colors";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../Contexts/userContext";
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
 
-export default function MyPurchases(){
+export default function MyPurchases() {
     const [products, setProducts] = useState(undefined);
-    const {user, setUser} =  useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
-    //const { token } = user;
-    const token = "16615766-ec8c-457f-abe6-fd5d31f01125"
+    const token = localStorage.getItem('token');
 
     const config = {
         headers: {
@@ -19,77 +19,168 @@ export default function MyPurchases(){
     }
 
     useEffect(() => {
+
+        if (!token) {
+            navigate('/');
+            return;
+        }
+
         axios.get(`${import.meta.env.VITE_API_URL}/minhas-compras`, config)
             .then(res => {
                 setProducts(res.data);
-                console.log(res.data);
             })
             .catch(res => console.log(res));
     }, []);
 
-    function renderProducts(){
-        if(products === undefined) return <p>Carregando...</p>
-        if(products[0] === null) return <p>Você não possui compras</p>
-        return(
-            products.map(product => 
-                <SCProduct key={product._id}>
-                    <div>
-                        <img src={product.picture} alt={product.name}/>
-                        <p>{product.name}</p>
-                        <span>R${String(Number(product.value).toFixed(2)).replace('.', ',')}</span>
-                    </div>
-                </SCProduct>
+    function renderProducts() {
+        if (products === undefined) return <p>Carregando...</p>
+        if (products.length == 0) return <p>Você não possui compras</p>
+        return (
+            products.map(product => {
+                if (product.name !== undefined) {
+                       return ( <Purchase key={uuidv4()}>
+                        
+                            <div className="main">
+                                <div className="image-and-name">
+                                    <img src={product.picture} alt={product.name} />
+                                    <p>{product.name}</p>
+                                </div>
+                               <div className="numbers">
+                                    <span>R${String(Number(product.value).toFixed(2)).replace('.', ',')}</span>
+                                    <p className="quant">Quantidade:{product.info.amount}</p>
+                               </div>
+                            </div>
+                            <div className="secondary">
+                                <p className="adress">E: {` ${product.info.street} ${product.info.number} - ${product.info.neighborhood} - ${product.info.city},${product.info.state}`}</p>
+                            </div>
+                        
+                    </Purchase>)
+                }
+            }
             )
         )
     }
 
-    return(
+    return (
         <SCMyPurchases>
             <SCProducts>
                 {renderProducts()}
             </SCProducts>
         </SCMyPurchases>
-        );
+    );
 }
 
 
 const SCMyPurchases = styled.div`
     background-color: ${mainColor};
     margin-top: 120px;
+    width: 100%;
+    overflow-x: hidden;
     min-height: 100%;
+    display: flex;
+    justify-content: center;
 `
 
 const SCProducts = styled.div`
-    margin-left: 40px;
-    padding-top: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    gap: 20px;
+    transition: all 200ms;
+    @media (max-width:583px) {
+       padding: 0;
+       margin-top: 40px;
+    }
 `
 
-const SCProduct = styled.div`
+const Purchase = styled.div`
     background-color: rgb(237 237 237);
-    width: 800px;
-    height: 200px;
-    margin-bottom: 40px;
+    width: 100%;
+    max-width: 600px;
+    min-height: 120px;
     border-radius: 10px;
     padding: 15px;
-    div{
-        display: flex;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: all 200ms;
+
+    @media (max-width:583px) {
+       border-radius: 0;
+    }
+    
+    *{
+        font-family: 'Mulish', sans-serif;
+        transition: all 200ms;
+
     }
 
-    div:nth-child(1){
-        height: 130px;
+    .main{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        .image-and-name{
+            display: flex;
+            align-items: center;
+            width: 200px;
+
+            p{
+
+                white-space: nowrap;
+                @media (max-width:459px) {
+                    font-size: 20px;
+                }
+            }
+        }
+
+        .numbers{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: auto;
+            span{
+                @media (max-width:459px) {
+                    font-size: 20px;
+                }
+            }
+        }
+        .quant{
+            width: auto;
+            font-size: 12px;
+            text-align: right;
+        }
+        
     }
+
+    .secondary{
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 5px;
+        .adress{
+            font-size: 14px;
+        }
+    }
+
     img{
-        width: 130px;
+        width: 70px;
         max-width: 130px;
-        height: 130px;
-        border-radius: 70px;
+        height: 70px;
+        border-radius: 50%;
         margin-right: 15px;
     }
 
     p{
         width: 500px;
         height: auto;
-        font-family: 'Mulish', sans-serif;
         font-weight: 700;
         font-size: 30px;
     }
@@ -99,5 +190,7 @@ const SCProduct = styled.div`
         font-weight: 600;
         color: rgb(96 223 34);
         margin-top: 10px;
+        text-align: right;
+
     }
 `

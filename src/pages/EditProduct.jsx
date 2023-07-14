@@ -11,9 +11,9 @@ import { toast } from "react-toastify";
 export default function EditProduct() {
 
     const nameRef = useRef();
-    const pValueRef = useRef();
+    const [pValueRef,setPValueRef] =useState('');
+    const [stockRef,setStockRef] =useState('');
     const descriptionRef = useRef();
-    const stockRef = useRef();
     const categoryRef = useRef();
     const pictureRef = useRef();
     const isNewRef = useRef();
@@ -24,18 +24,24 @@ export default function EditProduct() {
     const params = useParams();
     const id = params.id;
     useEffect(()=>{
+          
+        if(!localStorage.getItem('token'))
+        {
+            navigate('/');
+            return;
+        }
+
         if(location.state)
         {
             const {name,value,description,stock,category,picture,is_new} = location.state.product;
             nameRef.current.value = name;
-            pValueRef.current.value = value;
+            setPValueRef(Number(value.toString().replace(',','.')));
+            setStockRef(stock);
             descriptionRef.current.value = description;
-            stockRef.current.value = stock;
             categoryRef.current.value = category;
             pictureRef.current.value = picture;
             isNewRef.current.checked = is_new;
         }
-        
     },[]);
 
     function editProduct(e) {
@@ -44,10 +50,10 @@ export default function EditProduct() {
 
         const newProduct = {
             name: nameRef.current.value,
-            value: Number(pValueRef.current.value),
+            value: Number(pValueRef),
             description: descriptionRef.current.value,
-            stock: Number(stockRef.current.value),
-            available: Number(stockRef.current.value) > 0,
+            stock: Number(stockRef),
+            available: Number(stockRef) > 0,
             category: categoryRef.current.value,
             picture: pictureRef.current.value,
             is_new:isNewRef.current.checked
@@ -66,7 +72,7 @@ export default function EditProduct() {
                     progress: undefined,
                     theme: "colored",
                 });
-                navigate('/');
+                navigate('/meus-produtos');
             })
             .catch(err => {
                 console.log(err); 
@@ -86,11 +92,11 @@ export default function EditProduct() {
                     <div className="values">
                         <div>
                             <label htmlFor="pvalue">Valor</label>
-                            <Input type="number" required id="pvalue" name="pvalue" ref={pValueRef} placeholder="e.g: R$: 50,00" pattern="[0-9.]*" />
+                            <Input type="number"   onChange={(e)=> setPValueRef(e.target.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, ''))}  required id="pvalue" name="pvalue" value={pValueRef} placeholder="e.g: R$: 50,00" pattern="[0-9.]*" />
                         </div>
                         <div>
                             <label htmlFor="pstock">Estoque</label>
-                            <Input type="number" required id="pstock" name="pstock" ref={stockRef} placeholder="e.g: 500 unidades" max={99999} pattern="[0-9]*" />
+                            <Input type="number" onChange={(e)=> setStockRef(e.target.value.replace(/\./g, '').replace(/[^\d]/g, '').substring(0,10))} required id="pstock" name="pstock" value={stockRef} placeholder="e.g: 500 unidades" max={99999} pattern="[0-9]*" />
                         </div>
                         <div className="check">
                             <label htmlFor="is-new">Usado</label>
@@ -108,6 +114,7 @@ export default function EditProduct() {
                                 <option value="eletronicos">Eletrônicos</option>
                                 <option value="vestuario">Vestuário e moda</option>
                                 <option value="casa">Casa e decoração</option>
+                                <option value="casa">Cozinha</option>
                                 <option value="beleza">Beleza</option>
                                 <option value="saude">Saúde e bem-estar</option>
                                 <option value="alimentos">Alimentos e bebidas</option>
@@ -128,7 +135,7 @@ export default function EditProduct() {
                             </select>
                         </div>
                         <div>
-                            <label htmlFor="ppicture">Foto do produto</label>
+                            <label className="foto-label" htmlFor="ppicture">Foto</label>
                             <Input type="text" required id="ppicture" name="ppicture" ref={pictureRef} placeholder="e.g: https://photo.jpg" max={8} />
                         </div>
                     </div>
@@ -150,6 +157,11 @@ const PageContainer = styled.div`
     flex-direction: column;
     gap: 30px;
 
+    *{
+        transition: all 200ms;
+    }
+
+
     .check{
         input[type="checkbox"]{
             accent-color: ${mainColor};
@@ -168,6 +180,9 @@ const PageContainer = styled.div`
         font-size: 50px;
         margin-bottom: 40px;
         user-select: none;
+        @media (max-width:500px) {
+         font-size: 40px;
+        }
     }
 
     .product-ilus{
@@ -175,6 +190,9 @@ const PageContainer = styled.div`
         min-width: 200px;
         max-width: 500px;
         user-select: none;
+        @media (max-width:985px) {
+            display: none;
+        }
     }
 
     .main{
@@ -182,6 +200,7 @@ const PageContainer = styled.div`
         justify-content: center;
         align-items: center;
         gap: 30px;
+   
     }
 `;
 
@@ -194,6 +213,12 @@ const NewProductForm = styled.form`
     border-radius: 15px;
     display: flex;
     flex-direction: column;
+    transition: all 200ms;
+
+    @media (max-width:500px) {
+         box-sizing: content-box;
+         border-radius: 0;
+    }
 
     .bottom{
         display: flex;

@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 
 export default function ViewProduct() {
     const { product } = useLocation().state;
-    const { name, value, picture, description, _id, stock } = product;
+    const { name, value, picture, description, _id, stock ,category} = product;
     const [selectedQuantity, setSelectedQuantity] = useState(0);
     const { cartItems,setCartItems } = useContext(UserContext);
     const itemsFound = cartItems.filter(item => item._id == _id);
@@ -67,9 +67,11 @@ export default function ViewProduct() {
         <>
         <SCBuyProduct>
             <SCProduct>
+                
                 <div className="content">
                     <img src={picture} alt={name} />
                     <div className="info">
+                        <h1 className="category">Produtos <span>{'>'}</span> {category}</h1>
                         <p className="name">{name}</p>
                         <div className="price-container">
                             <p className="price">R${String(Number(value).toFixed(2)).replace('.', ',')}</p>
@@ -90,7 +92,7 @@ export default function ViewProduct() {
                                     <span className="available"> ({stock ? stock : 0} disponíveis)</span> </p>
                             </div>
                             <button onClick={buy} disabled={stock && stock > 0 ? false : true}>{stock && stock > 0 ? 'Comprar agora' : 'Produto indisponível'}</button>
-                            <button onClick={addToCart} disabled={stock && stock > 0  && itemsFound == 0 ? false : true}>{stock && stock > 0  && itemsFound == 0 ? 'Carrinho' : 'Ja está no carrinho!'}</button>
+                            <button onClick={addToCart} disabled={stock && stock > 0  && itemsFound == 0 ? false : true}>{stock && stock > 0 && itemsFound == 0 ? 'Carrinho' : stock == 0 ? 'Carrinho': 'Ja está no carrinho!' }</button>
                         </div>
                     </div>
                 </div>
@@ -162,6 +164,17 @@ const SCProduct = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+        position: relative;
+    }
+
+    .category{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-weight: bold;
+        color: #2968c8;
+        font-family: 'Mulish', sans-serif;
+        cursor: pointer;
     }
 
     img{
@@ -169,8 +182,10 @@ const SCProduct = styled.div`
         width: 100%;
         object-fit: scale-down;
         box-sizing: border-box;
+        margin-left: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
         &:hover{
-            transform: scale(1.1);
             object-fit: cover;
             cursor: zoom-in;
         }

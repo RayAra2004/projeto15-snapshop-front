@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { mainColor } from "../Colors/colors";
 
 const ResetStyle = createGlobalStyle`
     html, body, div, span, applet, object, iframe,
@@ -51,6 +52,7 @@ const ResetStyle = createGlobalStyle`
 
     html,body{
         height: 100%;
+		background-color: ${mainColor};
     }
 
     #root{
