@@ -11,7 +11,7 @@ export default function ViewProduct() {
     const { product } = useLocation().state;
     const { name, value, picture, description, _id, stock } = product;
     const [selectedQuantity, setSelectedQuantity] = useState(0);
-    const { user ,cartItems,setCartItems } = useContext(UserContext);
+    const { cartItems,setCartItems } = useContext(UserContext);
     const itemsFound = cartItems.filter(item => item._id == _id);
     const navigate = useNavigate();
 
@@ -20,8 +20,6 @@ export default function ViewProduct() {
         if (stock && stock > 0) {
             setSelectedQuantity(1);
         }
-
-       
     }, [])
 
     function updateQuantity() {

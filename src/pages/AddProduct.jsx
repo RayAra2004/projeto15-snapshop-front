@@ -75,7 +75,7 @@ export default function AddProduct() {
             is_new:isNewRef.current.checked
         }
 
-        axios.post(`${import.meta.env.VITE_API_URL}/adicionar-produto`, newProduct,{headers:{Authorization:`Bearer ${user ? user.token : 'dsadlkasjdlaksjd'}`}})
+        axios.post(`${import.meta.env.VITE_API_URL}/adicionar-produto`, newProduct,{headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}})
             .then(() => {
                 setIsLoading(false);
                 toast.success( 'Produto cadastrado!', {
