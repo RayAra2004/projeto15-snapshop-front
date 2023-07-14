@@ -25,8 +25,8 @@ export default function SignIn(){
             .post(`${import.meta.env.VITE_API_URL}/login`, form)
             .then(res => {
                 setIsLoading(false)
-                setUser(res.data.user)
-                localStorage.setItem("user", res.data.user)
+                setUser(res.data)
+                localStorage.setItem("token", res.data.token)
                 navigate(`/`)
                 })
             .catch(err => 

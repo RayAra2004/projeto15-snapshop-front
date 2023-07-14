@@ -6,14 +6,15 @@ import { mainColor } from "../Colors/colors";
 import { BsFillTrashFill } from "react-icons/bs";
 import {BiSolidEdit} from 'react-icons/bi';
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export default function MyProducts(){
 
     const [products, setProducts] = useState(undefined);
     const {user, setUser} =  useContext(UserContext);
     const navigate = useNavigate();
-    //const { token } = user;
-    const token = "f1496ae3-5ff7-4f3e-856a-68aa36e84c4a"
+    const token  = localStorage.getItem('token');
 
     const config = {
         headers: {
@@ -22,20 +23,72 @@ export default function MyProducts(){
     }
 
     useEffect(() => {
+        if(!token)
+        {
+            navigate('/');
+            return;
+        }
+
+        getProducts();
+        
+    }, []);
+
+    function getProducts()
+    {
         axios.get(`${import.meta.env.VITE_API_URL}/meus-produtos`, config)
             .then(res => {
                 setProducts(res.data);
-                console.log(res.data);
             })
-            .catch(res => console.log(res));
-    }, [products]);
+        .catch(res => console.log(res));
+    }
+    
 
-    function deleteProduct(id){
-        axios.delete(`${import.meta.env.VITE_API_URL}/remover-produto/${id}`, config)
-            .then(res => {
-                setProducts(products.filter(update => update._id !== id))
-            })
-            .catch(res => console.log(res.data));
+    function deleteProduct(id,picture,name){
+
+        Swal.fire({
+            title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Remover ${name} do banco de dados?</span>`,
+            showCancelButton: true,
+            confirmButtonColor: '#c9c9c9',
+            cancelButtonColor: `${mainColor}`,
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            width: 300,
+            heightAuto: false,
+            imageUrl: picture,
+            imageWidth: 200,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`${import.meta.env.VITE_API_URL}/remover-produto/${id}`, config)
+                    .then(res => {
+                        toast.info(`${name} removido do banco de dados!`, {
+                            position: "top-center",
+                            autoClose: 2000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: false,
+                            progress: undefined,
+                            theme: "colored",
+                        });
+                        setProducts(products.filter(update => update._id !== id));
+                        getProducts();
+                    })
+            .catch(res => {
+                console.log(res.data);
+                toast.error(`Falha ao remover ${name} do banco de dados!`, {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            });
+        }
+    });
+        
     }
 
     function renderProducts(){
@@ -50,7 +103,7 @@ export default function MyProducts(){
                     </div>           
                     <div>
                         <SCActions>
-                            <BsFillTrashFill className="delete" onClick={() => deleteProduct(product._id)}/>
+                            <BsFillTrashFill className="delete" onClick={() => deleteProduct(product._id,product.picture,product.name)}/>
                             <BiSolidEdit className="edit" onClick={() => {
                                 navigate(`/editar-produto/${product._id}`,{state:{product}})
                             }}/>

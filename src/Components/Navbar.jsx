@@ -17,7 +17,7 @@ export default function Navbar() {
     const [showUserInfo, setShowUserInfo] = useState(false);
     const [showCartItems, setShowCartItems] = useState(false);
     const location = useLocation();
-    const { user, cartItems } = useContext(UserContext);
+    const { user,setUser,cartItems } = useContext(UserContext);
     function logout() {
         Swal.fire({
             title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Deseja sair?</span>`,
@@ -34,6 +34,7 @@ export default function Navbar() {
         }).then((result) => {
             if (result.isConfirmed) {
                 localStorage.removeItem('token');
+                setUser(null);
                 navigate('/');
             }
         });
@@ -71,7 +72,7 @@ export default function Navbar() {
                                 user &&
                                 <Navbutton title="Usuario" onMouseEnter={() => setShowUserInfo(true)} >
                                     <BsPersonCircle />
-                                    <p className="user">{user.name}<BsFillCaretDownFill className="drop" /></p>
+                                    <p className="user">{user.userName}<BsFillCaretDownFill className="drop" /></p>
                                     {showUserInfo &&
                                         <div onMouseLeave={closeDropdowns} className="user-info">
                                             <div title="Editar usuário" className="btn" onClick={() => navigate('/editar-usuario')}>Editar informações</div>

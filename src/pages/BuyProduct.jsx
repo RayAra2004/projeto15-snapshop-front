@@ -4,6 +4,7 @@ import { useContext, useState} from "react";
 import UserContext from "../Contexts/userContext";
 import styled from "styled-components";
 import { mainColor } from "../Colors/colors";
+import { useEffect } from "react";
 
 export default function BuyProduct(){
     
@@ -20,13 +21,19 @@ export default function BuyProduct(){
     const [nameHolder, setNameHolder] = useState('');
     const navigate = useNavigate();
     const { id } = useParams();
-    const {user, setUser} =  useContext(UserContext);
-    //const { token } = user;
-    const token = "f1496ae3-5ff7-4f3e-856a-68aa36e84c4a"
+    const {user} =  useContext(UserContext);
+    const token  = localStorage.getItem('token');
     const location = useLocation();
 
     const {name,value,picture,quantity} = location.state;
 
+    useEffect(()=>{
+        if(!token)
+        {
+            navigate('/');
+            return;
+        }
+    },[])
     
     const config = {
         headers: {
@@ -210,9 +217,11 @@ const SCProduct = styled.div`
     padding: 40px;
     img{
         width: 100px;
-        height: 100px;
+        aspect-ratio: 1;
         border-radius: 160px;
         margin-bottom: 20px;
+        object-fit:cover;
+        
         background-image: #FFFFFF;
         background-color: #FFFFFF;
     }

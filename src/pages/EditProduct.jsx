@@ -53,7 +53,7 @@ export default function EditProduct() {
             is_new:isNewRef.current.checked
         }
 
-        axios.put(`${import.meta.env.VITE_API_URL}/editar-produto/${id}`, newProduct,{headers:{Authorization:`Bearer ${user ? user.token : 'dsadlkasjdlaksjd'}`}})
+        axios.put(`${import.meta.env.VITE_API_URL}/editar-produto/${id}`, newProduct,{headers:{Authorization:`Bearer ${user.token}`}})
             .then(() => {
                 setIsLoading(false);
                 toast.info( 'Produto editado!', {
