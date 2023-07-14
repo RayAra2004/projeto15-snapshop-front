@@ -13,8 +13,7 @@ export default function SignIn(){
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
     const {setUser} =  useContext(UserContext);
-
-    console.log(form)
+    
     function handleForm(e) {
         setForm({...form, [e.target.name]: e.target.value})
     }
@@ -133,23 +132,7 @@ const Input = styled.input`
     }
 `
 const Button = styled.button`
-    width: 100%;
-    height: 35px;
-    border: 0;
-    border-radius: 5px;
-    background-color: #FF69B4;
-    font-family: 'Mulish', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: #FFFFFF;
-    margin-top: 5px;
-    cursor: pointer;
-    transition: all 200ms;
-    &:hover{
-        color: #FF1493;
-        background-color: white;
-        border: 1px solid #FF1493;
-    }
+   
 `
 const SideBarr = styled.div`
     width: 400px;

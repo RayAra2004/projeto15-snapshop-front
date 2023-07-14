@@ -43,10 +43,10 @@ export default function CartItem({item}) {
         <SCCartItem>
             <div className="image">
                 <img src={item.picture} alt={item.name} />
-                <p>{item.quantity}</p>
+                <p>x{item.quantity}</p>
             </div>
             <p>{item.name.substring(0,15)}{item.name.length > 15 ? '...' : ''}</p>
-            <p>R$ {Number(item.value).toFixed(2).toString().replace('.',',')}</p>
+            <p>R$ {Number(item.value * item.quantity).toFixed(2).toString().replace('.',',')}</p>
             <BsFillTrashFill className="delete-btn" onClick={() => remove(item)} />
         </SCCartItem>
     );
@@ -64,17 +64,24 @@ const SCCartItem = styled.div`
 
     .image{
         height: 80%;
-        padding-left: 10px;
+        flex-shrink: 0;
+        margin-left: 5px;
         position: relative;
         border-radius: 50%;
+        overflow: hidden;
         img{
             height: 100%;
+            width: 100%;
+            opacity: 50%;
         }
         p{
             position: absolute;
-            left: 0;
-            top: 0;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            color: black;
             z-index: 1;
+            font-weight: bold;
         }
     }
 

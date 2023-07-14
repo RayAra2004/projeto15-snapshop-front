@@ -5,19 +5,61 @@ import Shop from "../assets/shopping.svg"
 import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner"
 import axios from "axios";
+import { toast } from "react-toastify";
 
 
 export default function SignUp(){
-    const [form, setForm] = useState({name: "", email: "", password: "", confirmPassword: "", photo: ""})
+    const [form, setForm] = useState({name: "", email: "", password: "", confirmPassword: "", photo: ""});
+    const [invalidImage, setInvalidImage] = useState(false);
     const [isLoading, setIsLoading] = useState(false)
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    async function validarUrlImagem(url) {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = function() {
+            resolve(true);
+          };
+          img.onerror = function() {
+            reject(false);
+          };
+          img.src = url;
+        });
+      }
 
     function handleForm(e) {
         setForm({...form, [e.target.name]: e.target.value})
     }
-    function submitForm(e){
+    async function submitForm(e){
         e.preventDefault()
         setIsLoading(true);
+
+        let valid = true;
+
+        await validarUrlImagem(form.photo)
+        .catch(() => {
+            valid = false;
+        });
+
+        setInvalidImage(!valid);
+
+        if(!valid){
+
+            toast.error( 'Url da imagem de usuário inserida é invalida!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
+            
+            setIsLoading(false);
+            return;
+        }
+
         if(form.password !== form.confirmPassword) return alert("Senhas incompatíveis, tente novamente.")
 
         delete form.confirmPassword
@@ -88,8 +130,9 @@ export default function SignUp(){
                         placeholder="Foto de usuário" 
                         name="photo"
                         value={form.photo}
-                        onChange={handleForm}
+                        onChange={(e)=> {handleForm(e); setInvalidImage(false);}}
                         disabled={isLoading}
+                        className={invalidImage ? 'invalid' : ''}
                     />
                     <Button type="submit" disabled={isLoading}>
                         {isLoading ? <ThreeDots type="ThreeDots" color="#FFFFFF" height={20} width={40} /> : "Cadastro"}
@@ -140,6 +183,13 @@ const Container = styled.div`
 const Form = styled.form`
     width: 300px;
     box-sizing: border-box;
+    .invalid{
+            border: 2px solid red;
+            color:  red;
+            &::placeholder{
+                color:  red;
+            }
+        }
 `
 const Input = styled.input`
     width: 100%;

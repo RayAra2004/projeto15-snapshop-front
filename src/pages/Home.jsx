@@ -46,10 +46,12 @@ const PageContainer = styled.div`
 
     width: 100%;
     height: auto;
+    min-height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background-color: white;
 
     .banner{
         margin-top: 120px;

@@ -7,13 +7,15 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import UserContext from "../Contexts/userContext";
 import { toast } from "react-toastify";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 export default function AddProduct() {
 
     const nameRef = useRef();
-    const pValueRef = useRef();
+    const [pValueRef,setPValueRef] =useState('');
+    const [stockRef,setStockRef] =useState('');
     const descriptionRef = useRef();
-    const stockRef = useRef();
+
     const categoryRef = useRef();
     const pictureRef = useRef();
     const isNewRef = useRef();
@@ -21,6 +23,15 @@ export default function AddProduct() {
     const navigate = useNavigate();
     const [invalidImage, setInvalidImage] = useState(false);
     const {user} = useContext(UserContext);
+    const size = useWindowSize();
+
+    useEffect(()=>{
+        if(!localStorage.getItem('token'))
+        {
+            navigate('/');
+            return;
+        }
+    },[])
 
     async function validarUrlImagem(url) {
         return new Promise((resolve, reject) => {
@@ -66,10 +77,10 @@ export default function AddProduct() {
 
         const newProduct = {
             name: nameRef.current.value,
-            value: Number(pValueRef.current.value),
+            value: Number(pValueRef),
             description: descriptionRef.current.value,
-            stock: Number(stockRef.current.value),
-            available: Number(stockRef.current.value) > 0,
+            stock: Number(stockRef),
+            available: Number(stockRef) > 0,
             category: categoryRef.current.value,
             picture: pictureRef.current.value,
             is_new:isNewRef.current.checked
@@ -88,7 +99,7 @@ export default function AddProduct() {
                     progress: undefined,
                     theme: "colored",
                 });
-                navigate('/');
+                navigate('/meus-produtos');
             })
             .catch(err => {
                 console.log(err); 
@@ -101,18 +112,27 @@ export default function AddProduct() {
         <PageContainer>
             <h1>Cadastrar produto</h1>
             <div className="main">
-                <img className="product-ilus" src={productIllustration} alt="" />
+               {size.width > 1029 &&  <img className="product-ilus" src={productIllustration} alt="" />}
                 <NewProductForm onSubmit={createProduct}>
                     <label htmlFor="pname">Nome</label>
                     <Input type="text" required id="pname" name="pname" maxLength={20} minLength={5} ref={nameRef} placeholder="e.g: Furadeira" />
                     <div className="values">
                         <div>
                             <label htmlFor="pvalue">Valor</label>
-                            <Input type="number" required id="pvalue" max={9999} min={1} name="pvalue" ref={pValueRef} placeholder="e.g: R$: 50,00" pattern="[0-9.]*" />
+                            <Input 
+                                type="text" 
+                                required id="pvalue" 
+                                max={9999} min={1} 
+                                name="pvalue" 
+                                value={pValueRef} 
+                                onChange={(e)=> setPValueRef(e.target.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, ''))} 
+                                placeholder="e.g: R$: 50,00" 
+                                pattern="[0-9.]*" 
+                            />
                         </div>
                         <div>
                             <label htmlFor="pstock">Estoque</label>
-                            <Input type="number" required id="pstock" name="pstock" ref={stockRef} placeholder="e.g: 500 unidades" max={99999} pattern="[0-9]*" />
+                            <Input type="text" onChange={(e)=> setStockRef(e.target.value.replace(/\./g, '').replace(/[^\d]/g, '').substring(0,10))}  required id="pstock" name="pstock" value={stockRef} placeholder="e.g: 500 unidades" max={99999} pattern="[0-9]*" />
                         </div>
                         <div className="check">
                             <label htmlFor="is-new">Usado</label>
@@ -130,6 +150,7 @@ export default function AddProduct() {
                                 <option value="eletronicos">Eletrônicos</option>
                                 <option value="vestuario">Vestuário e moda</option>
                                 <option value="casa">Casa e decoração</option>
+                                <option value="casa">Cozinha</option>
                                 <option value="beleza">Beleza</option>
                                 <option value="saude">Saúde e bem-estar</option>
                                 <option value="alimentos">Alimentos e bebidas</option>
@@ -172,6 +193,10 @@ const PageContainer = styled.div`
     flex-direction: column;
     gap: 30px;
 
+    *{
+        transition: all 200ms;
+    }
+
     .check{
         input[type="checkbox"]{
             accent-color: ${mainColor};
@@ -190,6 +215,10 @@ const PageContainer = styled.div`
         font-size: 50px;
         margin-bottom: 40px;
         user-select: none;
+        @media (max-width:500px) {
+         font-size: 40px;
+        }
+        
     }
 
     .product-ilus{
@@ -216,6 +245,11 @@ const NewProductForm = styled.form`
     border-radius: 15px;
     display: flex;
     flex-direction: column;
+
+    @media (max-width:500px) {
+         box-sizing: content-box;
+         border-radius: 0;
+    }
 
     .bottom{
         display: flex;

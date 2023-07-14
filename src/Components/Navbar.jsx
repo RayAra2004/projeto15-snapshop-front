@@ -7,9 +7,12 @@ import Swal from "sweetalert2";
 import logoutIcon from '../assets/logout.svg';
 import UserContext from "../Contexts/userContext.js";
 import { v4 as uuidv4 } from 'uuid';
-import trash from '../assets/trash.svg';
-import { toast } from "react-toastify";
 import CartItem from "./CartItem.jsx";
+import { BiSolidStar } from "react-icons/bi";
+import {FaMoneyBillAlt} from 'react-icons/fa';
+import {AiFillPhone} from 'react-icons/ai';
+import { useWindowSize } from "@uidotdev/usehooks";
+import {FaHistory} from 'react-icons/fa';
 
 export default function Navbar() {
 
@@ -17,6 +20,7 @@ export default function Navbar() {
     const [showUserInfo, setShowUserInfo] = useState(false);
     const [showCartItems, setShowCartItems] = useState(false);
     const location = useLocation();
+    const size = useWindowSize();
     const { user,setUser,cartItems } = useContext(UserContext);
     function logout() {
         Swal.fire({
@@ -50,27 +54,74 @@ export default function Navbar() {
         <>
             {location.pathname !== '/cadastro' && location.pathname !== '/login' && location.pathname !== '/adicionar-produto' &&
 
-                <NavContainer onMouseEnter={closeDropdowns} onMouseLeave={closeDropdowns}>
+                <NavContainer amount={cartItems.length} onMouseEnter={closeDropdowns} onMouseLeave={closeDropdowns}>
                     <div className="content">
                         <div className="actions">
+                           {
+                            size.width > 800 && 
                             <Navbutton title="Categorias">
                                 <p>Categorias</p>
                             </Navbutton>
-                            <Navbutton title="Histórico">
-                                <p>Histórico</p>
-                            </Navbutton>
-                            <Navbutton title="Vender" onClick={() => navigate('/meus-produtos')}>
-                                <p>Vender</p>
-                            </Navbutton>
+                           }
+                            {
+                                user && 
+                               <>
+                                <Navbutton title="Histórico">
+                                    {size.width < 800 ? <FaHistory/> : <p>Histórico</p>}
+                                </Navbutton>
+                                {
+                                    size.width > 800 && 
+                                    <Navbutton title="Vender" onClick={() => {navigate('/meus-produtos'); closeDropdowns();}}>
+                                        <p>Vender</p>
+                                    </Navbutton>
+                                }
+                                
+                               </>
+                            }
                             <Navbutton title="Contato">
-                                <p>Contato</p>
+                                {size.width < 800 ? <AiFillPhone/> : <p>Contato</p>}
                             </Navbutton>
                         </div>
 
                         <div className="user-actions">
+                           
+                            {
+                                !user &&
+                                <>
+                                    <Navbutton title="Entrar" onMouseEnter={closeDropdowns} onClick={() => navigate('/login')}>
+                                        <p>Entre</p>
+                                    </Navbutton>
+                                    <Navbutton title="Criar uma conta" onMouseEnter={closeDropdowns} onClick={() => navigate('/cadastro')}>
+                                        <p>Crie uma conta</p>
+                                    </Navbutton>
+                                </>
+                            }
+                            {
+                                user && 
+                                <>
+                                    <Navbutton title="Compras" onMouseEnter={closeDropdowns} onClick={() => navigate('/minhas-compras')}>
+                                        {size.width < 800 ? <FaMoneyBillAlt/> : <p>Compras</p>}
+                                    </Navbutton>
+                                    <Navbutton title="Favoritos" onMouseEnter={closeDropdowns} onClick={() => navigate('#')}>
+                                        {size.width < 800 ? <BiSolidStar/> : <p>Favoritos</p>}
+                                    </Navbutton>
+                                </>
+                            }
+                           
+                            <BsFillBellFill className="notifications-btn" />
+                            <div className="cart">
+                                <BsFillCartFill onClick={() => navigate('/carrinho')} className="cart-btn" onMouseEnter={() => {setShowCartItems(true); setShowUserInfo(false)}} />
+                                <p className="cart-items-amount">{cartItems.length > 0 ? cartItems.length : ''}</p>
+                                {
+                                    showCartItems &&
+                                    <div onMouseLeave={closeDropdowns} className="cart-items">
+                                        {cartItems && cartItems.length > 0 && cartItems.map(cartItem => <CartItem key={uuidv4()} item={cartItem} />)}
+                                    </div>
+                                }
+                            </div>
                             {
                                 user &&
-                                <Navbutton title="Usuario" onMouseEnter={() => setShowUserInfo(true)} >
+                                <Navbutton title="Usuario" onMouseEnter={() => {setShowUserInfo(true); setShowCartItems(false);}} >
                                     <BsPersonCircle />
                                     <p className="user">{user.userName}<BsFillCaretDownFill className="drop" /></p>
                                     {showUserInfo &&
@@ -84,35 +135,8 @@ export default function Navbar() {
 
                                 </Navbutton>
                             }
-                            {
-                                !user &&
-                                <>
-                                    <Navbutton title="Entrar" onMouseEnter={closeDropdowns} onClick={() => navigate('/login')}>
-                                        <p>Entre</p>
-                                    </Navbutton>
-                                    <Navbutton title="Criar uma conta" onMouseEnter={closeDropdowns} onClick={() => navigate('/cadastro')}>
-                                        <p>Crie uma conta</p>
-                                    </Navbutton>
-                                </>
-                            }
-                            <Navbutton title="Compras" onMouseEnter={closeDropdowns} onClick={() => navigate('/minhas-compras')}>
-                                <p>Compras</p>
-                            </Navbutton>
-                            <Navbutton title="Favoritos" onMouseEnter={closeDropdowns} onClick={() => navigate('#')}>
-                                <p>Favoritos</p>
-                            </Navbutton>
-                            <BsFillBellFill onClick={() => navigate('#')} className="notifications-btn" />
-                            <div className="cart">
-                                <BsFillCartFill onClick={() => navigate('/carrinho')} className="cart-btn" onMouseEnter={() => setShowCartItems(true)} />
-                                <p className="cart-items-amount">{cartItems.length > 0 ? cartItems.length : ''}</p>
-                                {
-                                    showCartItems &&
-                                    <div onMouseLeave={closeDropdowns} className="cart-items">
-                                        {cartItems && cartItems.length > 0 && cartItems.map(cartItem => <CartItem key={uuidv4()} item={cartItem} />)}
-                                    </div>
-                                }
-                            </div>
                         </div>
+                        
                     </div>
                 </NavContainer>
             }
@@ -131,6 +155,7 @@ const NavContainer = styled.header`
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.6);
 
     .content{
         width: 100%;
@@ -163,9 +188,9 @@ const NavContainer = styled.header`
             align-items: center;
             .cart-items-amount{
                 position: absolute;
-                right: 3px;
-                top: 3px;
-                font-size: 10px;
+                right: ${(props)=> props.amount < 10 ? '5px' : '3px'};
+                top: 4px;
+                font-size: 9px;
                 font-weight: bold;
                 pointer-events: none;
                 
@@ -183,13 +208,10 @@ const NavContainer = styled.header`
                 overflow: hidden;
                 box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -3px 0px 3px rgba(0, 0, 0, 0.1);
             }
+        }
     }
 }
 
-}
-
-    
-    
 `;
 
 const Navbutton = styled.button`
@@ -204,32 +226,50 @@ const Navbutton = styled.button`
     justify-content: center;
     gap: 10px;
     transition: all 200ms;
+    *{
+        transition: all 200ms;
+    }
+
+    &:nth-child(1)
+    {
+        margin-left: 10px;
+    }
+
 
     &:hover{
+       p{
         color: lightgray;
+       }
+    }
+
+    p{
+        color:white;
     }
 
     .user{
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-right: 10px;
         .drop{
             padding-top: 5px;
             padding-left: 5px;
             font-size:10px;
         }
+        
     }
 
     .user-info{
         width: 200px;
-        padding-bottom: 20px;
         background-color: white;
         border-bottom-left-radius: 5px;
         border-bottom-right-radius: 5px;
+        border-top-left-radius: 5px;
+        overflow: hidden;
         position: absolute;
         top: 29px;
         transition: all 200ms;
-        left: 0;
+        left: -110px;
         box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1), -3px 0px 3px rgba(0, 0, 0, 0.1);
 
         display: flex;
@@ -251,6 +291,7 @@ const Navbutton = styled.button`
             &:hover{
                 background-color: #f0f0f0;
             }
+           
         }
     }
 `;

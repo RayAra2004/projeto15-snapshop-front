@@ -7,13 +7,14 @@ import banner from '../assets/banner.png'
 import { useRef } from "react";
 import { useWindowSize } from "@uidotdev/usehooks";
 
+
+
 export default function Header() {
 
     const navigate = useNavigate();
     const location = useLocation();
     const searchRef = useRef();
     const size = useWindowSize();
-    
  
     function search()
     {
@@ -22,14 +23,14 @@ export default function Header() {
 
     return (
 
-        <HeaderContainer>
+        <HeaderContainer pathname ={location.pathname}>
             <div className="content">
                 <Logo onClick={() => navigate('/')}>
                     <img className="favicon" src={favicon} alt="" />
                     <h1>SnapShop</h1>
                 </Logo>
 
-                {location.pathname !== '/cadastro' && location.pathname !== '/login' && location.pathname !== '/adicionar-produto' &&
+                {location.pathname !== '/cadastro' && location.pathname !== '/login' && location.pathname !== '/adicionar-produto' && 
 
                     <SearchBar>
                         <input ref={searchRef} type="text" placeholder={size.width < 500 ? 'Buscar produtos...' : "Buscar produtos, marcas e muito mais…"} />
@@ -55,6 +56,7 @@ const HeaderContainer = styled.header`
     justify-content: center;
     align-items: center;
     z-index: 1;
+    border-bottom: ${(props) => props.pathname == '/adicionar-produto' ||  props.pathname == '/login' ||  props.pathname == '/cadastro'  ? '1px solid rgba(255,255,255,0.6)': '0'};
 
     .content{
         display: flex;
@@ -103,6 +105,7 @@ const SearchBar = styled.div`
         @media (max-width:500px) {
             min-width: 250px;
             width: 80%;
+            text-align: center;
         }
     }
 
@@ -115,8 +118,6 @@ const SearchBar = styled.div`
         padding-right: 5px;
         height: 30px;
     }
-
-
 `;
 
 const Logo = styled.div`
