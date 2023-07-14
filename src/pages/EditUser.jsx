@@ -4,7 +4,6 @@ import ProfilePic from "../assets/Profile.svg"
 
 export default function EditUser(){
     return(
-  
             <Container>
                 <Banner>
                     <h1>Edite seu perfil para ficar a sua cara!</h1>
