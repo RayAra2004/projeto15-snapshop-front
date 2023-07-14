@@ -31,8 +31,8 @@ export default function SignUp(){
                 navigate(`/login`)
                 })
             .catch(err => 
-                console.log(err), 
-                //setIsLoading(false)
+                alert(err.response),
+                setIsLoading(false)
                 )
 
         setIsLoading(true)
