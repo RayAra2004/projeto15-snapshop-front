@@ -13,7 +13,7 @@ export default function MyProducts(){
     const {user, setUser} =  useContext(UserContext);
     const navigate = useNavigate();
     //const { token } = user;
-    const token = "f1496ae3-5ff7-4f3e-856a-68aa36e84c4a"
+    const token = "16615766-ec8c-457f-abe6-fd5d31f01125"
 
     const config = {
         headers: {
@@ -22,7 +22,7 @@ export default function MyProducts(){
     }
 
     useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}/meus-produtos`, config)
+        axios.get(`${import.meta.env.VITE_API_URL}/minhas-compras`, config)
             .then(res => {
                 setProducts(res.data);
                 console.log(res.data);
