@@ -253,8 +253,6 @@ const SCBuy = styled.div`
 
 const SCForm = styled.form`
     margin-top: 150px;
-   
-  
     display: flex;
     background-color: white;
     padding: 40px;
@@ -263,7 +261,6 @@ const SCForm = styled.form`
     max-width: 650px;
     flex-direction: column;
     box-sizing: border-box;
-
 
     @media (max-width:1060px) {
          margin-top: 0;

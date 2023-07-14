@@ -24,6 +24,7 @@ import axios from 'axios';
 export default function App() {
 
   const [user,setUser] = useState();
+  const [clientSearchValue,setClientSearchValue] = useState('');
   const [cartItems,setCartItems] = useState([]);
 
   useEffect(()=>{
@@ -38,7 +39,7 @@ export default function App() {
 
 
   return (
-    <UserContext.Provider value={{user,setUser,cartItems,setCartItems}}>
+    <UserContext.Provider value={{user,setUser,cartItems,setCartItems,clientSearchValue,setClientSearchValue}}>
       <BrowserRouter>
       <ToastContainer />
        <Header/> 
