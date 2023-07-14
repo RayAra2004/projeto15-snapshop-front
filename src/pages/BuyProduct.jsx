@@ -9,6 +9,8 @@ import creditCardIcon from '../assets/credit_card.png';
 import boletoIcon from '../assets/boleto.png';
 import pixIcon from '../assets/pix.png';
 import cardIlus from '../assets/card_ilustration.svg';
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 export default function BuyProduct() {
 
@@ -57,15 +59,61 @@ export default function BuyProduct() {
 
     function finalizarCompra(e) {
         e.preventDefault();
+        if(paymentMethod == '')
+        {
+            toast.error( 'Selecione um método de pagamento!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
 
+            return;
+        }
+
+        Swal.fire({
+            title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Comprar ${name} x${quantity}</span>`,
+            showCancelButton: true,
+            confirmButtonColor: `${mainColor}`,
+            cancelButtonColor: '#c9c9c9',
+            confirmButtonText: 'Sim',
+            cancelButtonText: 'Cancelar',
+            width: 300,
+            heightAuto: false,
+            imageUrl: picture,
+            imageWidth: 200,
+        }).then((result) => {
+            if (result.isConfirmed) {
+               buy();
+            }
+        });
+    }
+
+    function buy()
+    {
         let body;
         if (paymentMethod === 'pix' || paymentMethod === 'boleto') {
             body = { amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod }
         } else {
             body = { amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
         }
+
         axios.post(`${import.meta.env.VITE_API_URL}/comprar/${id}`, body, config)
             .then(res => {
+                toast.success( `${name} x${quantity} comprado com sucesso`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                });
                 navigate('/');
             })
             .catch(res => console.log(res))
@@ -155,11 +203,11 @@ export default function BuyProduct() {
                    <SCMethod method={paymentMethod}>
                         <div>
                             <label htmlFor="nameHolder">Nome do Titular</label>
-                            <input id="nameHolder" name="nameHolder" placeholder="Nome do Titular" value={nameHolder} onChange={e => setNameHolder(e.target.value)} required />
+                            <input id="nameHolder" name="nameHolder" placeholder="Nome do Titular" value={nameHolder} onChange={e => setNameHolder(e.target.value)}  required={paymentMethod == 'creditCard' || paymentMethod == 'debitCard'} />
                         </div>
                         <div>
                             <label htmlFor="cardNumber">Número do Cartão</label>
-                            <input id="cardNumber" name="cardNumber" type="number" placeholder="Número do Cartão" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required />
+                            <input id="cardNumber" name="cardNumber" type="number" placeholder="Número do Cartão" value={cardNumber} onChange={e => setCardNumber(e.target.value)}  required={paymentMethod == 'creditCard' || paymentMethod == 'debitCard'} />
                         </div>
                         <div>
                             <label htmlFor="expiration">Vencimento</label>
@@ -167,7 +215,7 @@ export default function BuyProduct() {
                         </div>
                         <div>
                             <label htmlFor="cvv">CVV</label>
-                            <input id="cvv" name="cvv" type="number" placeholder="Ex: 241" value={cvv} onChange={e => setCvv(e.target.value)} required />
+                            <input id="cvv" name="cvv" type="number" placeholder="Ex: 241" value={cvv} onChange={e => setCvv(e.target.value)}  required={paymentMethod == 'creditCard' || paymentMethod == 'debitCard'} />
                         </div>                      
                     </SCMethod>
                     <img className="ilustration" src={cardIlus} alt="" />
@@ -194,12 +242,19 @@ const SCBuy = styled.div`
     height: 100%;
     justify-content: center;
     gap: 30px;
-
+    @media (max-width:1060px) {
+        
+         align-items: center;
+         flex-direction: column-reverse;
+         margin-top: 150px;
+         justify-content: flex-end;
+    }
 `
 
 const SCForm = styled.form`
     margin-top: 150px;
-    margin-left: 30px;
+   
+  
     display: flex;
     background-color: white;
     padding: 40px;
@@ -208,6 +263,19 @@ const SCForm = styled.form`
     max-width: 650px;
     flex-direction: column;
     box-sizing: border-box;
+
+
+    @media (max-width:1060px) {
+         margin-top: 0;
+         margin-left: 0;
+    }
+    @media (max-width:650px) {
+         width: 100%;
+         margin: 0;
+         height: fit-content;
+         
+         border-radius: 0;
+    }
 
     h1{
 
@@ -220,6 +288,10 @@ const SCForm = styled.form`
         }
 
     .container-card{
+        
+        @media (max-width:650px) {
+            height: auto;
+        }
         
         display: ${props => {
         if (props.method === '' || props.method === 'pix' || props.method === 'boleto') {
@@ -235,6 +307,9 @@ const SCForm = styled.form`
 
         .ilustration{
             height: 100%;
+            @media (max-width:650px) {
+               display: none;
+            }
         }
     }   
 
@@ -297,6 +372,11 @@ const SCForm = styled.form`
         #cep{
             width: 100px;
         }
+
+        @media (max-width:650px) {
+         width: 100%;
+         
+    }
     }
     div{
         display: flex;
@@ -380,7 +460,7 @@ const SCMethod = styled.div`
 const SCProduct = styled.div`
     font-family: 'Mulish', sans-serif;
     margin-top: 150px;
-    margin-left: 30px;
+    
     box-sizing: border-box;
     background-color: white;
     display: flex;
@@ -391,6 +471,20 @@ const SCProduct = styled.div`
     border-radius: 20px;
     max-height: 440px;
     transition: all 200ms;
+
+    @media (max-width:1060px) {
+         margin-top: 0;
+         width:650px;
+    }
+
+    @media (max-width:650px) {
+         width: 100%;
+        
+         border-radius: 0;
+    }
+
+    
+
     .payment-form{
         font-size: 13px;
         user-select: none;
