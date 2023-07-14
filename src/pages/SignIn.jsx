@@ -1,9 +1,43 @@
 import styled from "styled-components";
 import { mainColor } from "../Colors/colors";
 import Login from "../assets/login.svg"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { ThreeDots } from "react-loader-spinner";
+import axios from "axios";
+import { useContext } from "react";
+import UserContext from "../Contexts/userContext"
 
 export default function SignIn(){
+    const [form, setForm] = useState({email: "", password: ""})
+    const [isLoading, setIsLoading] = useState(false)
+    const navigate = useNavigate()
+    const {setUser} =  useContext(UserContext);
+
+    console.log(form)
+    function handleForm(e) {
+        setForm({...form, [e.target.name]: e.target.value})
+    }
+    function submitForm(e){
+        e.preventDefault()
+
+        axios
+            .post(`${import.meta.env.VITE_API_URL}/login`, form)
+            .then(res => {
+                setIsLoading(false)
+                setUser(res.data.user)
+                localStorage.setItem("user", res.data.user)
+                navigate(`/`)
+                })
+            .catch(err => 
+                alert(err.response.data),
+                setIsLoading(false)
+                )
+
+        setIsLoading(true)
+    }
+
+
     return(
         <Body>
             <SideBarr>
@@ -11,13 +45,16 @@ export default function SignIn(){
                 <img src={Login} alt="login-logo"/>
             </SideBarr>
             <Container>
-                <Form>
+                <Form onSubmit={submitForm}>
                     <Input 
                         required
                         type="text" 
                         placeholder="E-mail"
                         autoComplete="username"
                         name="email"
+                        value={form.email}
+                        disabled={isLoading}
+                        onChange={handleForm}
                     />
 
                     <Input 
@@ -26,9 +63,14 @@ export default function SignIn(){
                         placeholder="Senha"
                         autoComplete="new-password"
                         name="password"
+                        value={form.password}
+                        disabled={isLoading}
+                        onChange={handleForm}
                     />
                     
-                    <Button>Entrar</Button>
+                    <Button type="submit" disabled={isLoading}>
+                        {isLoading ? <ThreeDots type="ThreeDots" color="#FFFFFF" height={20} width={40} /> : "Entrar"}
+                    </Button>
                 </Form>
                 <Link to={"/cadastro"}>
                     <p>Não possui uma conta? Cadastre-se já!</p>
