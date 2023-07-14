@@ -47,6 +47,16 @@ export default function ViewProduct() {
             const newCartItem = {name,picture,_id,value,quantity:selectedQuantity};
             // ATUALIZAR NO BANCO DE DADOS
             setCartItems([...cartItems,newCartItem]);
+            toast.success(`${name} adicionado ao carrinho!`, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
        }
        else
        {
