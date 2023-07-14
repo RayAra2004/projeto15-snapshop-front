@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Date from "../assets/datas.svg"
-import ProfilePic from "../assets/Profile.svg"
+import ProfilePic from "../assets/profile.svg"
 
 export default function EditUser(){
     return(
