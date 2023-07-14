@@ -28,11 +28,13 @@ export default function MyProducts(){
                 console.log(res.data);
             })
             .catch(res => console.log(res));
-    }, []);
+    }, [products]);
 
     function deleteProduct(id){
         axios.delete(`${import.meta.env.VITE_API_URL}/remover-produto/${id}`, config)
-            .then(res => console.log(res.data))
+            .then(res => {
+                setProducts(products.filter(update => update._id !== id))
+            })
             .catch(res => console.log(res.data));
     }
 
