@@ -12,14 +12,12 @@ export default function SignUp(){
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
 
-    console.log(form)
     function handleForm(e) {
         setForm({...form, [e.target.name]: e.target.value})
     }
     function submitForm(e){
         e.preventDefault()
-        console.log(form)
-
+        setIsLoading(true);
         if(form.password !== form.confirmPassword) return alert("Senhas incompatíveis, tente novamente.")
 
         delete form.confirmPassword
@@ -31,11 +29,9 @@ export default function SignUp(){
                 navigate(`/login`)
                 })
             .catch(err => 
-                console.log(err), 
-                //setIsLoading(false)
-                )
-
-        setIsLoading(true)
+                alert(err.response),
+                setIsLoading(false)
+            )
     }
 
     return(

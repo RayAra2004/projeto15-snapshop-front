@@ -17,12 +17,24 @@ import SignUp from './pages/SignUp';
 import Navbar from './Components/Navbar';
 import SignIn from './pages/SignIn';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
+import axios from 'axios';
 
 
 export default function App() {
 
   const [user,setUser] = useState();
   const [cartItems,setCartItems] = useState([]);
+
+  useEffect(()=>{
+    if(localStorage.getItem('token'))
+    {
+      axios.get(`${import.meta.env.VITE_API_URL}/info-usuario`,{headers:{Authorization:localStorage.getItem('token')}})
+      .then((res) => {
+        setUser(res.data);
+      })
+    }
+  },[]);
 
 
   return (
