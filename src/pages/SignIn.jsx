@@ -71,7 +71,7 @@ export default function SignIn(){
                         required
                         id="email"
                         type="text" 
-                        placeholder="E-mail"
+                        placeholder="e.g: myemail@email.com"
                         autoComplete="username"
                         name="email"
                         value={form.email}
@@ -83,7 +83,7 @@ export default function SignIn(){
                         required
                         id="password"
                         type="password" 
-                        placeholder="Senha"
+                        placeholder="**********"
                         autoComplete="new-password"
                         name="password"
                         value={form.password}
@@ -98,7 +98,6 @@ export default function SignIn(){
                 <GoogleLogin
                     onSuccess={credentialResponse => {
                         const googleObj = jwt_decode(credentialResponse.credential);
-                        console.log(googleObj);
                         setForm({email:googleObj.email,password:googleObj.sub});
                         login(googleObj.email,googleObj.sub,googleObj);
                     }}
@@ -110,7 +109,7 @@ export default function SignIn(){
                     auto_select
                     context="signin"
                     width="360"
-                    state_cookie_domain="google-track-it"
+                    state_cookie_domain="google-snapshop"
                     prompt_parent_id="s1j89281h168egdsadjkh712"
                     ux_mode="popup"
                 />
