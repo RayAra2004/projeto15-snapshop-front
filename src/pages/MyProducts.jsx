@@ -15,7 +15,6 @@ export default function MyProducts(){
     const {user, setUser} =  useContext(UserContext);
     const navigate = useNavigate();
     const token  = localStorage.getItem('token');
-
     const config = {
         headers: {
             "Authorization": `${token}`
