@@ -91,7 +91,7 @@ export default function ViewProduct() {
                                     />
                                     <span className="available"> ({stock ? stock : 0} disponíveis)</span> </p>
                             </div>
-                            <button onClick={buy} disabled={stock && stock > 0 ? false : true}>{stock && stock > 0 ? 'Comprar agora' : 'Produto indisponível'}</button>
+                            <button className="buy-btn" onClick={buy} disabled={stock && stock > 0 ? false : true}>{stock && stock > 0 ? 'Comprar agora' : 'Produto indisponível'}</button>
                             <button onClick={addToCart} disabled={stock && stock > 0  && itemsFound == 0 ? false : true}>{stock && stock > 0 && itemsFound == 0 ? 'Carrinho' : stock == 0 ? 'Carrinho': 'Ja está no carrinho!' }</button>
                         </div>
                     </div>
@@ -137,6 +137,10 @@ const SCProduct = styled.div`
     margin-bottom: 80px;
     overflow: hidden;
 
+    @media (max-width:573px) {
+        border-radius: 0;
+    }
+
     
     .description{
         
@@ -144,6 +148,12 @@ const SCProduct = styled.div`
         margin-top: 20px;
         min-height: 100px;
         height:fit-content;
+
+        @media (max-width:573px) {
+            width: calc(100% - 20px);
+            max-width: 100%;
+        }
+       
         h1{
             font-family: 'Mulish', sans-serif;
             font-weight: bold;
@@ -165,6 +175,10 @@ const SCProduct = styled.div`
         justify-content: center;
         align-items: center;
         position: relative;
+        @media (max-width:573px) {
+            width: 100%;
+            flex-direction: column;
+        }
     }
 
     .category{
@@ -175,9 +189,22 @@ const SCProduct = styled.div`
         color: #2968c8;
         font-family: 'Mulish', sans-serif;
         cursor: pointer;
+        @media (max-width:573px) {
+            top: 10px;
+            left: 50%;
+            width: fit-content;
+            transform: translate(-50%);
+        }
     }
 
     img{
+        @media (max-width:573px) {
+            margin-top: 40px;
+            max-width: 100%;
+            margin-left: 0;
+            border-radius: 0;
+        }
+
         max-width: 300px;
         width: 100%;
         object-fit: scale-down;
@@ -199,6 +226,7 @@ const SCProduct = styled.div`
         margin-top: 10px;
         box-sizing: border-box;
         border-left: 1px solid rgba(0,0,0,0.3);
+       
         max-width: 320px;
         width: 100%;
         padding-top: 30px;
@@ -209,9 +237,15 @@ const SCProduct = styled.div`
         justify-content: flex-start;
         gap: 20px;
         flex-direction: column;
-        margin-bottom: 20px;
+       
         
-        
+        @media (max-width:573px) {
+            border: 0;
+            margin: 0;
+            max-width: 100%;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
         .name{
             font-size: 25px;
             font-weight: bold;
@@ -232,11 +266,18 @@ const SCProduct = styled.div`
             }
         }
 
+        .buy-btn{
+            margin-top: 20px;
+        }
+
         .price-container{
             display: flex;
             justify-content: center;
             flex-direction: column;
             gap: 10px;
+            @media (max-width:573px) {
+                width: 100%;
+            }
         }
 
         .has-stock{
