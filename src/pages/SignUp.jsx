@@ -6,12 +6,15 @@ import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner"
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useWindowSize } from "@uidotdev/usehooks";
 
 
 export default function SignUp(){
     const [form, setForm] = useState({name: "", email: "", password: "", confirmPassword: "", photo: ""});
     const [invalidImage, setInvalidImage] = useState(false);
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const [invalidPassword,setInvalidPassword] = useState(false);
+    const size = useWindowSize();
     const navigate = useNavigate();
 
     async function validarUrlImagem(url) {
@@ -60,7 +63,21 @@ export default function SignUp(){
             return;
         }
 
-        if(form.password !== form.confirmPassword) return alert("Senhas incompatíveis, tente novamente.")
+        if(form.password !== form.confirmPassword){
+            setInvalidPassword(true);
+            toast.error( "Senhas inseridas são incompatíveis.", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
+            setIsLoading(false);
+            return;
+        }
 
         delete form.confirmPassword
 
@@ -77,57 +94,68 @@ export default function SignUp(){
     }
 
     return(
-        <Body>
-            <SideBarr>
-                <h1>Cadastre-se e venha aproveitar nosso App!</h1>
-                <img src={Shop} alt="cadastrar" />
+        <Body height={size.height}>
+            <SideBarr height={size.height}>
+                <h1>Cadastre-se</h1>
+                {size.height > 700 && <img src={Shop} alt="cadastrar" />}
             </SideBarr>
             <Container>
                 <Form onSubmit={submitForm}>
+                    <label htmlFor="name">Nome</label>
                     <Input 
-                        required 
-                        placeholder="Nome" 
+                        required
+                        id="name"
+                        placeholder="e.g: Maria Madalena" 
                         name="name"
                         value={form.name}
                         onChange={handleForm}
                         disabled={isLoading}
                     />
+                     <label htmlFor="email">E-mail</label>
                     <Input 
                         required 
+                        id="email"
                         type="email" 
-                        placeholder="E-mail" 
+                        placeholder="e.g: myemail@email.com" 
                         autoComplete="username" 
                         name="email"
                         value={form.email}
                         onChange={handleForm}
                         disabled={isLoading}
                     />
+                     <label htmlFor="password">Senha</label>
                     <Input 
-                        required 
+                        required
+                        id="password"
                         type="password" 
                         minLength={3}
-                        placeholder="Senha" 
+                        placeholder="********" 
                         autoComplete="new-password" 
                         name="password"
                         value={form.password}
                         onChange={handleForm}
                         disabled={isLoading}
                     />
+                     <label htmlFor="confirmPassword">Confirmação de senha</label>
                     <Input 
                         required 
                         type="password"
+                        id="confirmPassword"
+                        className={invalidPassword ? 'invalid' : ''}
                         minLength={3}
-                        placeholder="Confirme a senha" 
+                        placeholder="********" 
                         autoComplete="new-password" 
                         name="confirmPassword"
                         value={form.confirmPassword}
-                        onChange={handleForm}
+                        onChange={(e)=> {handleForm(e); setInvalidPassword(false);}}
                         disabled={isLoading}
                     />
+                    <label htmlFor="photo">Foto de usuário</label>
                     <Input 
-                        required 
+                        required
+                        id="photo"
                         type="text" 
-                        placeholder="Foto de usuário" 
+                        placeholder="e.g: https://www.cats.com/cat.jpg" 
                         name="photo"
                         value={form.photo}
                         onChange={(e)=> {handleForm(e); setInvalidImage(false);}}
@@ -150,15 +178,26 @@ export default function SignUp(){
 
 const Body = styled.div`
     width: 100%;
-    height: 100%;
+    height: auto;
+    min-height: 100%;
     background-color: ${mainColor};
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 200px;
+    box-sizing: border-box;
+    
+    @media (max-width:924px) {
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: ${(props)=> props.height > 700 ? '160px' : '30px'};
+        gap: 50px;
+    }
 `
 const Container = styled.div`
-    width: 400px;
-    height: 400px;
+    width: 100%;
+    max-width: 400px;
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
@@ -166,6 +205,13 @@ const Container = styled.div`
     justify-content: center;
     box-sizing: border-box;
     border-radius: 15px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+    margin-top: 20px;
+
+    @media (max-width:400px) {
+        width: calc(100% - 20px)
+    }
 
     & p{
         color: #C71585;
@@ -173,16 +219,23 @@ const Container = styled.div`
         font-weight: 400;
         font-size: 12px;
         text-decoration: underline;
-        margin-top: 15px;
         transition: all 200ms;
+        margin-bottom: 20px;
         &:hover{
             color: #DDA0DD;
         }
     }
 `
 const Form = styled.form`
-    width: 300px;
+    width: 100%;
+    padding:20px;
+   
     box-sizing: border-box;
+    
+    label{
+        font-family: 'Mulish', sans-serif;
+       
+    }
     .invalid{
             border: 2px solid red;
             color:  red;
@@ -195,6 +248,7 @@ const Input = styled.input`
     width: 100%;
     height: 40px;
     margin-bottom: 7px;
+    margin-top: 7px;
     box-sizing: border-box;
     border: 1px solid #DDA0DD;
     border-radius: 5px;
@@ -226,13 +280,21 @@ const Button = styled.button`
 
 const SideBarr = styled.div`
     width: 400px;
-    height: 200px;
     margin-right: 100px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
+    
+    @media (max-width:400px) {
+        width: 100%;
+    }
+
+    @media (max-width:924px) {
+        margin-right: 0;
+    }
     
     & h1{
         font-family: 'Mulish', sans-serif;
@@ -241,11 +303,25 @@ const SideBarr = styled.div`
         color: #FFFFFF;
         margin-bottom: 15px;
         user-select: none;
+       
+
+        position: ${(props)=> props.height < 700? 'fixed' : 'static'};
+        top: 15px;
+        right:50%;
+        transform:${(props)=> props.height < 700 ? 'translateX(50%)' : 'normal'};
+        white-space: nowrap;
+        z-index: ${(props)=> props.height < 700? '1' : '0'};
     }
 
     & img{
-        width: 250px;
+        width: 100%;
+        max-width: 250px;
         margin-top: 10px;
         user-select: none;
+
+        @media (max-width:400px) {
+            width: 100%;
+            max-width: 250px;
+        }
     }
 `
