@@ -122,9 +122,9 @@ export default function BuyProduct() {
     function fillIn(v) {
         if (v === 'pix' || v === 'boleto') {
             setCardNumber(0);
-            setExpiration('');
+            setExpiration('null');
             setCvv(0);
-            setNameHolder('');
+            setNameHolder('null');
         }
     }
 
