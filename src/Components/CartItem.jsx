@@ -5,9 +5,15 @@ import UserContext from "../Contexts/userContext";
 import styled from "styled-components";
 import { BsFillTrashFill } from "react-icons/bs";
 import { mainColor } from "../Colors/colors";
+import axios from "axios";
 
 export default function CartItem({item}) {
     const {cartItems, setCartItems } = useContext(UserContext);
+    const config = {
+        headers: {
+            "Authorization": localStorage.getItem('token')
+        }
+    }
 
     function remove() {
         Swal.fire({
@@ -24,16 +30,32 @@ export default function CartItem({item}) {
         }).then((result) => {
             if (result.isConfirmed) {
                 const newCartItems = cartItems.filter(i => i._id !== item._id);
-                setCartItems(newCartItems);
-                toast.info( `${item.name} removido do carrinho!`, {
-                    position: "top-center",
-                    autoClose: 2000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: false,
-                    progress: undefined,
-                    theme: "colored",
+                axios.delete(`${import.meta.env.VITE_API_URL}/carrinho/${item._id}`,config)
+                .then((res) =>{
+                    setCartItems(newCartItems);
+                    toast.info( `${item.name} removido do carrinho com sucesso!`, {
+                        position: "top-center",
+                        autoClose: 2000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: false,
+                        progress: undefined,
+                        theme: "colored",
+                    });
+                })
+                .catch((error)=>{
+                    console.log(error);
+                    toast.error(`Falha ao remover ${item.name} do carrinho!`, {
+                        position: "top-center",
+                        autoClose: 2000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: false,
+                        progress: undefined,
+                        theme: "colored",
+                    });
                 });
             }
         });
@@ -64,6 +86,7 @@ const SCCartItem = styled.div`
 
     .image{
         height: 80%;
+        aspect-ratio: 1;
         flex-shrink: 0;
         margin-left: 5px;
         position: relative;

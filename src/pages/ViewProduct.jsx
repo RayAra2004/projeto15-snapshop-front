@@ -14,7 +14,11 @@ export default function ViewProduct() {
     const { cartItems,setCartItems } = useContext(UserContext);
     const itemsFound = cartItems.filter(item => item._id == _id);
     const navigate = useNavigate();
-
+    const config = {
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
+        }
+    }
 
     useEffect(() => {
         if (stock && stock > 0) {
@@ -46,16 +50,31 @@ export default function ViewProduct() {
        if(itemsFound.length == 0){
             const newCartItem = {name,picture,_id,value,quantity:selectedQuantity};
             // ATUALIZAR NO BANCO DE DADOS
-            setCartItems([...cartItems,newCartItem]);
-            toast.success(`${name} adicionado ao carrinho!`, {
-                position: "top-center",
-                autoClose: 2000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-                theme: "colored",
+            axios.post(`${import.meta.env.VITE_API_URL}/carrinho/${_id}?quantity=${selectedQuantity}`,null,config)
+            .then((res)=>{
+                setCartItems([...cartItems,newCartItem]);
+                toast.success(`${name} adicionado ao carrinho!`, {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                });
+            }).catch((error)=>{
+                toast.error(`Falha ao adicionar ${name} ao carrinho!`, {
+                    position: "top-center",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                });
+                console.log(error);
             });
        }
        else
@@ -222,6 +241,7 @@ const SCProduct = styled.div`
         margin-left: 10px;
         margin-top: 10px;
         border-radius: 5px;
+        margin-right: 10px;
         &:hover{
             object-fit: cover;
             cursor: zoom-in;

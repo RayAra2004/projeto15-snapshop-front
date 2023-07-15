@@ -32,7 +32,16 @@ export default function App() {
     {
       axios.get(`${import.meta.env.VITE_API_URL}/info-usuario`,{headers:{Authorization:localStorage.getItem('token')}})
       .then((res) => {
-        setUser(res.data);
+        //console.log(res);
+        if(res.data.items)
+        {
+          let items = [];
+          res.data.items.forEach(item =>{
+            items.push({name:item.name,picture:item.picture,_id:item._id,quantity:item.quantity,value:item.value})
+          });
+          setCartItems(items);
+        }
+        setUser(res.data.user);
       })
     }
   },[]);

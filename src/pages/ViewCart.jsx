@@ -3,13 +3,11 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../Contexts/userContext";
 import styled from "styled-components";
 import { mainColor } from "../Colors/colors";
-import { BsFillTrashFill } from "react-icons/bs";
-import { BiSolidEdit } from 'react-icons/bi';
+import { BsFillTrashFill,BsFillCartFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from 'uuid';
-import illustration from '../assets/my_products.svg';
 
 export default function ViewCart() {
 
@@ -38,7 +36,7 @@ export default function ViewCart() {
         axios.get(`${import.meta.env.VITE_API_URL}/carrinho`, config)
             .then(res => {
                 setProducts(res.data);
-                console.log(res.data)
+                //console.log(res.data)
             })
             .catch(res => console.log(res));
     }
@@ -97,27 +95,29 @@ export default function ViewCart() {
         navigate(`/visualizar-produto/${prod._id}`, { state: { product: prod } });
     }
 
-    function newProduct()
-    {
-        navigate('/adicionar-produto');
-    }
-
     return (
         <SCMyProducts>
 
             <SCProducts>
+                {products === undefined && <p>Carregando...</p>}
+                {products && products.length == 0 && <p className="no-purchases">Você não possui itens no carrinho</p>}
+                {products && products.length > 0 && <p className="title"><BsFillCartFill/> Carrinho de compras <BsFillCartFill/></p>}
                 {products && products.map(product =>
                     <SCProduct key={uuidv4()}>
-                        <div>
-                            <img onClick={(e) => viewProduct(product, e)} src={product.picture} alt={product.name} />
+                        <div className="left">
+                            <div className="image" onClick={(e) => viewProduct(product, e)}>
+                                <img src={product.picture} alt={product.name} />
+                                <p className="quantity">x{product.quantity}</p>
+                            </div>
                             <div className="name-desc">
                                 <p onClick={(e) => viewProduct(product, e)} className="name">{product.name}</p>
                             </div>
                         </div>
                         <div className="right">
-                            <span className="value">R${String(Number(product.value).toFixed(2)).replace('.', ',')}</span>
-                            <span className="stock">Estoque:{product.stock}</span>
-
+                           <div className="values">
+                                <span className="value">R${String(Number(product.value).toFixed(2)).replace('.', ',')}</span>
+                                {/* <span className="stock">Estoque:{product.stock}</span> */}
+                           </div>
                             <SCActions>
                                 <BsFillTrashFill className="delete" onClick={(e) => deleteProduct(e, product._id, product.name, product.picture)} />
                             </SCActions>
@@ -140,6 +140,11 @@ const SCMyProducts = styled.div`
     display: flex;
     justify-content: center;
     gap: 30px;
+
+    .left{
+        display: flex;
+        align-items: center;
+    }
     .header{
         max-width: 800px;
         width: 100%;
@@ -161,7 +166,6 @@ const SCMyProducts = styled.div`
         img{
             height: 100px;
             margin-top: 20px;
-            
         }
 
         button{
@@ -196,6 +200,32 @@ const SCProducts = styled.div`
     box-sizing: border-box;
     max-width: 575px;
     width: 100%;
+    gap: 10px;
+
+    .title{
+        color: white;
+        font-family: 'Mulish', sans-serif;
+        font-size: 30px;
+        display: flex;
+        width: calc(100% - 20px);
+       
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    @media (max-width:600px) {
+        max-width: 100%;
+    }
+    .no-purchases{
+        color: white;
+        font-family: 'Mulish', sans-serif;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        font-size: 20px;
+        white-space: nowrap;
+    }
 `
 
 const SCProduct = styled.div`
@@ -203,13 +233,14 @@ const SCProduct = styled.div`
     max-width: 800px;
     width: 100%;
     box-sizing: border-box;
-    height: 200px;
-    margin-bottom: 40px;
+    height: 100px;
     border-radius: 10px;
-    @media (max-width:500px) {
+    box-shadow: 1px 6px 15px 1px rgba(0,0,0,0.3);
+    @media (max-width:600px) {
         height: fit-content;
         padding-bottom: 20px;
         border-radius: 0;
+        
     }
     padding: 15px;
     display: flex;
@@ -220,6 +251,8 @@ const SCProduct = styled.div`
     .name-desc{
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
         width: 300px;
         @media (max-width:533px) {
             width:100%;
@@ -239,31 +272,41 @@ const SCProduct = styled.div`
     .value{
         font-family: 'Mulish', sans-serif;
         font-size: 18px;
+        margin-top: 4px;
     }
 
-    
-    img{
-        width: 130px;
-        max-width: 130px;
-        height: 130px;
+    .image{
+        height: 60px;
+        flex-shrink: 0;
+        width: 60px;
         border-radius: 50%;
         border: 2px solid ${mainColor};
         cursor: pointer;
-        @media (max-width:533px) {
-            height: 60px;
-            width: 60px;
+        overflow: hidden;
+        position: relative;
+        img{
+            width: 100%;
+            opacity: 50%;
+        }
+
+        .quantity{
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            color: black;
+            font-family: 'Mulish', sans-serif;
+            transform: translate(-50%,-50%);
+            font-weight: bold;
         }
     }
+   
 
     .name{
         width: 100%;
-        @media (max-width:500px) {
-           font-size: 20px;
-        }
+        font-size: 20px;
         height: auto;
         font-family: 'Mulish', sans-serif;
         font-weight: 700;
-        font-size: 30px;
         margin-left: 20px;
         cursor: pointer;
         transition: all 200ms;
@@ -286,36 +329,28 @@ const SCProduct = styled.div`
     }
 
     .right{
-        height: 130px;
         display: flex;
-        flex-direction: column;
+        justify-content: center;
+        flex-direction: row;
         gap: 10px;
-        margin-right: 30px;
-
-        @media (max-width:533px) {
-            height: fit-content;
-            margin-right: 10px;
-            align-self: flex-start;
+        
+        .values{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
     }
 `
 
 const SCActions = styled.div`
-    display: flex;
     box-sizing: border-box;
-    margin-top: 20px;
-    gap: 20px;
-    .edit, .delete{
+    .delete{
         font-size: 25px;
         cursor: pointer;
         color: ${mainColor};
         transition: all 200ms;
         &:hover{
             color: #DDA0DD;
-        }
-
-        @media (max-width:500px) {
-           font-size: 15px;
         }
     }
 
