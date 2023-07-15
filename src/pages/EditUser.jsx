@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Date from "../assets/datas.svg"
 import ProfilePic from "../assets/profile.svg"
+import { secondaryColor } from "../Colors/colors";
 
 export default function EditUser(){
     return(
@@ -49,7 +50,7 @@ const Profile = styled.div`
     background-color: #FFE4E1;
     margin-right: 200px;
     box-sizing: border-box;
-    border: 1px solid #FF1493;
+    border: 1px solid ${secondaryColor};
     border-radius: 10px;
 `
 
@@ -81,9 +82,9 @@ const Button = styled.button`
     cursor: pointer;
     transition: all 200ms;
     &:hover{
-        color: #FF1493;
+        color: ${secondaryColor};
         background-color: white;
-        border: 1px solid #FF1493;
+        border: 1px solid ${secondaryColor};
     }
 `
 
@@ -115,7 +116,7 @@ const Banner = styled.div`
         font-weight: 700;
         margin-bottom: 10px;
         font-style: italic;
-        color: #FF1493;
+        color: ${secondaryColor};
         text-align: center;
     }
 `

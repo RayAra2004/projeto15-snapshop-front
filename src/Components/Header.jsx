@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { mainColor } from "../Colors/colors.js";
+import { headerColor, mainColor } from "../Colors/colors.js";
 import favicon from "../assets/favicon.png"
 import { BsSearch } from 'react-icons/bs';
 import { useLocation, useNavigate } from "react-router";
@@ -50,7 +50,7 @@ const HeaderContainer = styled.header`
 
     width: 100%;
     height: 80px;
-    background-color: ${mainColor};
+    background-color: ${headerColor};
     position: fixed;
     left: 0;
     top: 0;

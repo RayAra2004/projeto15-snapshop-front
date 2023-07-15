@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { mainColor } from "../Colors/colors";
+import { disabledButtonColor, mainColor, pageBackgroundColor, secondaryColor } from "../Colors/colors";
 import { useContext, useEffect, useRef, useState } from "react";
 import productIllustration from '../assets/editproduct.svg';
 import { ThreeDots } from "react-loader-spinner";
@@ -150,7 +150,7 @@ const PageContainer = styled.div`
 
     height: 100%;
     width: 100%;
-    background-color: ${mainColor};
+    background-color: ${pageBackgroundColor};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -288,13 +288,13 @@ const NewProductForm = styled.form`
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #8b305e;
+            background-color: ${disabledButtonColor};
         }
        &:enabled{
         &:hover{
-            color: #FF1493;
+            color: ${secondaryColor};
             background-color: white;
-            border: 1px solid #FF1493;
+            border: 1px solid ${secondaryColor};
         }
        }
     }

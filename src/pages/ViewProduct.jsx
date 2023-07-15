@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import UserContext from "../Contexts/userContext";
 import styled from "styled-components";
-import { backgroundProduct, installmentsColor, mainColor } from "../Colors/colors";
+import { backgroundProduct, disabledButtonColor, installmentsColor, mainColor, pageBackgroundColor, secondaryColor } from "../Colors/colors";
 import Footer from "../Components/Footer";
 import { toast } from "react-toastify";
 
@@ -175,7 +175,7 @@ export default function ViewProduct() {
 }
 
 const SCBuyProduct = styled.div`
-    background-color: ${mainColor};
+    background-color: ${pageBackgroundColor};
     width: 100%;
     min-height: 100%;
     display: flex;
@@ -222,7 +222,6 @@ const SCProduct = styled.div`
             font-size: 20px;
             padding-bottom: 5px;
             border-bottom: 1px solid rgba(0,0,0,0.3);
-            
         }
 
         p{
@@ -358,7 +357,7 @@ const SCProduct = styled.div`
         width: 30px;
         margin-left: 3px;
         &:focus{
-            outline: 1px solid #FF1493;
+            outline: 1px solid ${secondaryColor};
         }
         &::-webkit-outer-spin-button,
             &::-webkit-inner-spin-button {
@@ -383,15 +382,15 @@ const SCProduct = styled.div`
         transition: all 200ms;
         &:enabled{
                 &:hover{
-                color: #FF1493;
+                color: ${secondaryColor};
                 background-color: white;
-                border: 1px solid #FF1493;
+                border: 1px solid ${secondaryColor};
             }
         }
 
         &:disabled{
             cursor: not-allowed;
-            background-color: #974d72;
+            background-color: ${disabledButtonColor};
         }
     }
   

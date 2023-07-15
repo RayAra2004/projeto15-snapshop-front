@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { mainColor } from "../Colors/colors";
+import { mainColor, pageBackgroundColor, secondaryColor } from "../Colors/colors";
 import Login from "../assets/login.svg"
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -125,7 +125,7 @@ export default function SignIn(){
 const Body = styled.div`
     width: 100%;
     height: 100%;
-    background-color: ${mainColor};
+    background-color: ${pageBackgroundColor};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -210,9 +210,9 @@ const Button = styled.button`
     justify-content: center;
     align-items: center;
     &:hover{
-        color: #FF1493;
+        color: ${secondaryColor};
         background-color: white;
-        border: 1px solid #FF1493;
+        border: 1px solid ${secondaryColor};
     }
 `
 const SideBarr = styled.div`

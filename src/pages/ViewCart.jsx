@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../Contexts/userContext";
 import styled from "styled-components";
-import { mainColor } from "../Colors/colors";
+import { mainColor, pageBackgroundColor, secondaryColor } from "../Colors/colors";
 import { BsFillTrashFill,BsFillCartFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -129,7 +129,7 @@ export default function ViewCart() {
 }
 
 const SCMyProducts = styled.div`
-    background-color: ${mainColor};
+    background-color: ${pageBackgroundColor};
     margin-top: 120px;
     width: 100%;
     min-height: 100%;
@@ -179,9 +179,9 @@ const SCMyProducts = styled.div`
             cursor: pointer;
             transition: all 200ms;
             &:hover{
-                color: #FF1493;
+                color: ${secondaryColor};
                 background-color: white;
-                border: 1px solid #FF1493;
+                border: 1px solid ${secondaryColor};
             }
         }
     }
