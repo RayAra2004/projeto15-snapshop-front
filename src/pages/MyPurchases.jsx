@@ -34,7 +34,7 @@ export default function MyPurchases() {
 
     function renderProducts() {
         if (products === undefined) return <p>Carregando...</p>
-        if (products.length == 0) return <p>Você não possui compras</p>
+        if (products && products.length == 0) return <p className="no-purchases">Você não possui compras</p>
         return (
             products.map(product => {
                 if (product.name !== undefined) {
@@ -93,6 +93,17 @@ const SCProducts = styled.div`
     @media (max-width:583px) {
        padding: 0;
        margin-top: 40px;
+    }
+
+    .no-purchases{
+        color: white;
+        font-family: 'Mulish', sans-serif;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        font-size: 20px;
+        white-space: nowrap;
     }
 `
 
