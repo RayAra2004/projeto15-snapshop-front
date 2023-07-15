@@ -97,9 +97,9 @@ export default function BuyProduct() {
     {
         let body;
         if (paymentMethod === 'pix' || paymentMethod === 'boleto') {
-            body = { amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod }
+            body = {price:value, amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod }
         } else {
-            body = { amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
+            body = {price:value, amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
         }
 
         axios.post(`${import.meta.env.VITE_API_URL}/comprar/${id}`, body, config)

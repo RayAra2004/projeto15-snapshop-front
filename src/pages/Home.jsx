@@ -33,6 +33,10 @@ export default function Home(){
             setClientSearchValue(searchParam);
         }
 
+        if(!clientSearchValue){
+            setClientSearchValue ('');
+        }
+
         setIsLoading(true);
         axios.get(`${import.meta.env.VITE_API_URL}/all-products`)
         .then((res) => {
@@ -110,7 +114,10 @@ export default function Home(){
                 <ProductsContainer>
                     {
                         allProducts && allProducts.length > 0 && allProducts.map((product) =>{
-                            return <ProductItem show={product.name.toLowerCase().includes(clientSearchValue.toLowerCase()) || product.category.toLowerCase().includes(clientSearchValue.toLowerCase())} key={product._id} product={product}/>
+                            if(product && product.name && product.category && product._id)
+                            {
+                                return <ProductItem show={product.name.toLowerCase().includes(clientSearchValue.toLowerCase()) || product.category.toLowerCase().includes(clientSearchValue.toLowerCase())} key={product._id} product={product}/>
+                            }
                         })
                     }
                     {
