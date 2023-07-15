@@ -115,14 +115,15 @@ export default function AddProduct() {
                {size.width > 1029 &&  <img className="product-ilus" src={productIllustration} alt="" />}
                 <NewProductForm onSubmit={createProduct}>
                     <label htmlFor="pname">Nome</label>
-                    <Input type="text" required id="pname" name="pname" maxLength={20} minLength={5} ref={nameRef} placeholder="e.g: Furadeira" />
+                    <Input type="text" required id="pname" name="pname" maxLength={70} minLength={5} ref={nameRef} placeholder="e.g: Furadeira" />
                     <div className="values">
                         <div>
                             <label htmlFor="pvalue">Valor</label>
                             <Input 
                                 type="text" 
                                 required id="pvalue" 
-                                max={9999} min={1} 
+                                maxLength={6}
+                                max={6}
                                 name="pvalue" 
                                 value={pValueRef} 
                                 onChange={(e)=> setPValueRef(e.target.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, ''))} 
@@ -146,28 +147,29 @@ export default function AddProduct() {
                         <div>
                             <label htmlFor="pcategory">Categoria</label>
                             <select name="pcategory" id="pcategory" ref={categoryRef}>
-                                <option value="geral">Geral</option>
-                                <option value="eletronicos">Eletrônicos</option>
-                                <option value="vestuario">Vestuário e moda</option>
-                                <option value="casa">Casa e decoração</option>
-                                <option value="casa">Cozinha</option>
-                                <option value="beleza">Beleza</option>
-                                <option value="saude">Saúde e bem-estar</option>
-                                <option value="alimentos">Alimentos e bebidas</option>
-                                <option value="esportes">Esportes</option>
-                                <option value="livros">Livros e mídia</option>
-                                <option value="brinquedos">Brinquedos e jogos</option>
-                                <option value="automotivo">Automotivo</option>
-                                <option value="ferramentas">Ferramentas</option>
-                                <option value="animais">Animais de estimação</option>
-                                <option value="joias">Jóias e acessórios</option>
-                                <option value="musicais">Instrumentos musicais</option>
-                                <option value="papelaria">Artigos de papelaria</option>
-                                <option value="bebes">Produtos para bebês</option>
-                                <option value="moveis">Móveis e decoração</option>
-                                <option value="limpeza">Produtos de limpeza</option>
-                                <option value="viagem">Viagem</option>
-                                <option value="casa-inteligente">Smart Home</option>
+                                <option value="Geral">Geral</option>
+                                <option value="Eletrônicos">Eletrônicos</option>
+                                <option value="Vestuário e moda">Vestuário e moda</option>
+                                <option value="Casa e decoração">Casa e decoração</option>
+                                <option value="Cozinha">Cozinha</option>
+                                <option value="Beleza">Beleza</option>
+                                <option value="Saúde e bem-estar">Saúde e bem-estar</option>
+                                <option value="Alimentos e bebidas">Alimentos e bebidas</option>
+                                <option value="Esportes">Esportes</option>
+                                <option value="Livros e mídia">Livros e mídia</option>
+                                <option value="Brinquedos e jogos">Brinquedos e jogos</option>
+                                <option value="Automotivo">Automotivo</option>
+                                <option value="Ferramentas">Ferramentas</option>
+                                <option value="Animais de estimação">Animais de estimação</option>
+                                <option value="Jóias e acessórios">Jóias e acessórios</option>
+                                <option value="Instrumentos musicais">Instrumentos musicais</option>
+                                <option value="Artigos de papelaria">Artigos de papelaria</option>
+                                <option value="Produtos para bebês">Produtos para bebês</option>
+                                <option value="Móveis e decoração">Móveis e decoração</option>
+                                <option value="Produtos de limpeza">Produtos de limpeza</option>
+                                <option value="Viagem">Viagem</option>
+                                <option value="Smart Home">Smart Home</option>
+                                <option value="Informática">Informática</option>
                             </select>
                         </div>
                         <div>

@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../Contexts/userContext";
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
+import { BiSolidTruck } from "react-icons/bi";
+
 
 export default function MyPurchases() {
     const [products, setProducts] = useState(undefined);
@@ -43,7 +45,7 @@ export default function MyPurchases() {
                             <div className="main">
                                 <div className="image-and-name">
                                     <img src={product.picture} alt={product.name} />
-                                    <p>{product.name}</p>
+                                    <p>{product.name.substring(0,10).trim()}{product.name.length > 10 ? '...' : ''}</p>
                                 </div>
                                <div className="numbers">
                                     <span>R${String(Number(product.value).toFixed(2)).replace('.', ',')}</span>
@@ -51,7 +53,7 @@ export default function MyPurchases() {
                                </div>
                             </div>
                             <div className="secondary">
-                                <p className="adress">E: {` ${product.info.street} ${product.info.number} - ${product.info.neighborhood} - ${product.info.city},${product.info.state}`}</p>
+                                <p className="adress"><BiSolidTruck className="truck"/> {`${product.info.street} ${product.info.number} - ${product.info.neighborhood} - ${product.info.city},${product.info.state}`.substring(0,40)}...</p>
                             </div>
                         
                     </Purchase>)
@@ -178,6 +180,14 @@ const Purchase = styled.div`
         gap: 5px;
         .adress{
             font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            line-break: anywhere;
+        }
+
+        .truck{
+            color: ${mainColor};
         }
     }
 

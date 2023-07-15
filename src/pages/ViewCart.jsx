@@ -108,7 +108,7 @@ export default function ViewCart() {
                                 <p className="quantity">x{product.quantity}</p>
                             </div>
                             <div className="name-desc">
-                                <p onClick={(e) => viewProduct(product, e)} className="name">{product.name}</p>
+                                <p onClick={(e) => viewProduct(product, e)} className="name">{product.name.substring(0,10).trim()}{product.name.length > 10 ? '...' : ''}</p>
                             </div>
                         </div>
                         <div className="right">
@@ -202,7 +202,7 @@ const SCProducts = styled.div`
     .title,.loading{
         color: white;
         font-family: 'Mulish', sans-serif;
-        font-size: 30px;
+        font-size: 27px;
         display: flex;
         width: calc(100% - 20px);
        

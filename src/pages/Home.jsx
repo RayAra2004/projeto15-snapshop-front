@@ -6,13 +6,15 @@ import axios from "axios";
 import { useContext } from "react";
 import UserContext from "../Contexts/userContext";
 import { mainColor } from "../Colors/colors";
+import { useLocation } from "react-router-dom";
 export default function Home(){
 
     const [allProducts,setAllProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const {clientSearchValue,amountOfPages} = useContext(UserContext);
+    const {clientSearchValue,amountOfPages,setClientSearchValue} = useContext(UserContext);
     const [currentPage,setCurrentPage] = useState(1);
     const [currentBanner, setCurrentBanner] = useState(0);
+    const location = useLocation();
     const banners = [
         'https://http2.mlstatic.com/D_NQ_880633-MLA70477554913_072023-OO.webp',
         'https://http2.mlstatic.com/D_NQ_603228-MLA70502856957_072023-OO.webp',
@@ -24,6 +26,13 @@ export default function Home(){
         'https://http2.mlstatic.com/D_NQ_702369-MLA70504685369_072023-OO.webp',
       ];
     useEffect(()=>{
+        const queryParams = new URLSearchParams(location.search);
+        const searchParam = queryParams.get('search');
+        if(searchParam != '')
+        {
+            setClientSearchValue(searchParam);
+        }
+
         setIsLoading(true);
         axios.get(`${import.meta.env.VITE_API_URL}/all-products`)
         .then((res) => {
@@ -170,7 +179,6 @@ const PageContainer = styled.div`
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
         opacity: 0;
         transition: opacity 0.5s ease-in-out;
     }

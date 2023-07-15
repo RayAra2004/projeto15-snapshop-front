@@ -11,8 +11,8 @@ import { toast } from "react-toastify";
 export default function EditProduct() {
 
     const nameRef = useRef();
-    const [pValueRef,setPValueRef] =useState('');
-    const [stockRef,setStockRef] =useState('');
+    const [pValueRef, setPValueRef] = useState('');
+    const [stockRef, setStockRef] = useState('');
     const descriptionRef = useRef();
     const categoryRef = useRef();
     const pictureRef = useRef();
@@ -20,29 +20,27 @@ export default function EditProduct() {
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
-    const {user} = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const params = useParams();
     const id = params.id;
-    useEffect(()=>{
-          
-        if(!localStorage.getItem('token'))
-        {
+    useEffect(() => {
+
+        if (!localStorage.getItem('token')) {
             navigate('/');
             return;
         }
 
-        if(location.state)
-        {
-            const {name,value,description,stock,category,picture,is_new} = location.state.product;
+        if (location.state) {
+            const { name, value, description, stock, category, picture, is_new } = location.state.product;
             nameRef.current.value = name;
-            setPValueRef(Number(value.toString().replace(',','.')));
+            setPValueRef(Number(value.toString().replace(',', '.')));
             setStockRef(stock);
             descriptionRef.current.value = description;
             categoryRef.current.value = category;
             pictureRef.current.value = picture;
             isNewRef.current.checked = is_new;
         }
-    },[]);
+    }, []);
 
     function editProduct(e) {
         e.preventDefault();
@@ -56,13 +54,13 @@ export default function EditProduct() {
             available: Number(stockRef) > 0,
             category: categoryRef.current.value,
             picture: pictureRef.current.value,
-            is_new:isNewRef.current.checked
+            is_new: isNewRef.current.checked
         }
 
-        axios.put(`${import.meta.env.VITE_API_URL}/editar-produto/${id}`, newProduct,{headers:{Authorization:`Bearer ${user.token}`}})
+        axios.put(`${import.meta.env.VITE_API_URL}/editar-produto/${id}`, newProduct, { headers: { Authorization: `Bearer ${user.token}` } })
             .then(() => {
                 setIsLoading(false);
-                toast.info( 'Produto editado!', {
+                toast.info('Produto editado!', {
                     position: "bottom-left",
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -75,7 +73,7 @@ export default function EditProduct() {
                 navigate('/meus-produtos');
             })
             .catch(err => {
-                console.log(err); 
+                console.log(err);
                 alert('Erro ao editar produto, olhe o console para mais informações!')
                 setIsLoading(false);
             })
@@ -88,15 +86,35 @@ export default function EditProduct() {
                 <img className="product-ilus" src={productIllustration} alt="" />
                 <NewProductForm onSubmit={editProduct}>
                     <label htmlFor="pname">Nome</label>
-                    <Input type="text" required id="pname" name="pname" ref={nameRef} placeholder="e.g: Furadeira" />
+                    <Input type="text" required id="pname" name="pname" maxLength={70} minLength={5} ref={nameRef} placeholder="e.g: Furadeira" />
                     <div className="values">
                         <div>
                             <label htmlFor="pvalue">Valor</label>
-                            <Input type="number"   onChange={(e)=> setPValueRef(e.target.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, ''))}  required id="pvalue" name="pvalue" value={pValueRef} placeholder="e.g: R$: 50,00" pattern="[0-9.]*" />
+                            <Input
+                                maxLength={6}
+                                max={6}
+                                type="text"
+                                onChange={(e) => setPValueRef(e.target.value.replace(/[^\d.]/g, '').replace(/\.(?=.*\.)/g, ''))}
+                                required
+                                id="pvalue"
+                                name="pvalue"
+                                value={pValueRef}
+                                placeholder="e.g: R$: 50,00"
+                                pattern="[0-9.]*"
+                            />
                         </div>
                         <div>
                             <label htmlFor="pstock">Estoque</label>
-                            <Input type="number" onChange={(e)=> setStockRef(e.target.value.replace(/\./g, '').replace(/[^\d]/g, '').substring(0,10))} required id="pstock" name="pstock" value={stockRef} placeholder="e.g: 500 unidades" max={99999} pattern="[0-9]*" />
+                            <Input type="number"
+                                onChange={(e) => setStockRef(e.target.value.replace(/\./g, '').replace(/[^\d]/g, '').substring(0, 10))}
+                                required
+                                id="pstock"
+                                name="pstock"
+                                value={stockRef}
+                                placeholder="e.g: 500 unidades"
+                                max={99999}
+                                pattern="[0-9]*"
+                            />
                         </div>
                         <div className="check">
                             <label htmlFor="is-new">Usado</label>
@@ -110,28 +128,29 @@ export default function EditProduct() {
                         <div>
                             <label htmlFor="pcategory">Categoria</label>
                             <select name="pcategory" id="pcategory" ref={categoryRef}>
-                                <option value="geral">Geral</option>
-                                <option value="eletronicos">Eletrônicos</option>
-                                <option value="vestuario">Vestuário e moda</option>
-                                <option value="casa">Casa e decoração</option>
-                                <option value="casa">Cozinha</option>
-                                <option value="beleza">Beleza</option>
-                                <option value="saude">Saúde e bem-estar</option>
-                                <option value="alimentos">Alimentos e bebidas</option>
-                                <option value="esportes">Esportes</option>
-                                <option value="livros">Livros e mídia</option>
-                                <option value="brinquedos">Brinquedos e jogos</option>
-                                <option value="automotivo">Automotivo</option>
-                                <option value="ferramentas">Ferramentas</option>
-                                <option value="animais">Animais de estimação</option>
-                                <option value="joias">Jóias e acessórios</option>
-                                <option value="musicais">Instrumentos musicais</option>
-                                <option value="papelaria">Artigos de papelaria</option>
-                                <option value="bebes">Produtos para bebês</option>
-                                <option value="moveis">Móveis e decoração</option>
-                                <option value="limpeza">Produtos de limpeza</option>
-                                <option value="viagem">Viagem</option>
-                                <option value="casa-inteligente">Smart Home</option>
+                                <option value="Geral">Geral</option>
+                                <option value="Eletrônicos">Eletrônicos</option>
+                                <option value="Vestuário e moda">Vestuário e moda</option>
+                                <option value="Casa e decoração">Casa e decoração</option>
+                                <option value="Cozinha">Cozinha</option>
+                                <option value="Beleza">Beleza</option>
+                                <option value="Saúde e bem-estar">Saúde e bem-estar</option>
+                                <option value="Alimentos e bebidas">Alimentos e bebidas</option>
+                                <option value="Esportes">Esportes</option>
+                                <option value="Livros e mídia">Livros e mídia</option>
+                                <option value="Brinquedos e jogos">Brinquedos e jogos</option>
+                                <option value="Automotivo">Automotivo</option>
+                                <option value="Ferramentas">Ferramentas</option>
+                                <option value="Animais de estimação">Animais de estimação</option>
+                                <option value="Jóias e acessórios">Jóias e acessórios</option>
+                                <option value="Instrumentos musicais">Instrumentos musicais</option>
+                                <option value="Artigos de papelaria">Artigos de papelaria</option>
+                                <option value="Produtos para bebês">Produtos para bebês</option>
+                                <option value="Móveis e decoração">Móveis e decoração</option>
+                                <option value="Produtos de limpeza">Produtos de limpeza</option>
+                                <option value="Viagem">Viagem</option>
+                                <option value="Smart Home">Smart Home</option>
+                                <option value="Informática">Informática</option>
                             </select>
                         </div>
                         <div>
