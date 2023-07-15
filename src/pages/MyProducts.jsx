@@ -132,7 +132,7 @@ export default function MyProducts() {
                         </div>
                     </SCProduct>
                 )}
-                {!products && <p>Carregando...</p>}
+                {!products && <p className="loading">Carregando...</p>}
             </SCProducts>
 
         </SCMyProducts>
@@ -203,6 +203,17 @@ const SCProducts = styled.div`
     box-sizing: border-box;
     max-width: 575px;
     width: 100%;
+
+    .loading{
+        color: white;
+        font-family: 'Mulish', sans-serif;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        font-size: 20px;
+        white-space: nowrap;
+    }
 `
 
 const SCProduct = styled.div`

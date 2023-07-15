@@ -97,9 +97,7 @@ export default function ViewCart() {
 
     return (
         <SCMyProducts>
-
             <SCProducts>
-                {products === undefined && <p>Carregando...</p>}
                 {products && products.length == 0 && <p className="no-purchases">Você não possui itens no carrinho</p>}
                 {products && products.length > 0 && <p className="title"><BsFillCartFill/> Carrinho de compras <BsFillCartFill/></p>}
                 {products && products.map(product =>
@@ -124,10 +122,8 @@ export default function ViewCart() {
                         </div>
                     </SCProduct>
                 )}
-                {!products && <p>Carregando...</p>}
-                
+                {!products && <p className="loading">Carregando...</p>}
             </SCProducts>
-
         </SCMyProducts>
     );
 }
@@ -202,7 +198,8 @@ const SCProducts = styled.div`
     width: 100%;
     gap: 10px;
 
-    .title{
+
+    .title,.loading{
         color: white;
         font-family: 'Mulish', sans-serif;
         font-size: 30px;

@@ -11,7 +11,7 @@ export default function ViewProduct() {
     const { product } = useLocation().state;
     const { name, value, picture, description, _id, stock ,category} = product;
     const [selectedQuantity, setSelectedQuantity] = useState(0);
-    const { cartItems,setCartItems } = useContext(UserContext);
+    const { cartItems,setCartItems,user } = useContext(UserContext);
     const itemsFound = cartItems.filter(item => item._id == _id);
     const navigate = useNavigate();
     const config = {
@@ -41,10 +41,43 @@ export default function ViewProduct() {
     }
 
     function buy() {
-        navigate(`/comprar/${_id}`,{state:{name:product.name , quantity:selectedQuantity,value:product.value, picture:product.picture }});
+        if(user)
+        {
+            navigate(`/comprar/${_id}`,{state:{name:product.name , quantity:selectedQuantity,value:product.value, picture:product.picture }});
+        }
+        else
+        {
+            toast.error(`Você precisa estar logado para fazer uma compra!`, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
+        }
     }
 
     function addToCart() {
+
+        if(!user)
+        {
+            toast.error(`Você precisa estar logado para usar o carrinho!`, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
+
+            return;
+        }
+
         // ADICIONAR SÓ SE O ITEM NÃO EXISTE NO CARRINHO
         const itemsFound = cartItems.filter(item => item._id == _id);
        if(itemsFound.length == 0){
@@ -232,6 +265,7 @@ const SCProduct = styled.div`
             max-width: 100%;
             margin-left: 0;
             border-radius: 0;
+            margin-right: 0;
         }
 
         max-width: 300px;
