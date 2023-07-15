@@ -228,7 +228,7 @@ const SCProducts = styled.div`
     gap: 10px;
 
 
-    .title,.loading{
+    .title{
         color: white;
         font-family: 'Mulish', sans-serif;
         font-size: 27px;
@@ -242,7 +242,7 @@ const SCProducts = styled.div`
     @media (max-width:600px) {
         max-width: 100%;
     }
-    .no-purchases{
+    .no-purchases,.loading{
         color: white;
         font-family: 'Mulish', sans-serif;
         position: fixed;

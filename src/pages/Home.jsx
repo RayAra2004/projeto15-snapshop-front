@@ -28,13 +28,8 @@ export default function Home(){
     useEffect(()=>{
         const queryParams = new URLSearchParams(location.search);
         const searchParam = queryParams.get('search');
-        if(searchParam != '')
-        {
+        if(searchParam && searchParam != ''){
             setClientSearchValue(searchParam);
-        }
-
-        if(!clientSearchValue){
-            setClientSearchValue ('');
         }
 
         setIsLoading(true);
