@@ -133,7 +133,7 @@ export default function ViewProduct() {
                 <div className="content">
                     <img src={picture} alt={name} />
                     <div className="info">
-                        <h1 className="category">Produtos <span>{'>'}</span> {category}</h1>
+                        <h1 onClick={()=> navigate(`/?search=${category}`)} className="category">Produtos <span>{'>'}</span> {category}</h1>
                         <p className="name">{name}</p>
                         <div className="price-container">
                             <p className="price">R${String(Number(value).toFixed(2)).replace('.', ',')}</p>
@@ -151,7 +151,7 @@ export default function ViewProduct() {
                                         value={selectedQuantity}
                                         onChange={(e) => setSelectedQuantity(Number(e.target.value.toString().replace('-', '')) < stock ? Number(e.target.value.toString().replace('-', '')) : stock)}
                                     />
-                                    <span className="available"> ({stock ? stock : 0} disponíveis)</span> </p>
+                                    <span className="available">{stock.toString().length >= 6 ? <br/> : ''} ({stock ? stock : 0} disponíveis)</span> </p>
                             </div>
                             <button className="buy-btn" onClick={buy} disabled={stock && stock > 0 ? false : true}>{stock && stock > 0 ? 'Comprar agora' : 'Produto indisponível'}</button>
                             <button onClick={addToCart} disabled={stock && stock > 0  && itemsFound == 0 ? false : true}>{stock && stock > 0 && itemsFound == 0 ? 'Carrinho' : stock == 0 ? 'Carrinho': 'Ja está no carrinho!' }</button>
@@ -210,6 +210,8 @@ const SCProduct = styled.div`
         margin-top: 20px;
         min-height: 100px;
         height:fit-content;
+        
+        
 
         @media (max-width:573px) {
             width: calc(100% - 20px);
@@ -226,6 +228,10 @@ const SCProduct = styled.div`
 
         p{
             margin-top: 10px;
+            line-height: 20px;
+            margin-bottom: 20px;
+            line-break: strict;
+            white-space: break-spaces;
         }
     }
 
@@ -249,6 +255,7 @@ const SCProduct = styled.div`
         font-weight: bold;
         color: #2968c8;
         font-family: 'Mulish', sans-serif;
+        white-space: nowrap;
         cursor: pointer;
         @media (max-width:573px) {
             top: 10px;
@@ -312,6 +319,7 @@ const SCProduct = styled.div`
         .name{
             font-size: 25px;
             font-weight: bold;
+            line-break: anywhere;
         }
 
         .installments{

@@ -6,17 +6,37 @@ import axios from "axios";
 import { useContext } from "react";
 import UserContext from "../Contexts/userContext";
 import { mainColor } from "../Colors/colors";
+import { useLocation } from "react-router-dom";
 export default function Home(){
 
     const [allProducts,setAllProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const {clientSearchValue,amountOfPages} = useContext(UserContext);
+    const {clientSearchValue,amountOfPages,setClientSearchValue} = useContext(UserContext);
     const [currentPage,setCurrentPage] = useState(1);
+    const [currentBanner, setCurrentBanner] = useState(0);
+    const location = useLocation();
+    const banners = [
+        'https://http2.mlstatic.com/D_NQ_880633-MLA70477554913_072023-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_603228-MLA70502856957_072023-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_969639-MLA70502889119_072023-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_687470-MLA70502996705_072023-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_613294-MLA70502998531_072023-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_605511-MLA70477564256_072023-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_727681-MLA70477708062_072023-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_702369-MLA70504685369_072023-OO.webp',
+      ];
     useEffect(()=>{
+        const queryParams = new URLSearchParams(location.search);
+        const searchParam = queryParams.get('search');
+        if(searchParam != '')
+        {
+            setClientSearchValue(searchParam);
+        }
+
         setIsLoading(true);
         axios.get(`${import.meta.env.VITE_API_URL}/all-products`)
         .then((res) => {
-            setAllProducts(res.data);
+            setAllProducts(orderByName(res.data));
             setIsLoading(false);
         })
         .catch(err => {
@@ -25,6 +45,34 @@ export default function Home(){
             setIsLoading(false);
         })
     },[]);
+
+    function orderByName(array) {
+        if (array) {
+          return array.sort((a, b) => {
+            if (a.name.toLowerCase() < b.name.toLowerCase()) {
+              return -1;
+            } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+        }else{
+            return null;
+        }
+        
+      }
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentBanner((prevBanner) =>
+            (prevBanner + 1) % banners.length
+          );
+        }, 5000);
+    
+        return () => clearInterval(interval);
+      }, []);
+    
 
     function changePage(amount)
     {
@@ -47,7 +95,17 @@ export default function Home(){
 
     return(
         <PageContainer>
-            <img className="banner" decoding="async" src="https://http2.mlstatic.com/storage/splinter-admin/o:f_webp,q_auto:best/1689183971088-home-sliderdesktop34.jpg" alt="RELÊMPAGO "></img>
+            <div className="banner-slider">
+                {banners.map((banner, index) => (
+                    <img
+                    key={index}
+                    src={banner}
+                    alt={`Banner ${index + 1}`}
+                    className={index === currentBanner ? 'active' : ''}
+                    decoding="async"
+                    />
+                ))}
+            </div>
             {
                 <ProductsContainer>
                     {
@@ -104,10 +162,29 @@ const PageContainer = styled.div`
     flex-direction: column;
     background-color: white;
 
-    .banner{
+   
+
+    .banner-slider {
+        position: relative;
+        width: 100%;
+        height: 300px;
+        overflow: hidden;
         margin-top: 120px;
         max-width: 100%;
+       
+    }
+
+    .banner-slider img {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    .banner-slider img.active {
+        opacity: 1;
     }
 `;
 
@@ -119,7 +196,6 @@ const ProductsContainer = styled.div`
     gap: 20px;
     margin-top: 30px;
     height: auto;
-    max-height: 1260px;
     flex-direction: row;
     margin-bottom: 120px;
 

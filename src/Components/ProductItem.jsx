@@ -101,5 +101,6 @@ const ProductContainer = styled.div`
         margin-top: 10px;
         line-height: 16px;
         font-size: 14px;
+        line-break: anywhere;
     }
 `;

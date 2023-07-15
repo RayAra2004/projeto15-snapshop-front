@@ -113,8 +113,8 @@ export default function MyProducts() {
                         <div>
                             <img onClick={(e) => viewProduct(product, e)} src={product.picture} alt={product.name} />
                             <div className="name-desc">
-                                <p onClick={(e) => viewProduct(product, e)} className="name">{product.name}</p>
-                                <p className="desc">{product.description.substring(0, 120).trim()}{product.description.length > 120 ? '...' : ''}</p>
+                                <p onClick={(e) => viewProduct(product, e)} className="name">{product.name.substring(0,10).trim()}{product.name.length > 10 ? '...' : ''}</p>
+                                <p className="desc">{product.description.substring(0, 50).trim()}{product.description.length > 50 ? '...' : ''}</p>
                             </div>
 
                         </div>
@@ -295,6 +295,8 @@ const SCProduct = styled.div`
         margin-top: 10px;
         font-size: 14px;
         margin-left: 20px;
+        line-break: anywhere;
+        margin-right: 5px;
     }
 
     span{

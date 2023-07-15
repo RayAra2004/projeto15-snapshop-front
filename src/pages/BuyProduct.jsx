@@ -226,7 +226,7 @@ export default function BuyProduct() {
 
             <SCProduct>
                 <img src={picture} />
-                <h1>{name}</h1>
+                <h1>{name.substring(0,20).trim()}{name.length > 20 ? '...' : ''}</h1>
                 <span className="amount">Quantidade: {quantity}</span>
                 {paymentMethod !== '' && <span className="payment-form">Forma de pagamento: {paymentMethod == 'creditCard' ? 'Crédito' : paymentMethod == 'debitCard' ? 'Débito' : paymentMethod == 'pix' ? 'Pix' : paymentMethod == 'boleto' ? 'Boleto' : ''}</span>}
                 <h2>R${String(Number(value).toFixed(2)).replace('.', ',')}</h2>
