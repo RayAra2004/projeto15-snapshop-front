@@ -39,7 +39,10 @@ export default function App() {
         {
           let items = [];
           res.data.items.forEach(item =>{
-            items.push({name:item.name,picture:item.picture,_id:item._id,quantity:item.quantity,value:item.value})
+            if(item)
+            {
+              items.push({name:item.name,picture:item.picture,_id:item._id,quantity:item.quantity,value:item.value});
+            }
           });
           setCartItems(items);
         }

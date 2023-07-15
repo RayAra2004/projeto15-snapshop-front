@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import UserContext from "../Contexts/userContext";
 import styled from "styled-components";
 import { mainColor, pageBackgroundColor, secondaryColor } from "../Colors/colors";
-import { BsFillTrashFill,BsFillCartFill } from "react-icons/bs";
+import { BsFillTrashFill, BsFillCartFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
@@ -99,28 +99,57 @@ export default function ViewCart() {
         <SCMyProducts>
             <SCProducts>
                 {products && products.length == 0 && <p className="no-purchases">Você não possui itens no carrinho</p>}
-                {products && products.length > 0 && <p className="title"><BsFillCartFill/> Carrinho de compras <BsFillCartFill/></p>}
-                {products && products.map(product =>
-                    <SCProduct key={uuidv4()}>
-                        <div className="left">
-                            <div className="image" onClick={(e) => viewProduct(product, e)}>
-                                <img src={product.picture} alt={product.name} />
-                                <p className="quantity">x{product.quantity}</p>
-                            </div>
-                            <div className="name-desc">
-                                <p onClick={(e) => viewProduct(product, e)} className="name">{product.name.substring(0,10).trim()}{product.name.length > 10 ? '...' : ''}</p>
-                            </div>
-                        </div>
-                        <div className="right">
-                           <div className="values">
-                                <span className="value">R${String(Number(product.value).toFixed(2)).replace('.', ',')}</span>
-                                {/* <span className="stock">Estoque:{product.stock}</span> */}
-                           </div>
-                            <SCActions>
-                                <BsFillTrashFill className="delete" onClick={(e) => deleteProduct(e, product._id, product.name, product.picture)} />
-                            </SCActions>
-                        </div>
-                    </SCProduct>
+                {products && products.length > 0 && <p className="title"><BsFillCartFill /> Carrinho de compras <BsFillCartFill /></p>}
+                {products && products.map(product => {
+                    if (product) {
+                        return (
+                            <SCProduct key={uuidv4()}>
+                                <div className="left">
+                                    <div className="image" onClick={(e) => viewProduct(product, e)}>
+                                        <img src={product.picture} alt={product.name} />
+                                        <p className="quantity">x{product.quantity}</p>
+                                    </div>
+                                    <div className="name-desc">
+                                        <p onClick={(e) => viewProduct(product, e)} className="name">{product.name.substring(0, 10).trim()}{product.name.length > 10 ? '...' : ''}</p>
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <div className="values">
+                                        <span className="value">R${String(Number(product.value).toFixed(2)).replace('.', ',')}</span>
+                                        {/* <span className="stock">Estoque:{product.stock}</span> */}
+                                    </div>
+                                    <SCActions>
+                                        <BsFillTrashFill className="delete" onClick={(e) => deleteProduct(e, product._id, product.name, product.picture)} />
+                                    </SCActions>
+                                </div>
+                            </SCProduct>
+                        );
+                    }
+                    else {
+                        return (
+                            <SCProduct key={uuidv4()}>
+                                <div className="left">
+                                    <div className="image">
+                                        <img src='' alt='' />
+                                        <p className="quantity">--</p>
+                                    </div>
+                                    <div className="name-desc">
+                                        <p className="name">Produto Indisponível</p>
+                                    </div>
+                                </div>
+                                <div className="right">
+                                    <div className="values">
+                                        <span className="value"></span>
+                                    </div>
+                                    <SCActions>
+                                        <BsFillTrashFill className="delete"/>
+                                    </SCActions>
+                                </div>
+                            </SCProduct>
+                        );
+                    }
+                }
+
                 )}
                 {!products && <p className="loading">Carregando...</p>}
             </SCProducts>

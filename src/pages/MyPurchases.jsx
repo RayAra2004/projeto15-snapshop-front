@@ -40,23 +40,43 @@ export default function MyPurchases() {
         return (
             products.map(product => {
                 if (product.name !== undefined) {
-                       return ( <Purchase key={uuidv4()}>
-                        
+                    return (
+                        <Purchase key={uuidv4()}>
                             <div className="main">
                                 <div className="image-and-name">
                                     <img src={product.picture} alt={product.name} />
-                                    <p>{product.name.substring(0,10).trim()}{product.name.length > 10 ? '...' : ''}</p>
+                                    <p>{product.name.substring(0, 10).trim()}{product.name.length > 10 ? '...' : ''}</p>
                                 </div>
-                               <div className="numbers">
-                                    <span>R${String(Number(product.value).toFixed(2)).replace('.', ',')}</span>
+                                <div className="numbers">
+                                    <span>R${String(Number(product.info.price ? product.info.price : product.value).toFixed(2)).replace('.', ',')}</span>
                                     <p className="quant">Quantidade:{product.info.amount}</p>
-                               </div>
+                                </div>
                             </div>
                             <div className="secondary">
-                                <p className="adress"><BiSolidTruck className="truck"/> {`${product.info.street} ${product.info.number} - ${product.info.neighborhood} - ${product.info.city},${product.info.state}`.substring(0,40)}...</p>
+                                <p className="adress"><BiSolidTruck className="truck" /> {`${product.info.street} ${product.info.number} - ${product.info.neighborhood} - ${product.info.city},${product.info.state}`.substring(0, 40)}...</p>
                             </div>
-                        
-                    </Purchase>)
+                        </Purchase>
+                    );
+                }
+                else
+                {
+                    return (
+                        <Purchase key={uuidv4()}>
+                            <div className="main">
+                                <div className="image-and-name">
+                                    <img src='https://cdn-icons-png.flaticon.com/512/5372/5372351.png' alt='' />
+                                    <p>Produto Indisponível</p>
+                                </div>
+                                <div className="numbers">
+                                    <span>R$ {product.info.price}</span>
+                                    <p className="quant">Quantidade:{product.info.amount}</p>
+                                </div>
+                            </div>
+                            <div className="secondary">
+                                <p className="adress"><BiSolidTruck className="truck" /> {`${product.info.street} ${product.info.number} - ${product.info.neighborhood} - ${product.info.city},${product.info.state}`.substring(0, 40)}...</p>
+                            </div>
+                        </Purchase>
+                    );
                 }
             }
             )
