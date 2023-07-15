@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { mainColor } from "../Colors/colors";
+import { mainColor, pageBackgroundColor, secondaryColor } from "../Colors/colors";
 import { useContext, useEffect, useState } from "react";
 import UserContext from "../Contexts/userContext";
 import axios from "axios";
@@ -72,7 +72,7 @@ export default function MyPurchases() {
 
 
 const SCMyPurchases = styled.div`
-    background-color: ${mainColor};
+    background-color: ${pageBackgroundColor};
     margin-top: 120px;
     width: 100%;
     overflow-x: hidden;
@@ -108,7 +108,7 @@ const SCProducts = styled.div`
 `
 
 const Purchase = styled.div`
-    background-color: rgb(237 237 237);
+    background-color: white;
     width: 100%;
     max-width: 600px;
     min-height: 120px;
@@ -187,6 +187,7 @@ const Purchase = styled.div`
         height: 70px;
         border-radius: 50%;
         margin-right: 15px;
+        border: 1px solid ${secondaryColor};
     }
 
     p{

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { mainColor } from "../Colors/colors.js";
+import { headerColor, mainColor } from "../Colors/colors.js";
 import { BsFillBellFill, BsFillCartFill, BsPersonCircle, BsFillCaretDownFill, BsFillTrashFill } from 'react-icons/bs';
 import { useLocation, useNavigate } from "react-router";
 import { useContext, useState } from "react";
@@ -148,7 +148,7 @@ const NavContainer = styled.header`
     z-index: 1;
     width: 100%;
     height: 40px;
-    background-color: ${mainColor};
+    background-color: ${headerColor};
     position: fixed;
     left: 0;
     top: 80px;

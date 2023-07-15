@@ -5,11 +5,13 @@ import Footer from "../Components/Footer";
 import axios from "axios";
 import { useContext } from "react";
 import UserContext from "../Contexts/userContext";
+import { mainColor } from "../Colors/colors";
 export default function Home(){
 
     const [allProducts,setAllProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const {clientSearchValue} = useContext(UserContext);
+    const {clientSearchValue,amountOfPages} = useContext(UserContext);
+    const [currentPage,setCurrentPage] = useState(1);
     useEffect(()=>{
         setIsLoading(true);
         axios.get(`${import.meta.env.VITE_API_URL}/all-products`)
@@ -22,7 +24,26 @@ export default function Home(){
             alert('Erro ao buscar produtos, olhe o console para mais info!')
             setIsLoading(false);
         })
-    },[])
+    },[]);
+
+    function changePage(amount)
+    {
+        if(currentPage + amount !== 0 && currentPage + amount >=1 && currentPage + amount <= amountOfPages)
+        {
+            setIsLoading(true);
+            axios.get(`${import.meta.env.VITE_API_URL}/all-products?page=${currentPage + amount}`)
+            .then((res) => {
+                setAllProducts(res.data);
+                setIsLoading(false);
+                setCurrentPage(currentPage + amount);
+            })
+            .catch(err => {
+                console.log(err); 
+                alert('Erro ao buscar produtos, olhe o console para mais info!')
+                setIsLoading(false);
+            })
+        }
+    }
 
     return(
         <PageContainer>
@@ -35,15 +56,44 @@ export default function Home(){
                         })
                     }
                     {
-                        isLoading && <p>Carregando..</p>
+                        isLoading && <p className="loading">Carregando..</p>
                     }
                 </ProductsContainer>
             }
+            <HomePageController>
+                <button onClick={()=> changePage(-1)}>{'<'}</button>
+                    <p>Página {currentPage} de {amountOfPages}</p>
+                <button onClick={()=> changePage(1)} >{'>'}</button>
+            </HomePageController>
             <Footer/>
         </PageContainer>
         
     );
 }
+
+const HomePageController = styled.div`
+
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    font-family: 'Mulish', sans-serif;
+    color: black;
+    margin-bottom: 10px;
+
+    button{
+        transition: all 200ms;
+        border: 0;
+        background:0;
+        cursor: pointer;
+        color: blue;
+        font-weight: bold;
+        font-size: 20px;
+        &:hover{
+
+        }
+    }
+`;
 
 const PageContainer = styled.div`
 
@@ -72,6 +122,18 @@ const ProductsContainer = styled.div`
     max-height: 1260px;
     flex-direction: row;
     margin-bottom: 120px;
+
+    .loading{
+        color: ${mainColor};
+        font-family: 'Mulish', sans-serif;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        font-size: 20px;
+        white-space: nowrap;
+    }
+
     @media (max-width:440px) {
         margin-bottom: 180px;
     }

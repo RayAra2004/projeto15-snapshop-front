@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import UserContext from "../Contexts/userContext";
 import styled from "styled-components";
-import { backgroundProduct, installmentsColor, mainColor } from "../Colors/colors";
+import { backgroundProduct, disabledButtonColor, installmentsColor, mainColor, pageBackgroundColor, secondaryColor } from "../Colors/colors";
 import Footer from "../Components/Footer";
 import { toast } from "react-toastify";
 
@@ -11,7 +11,7 @@ export default function ViewProduct() {
     const { product } = useLocation().state;
     const { name, value, picture, description, _id, stock ,category} = product;
     const [selectedQuantity, setSelectedQuantity] = useState(0);
-    const { cartItems,setCartItems } = useContext(UserContext);
+    const { cartItems,setCartItems,user } = useContext(UserContext);
     const itemsFound = cartItems.filter(item => item._id == _id);
     const navigate = useNavigate();
     const config = {
@@ -41,10 +41,43 @@ export default function ViewProduct() {
     }
 
     function buy() {
-        navigate(`/comprar/${_id}`,{state:{name:product.name , quantity:selectedQuantity,value:product.value, picture:product.picture }});
+        if(user)
+        {
+            navigate(`/comprar/${_id}`,{state:{name:product.name , quantity:selectedQuantity,value:product.value, picture:product.picture }});
+        }
+        else
+        {
+            toast.error(`Você precisa estar logado para fazer uma compra!`, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
+        }
     }
 
     function addToCart() {
+
+        if(!user)
+        {
+            toast.error(`Você precisa estar logado para usar o carrinho!`, {
+                position: "top-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
+
+            return;
+        }
+
         // ADICIONAR SÓ SE O ITEM NÃO EXISTE NO CARRINHO
         const itemsFound = cartItems.filter(item => item._id == _id);
        if(itemsFound.length == 0){
@@ -142,7 +175,7 @@ export default function ViewProduct() {
 }
 
 const SCBuyProduct = styled.div`
-    background-color: ${mainColor};
+    background-color: ${pageBackgroundColor};
     width: 100%;
     min-height: 100%;
     display: flex;
@@ -189,7 +222,6 @@ const SCProduct = styled.div`
             font-size: 20px;
             padding-bottom: 5px;
             border-bottom: 1px solid rgba(0,0,0,0.3);
-            
         }
 
         p{
@@ -232,6 +264,7 @@ const SCProduct = styled.div`
             max-width: 100%;
             margin-left: 0;
             border-radius: 0;
+            margin-right: 0;
         }
 
         max-width: 300px;
@@ -324,7 +357,7 @@ const SCProduct = styled.div`
         width: 30px;
         margin-left: 3px;
         &:focus{
-            outline: 1px solid #FF1493;
+            outline: 1px solid ${secondaryColor};
         }
         &::-webkit-outer-spin-button,
             &::-webkit-inner-spin-button {
@@ -349,15 +382,15 @@ const SCProduct = styled.div`
         transition: all 200ms;
         &:enabled{
                 &:hover{
-                color: #FF1493;
+                color: ${secondaryColor};
                 background-color: white;
-                border: 1px solid #FF1493;
+                border: 1px solid ${secondaryColor};
             }
         }
 
         &:disabled{
             cursor: not-allowed;
-            background-color: #974d72;
+            background-color: ${disabledButtonColor};
         }
     }
   

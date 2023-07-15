@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useContext, useState } from "react";
 import UserContext from "../Contexts/userContext";
 import styled from "styled-components";
-import { mainColor } from "../Colors/colors";
+import { mainColor, pageBackgroundColor, secondaryColor } from "../Colors/colors";
 import { useEffect } from "react";
 import creditCardIcon from '../assets/credit_card.png';
 import boletoIcon from '../assets/boleto.png';
@@ -238,7 +238,7 @@ export default function BuyProduct() {
 
 const SCBuy = styled.div`
     display: flex;
-    background-color: ${mainColor};
+    background-color: ${pageBackgroundColor};
     height: 100%;
     justify-content: center;
     gap: 30px;
@@ -538,9 +538,9 @@ const SCProduct = styled.div`
         cursor: pointer;
         transition: all 200ms;
         &:hover{
-            color: #FF1493;
+            color: ${secondaryColor};
             background-color: white;
-            border: 1px solid #FF1493;
+            border: 1px solid ${secondaryColor};
         }
     }
 `

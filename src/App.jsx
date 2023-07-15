@@ -24,8 +24,10 @@ import axios from 'axios';
 export default function App() {
 
   const [user,setUser] = useState();
+  const [amountOfPages,setAmountOfPages] = useState(1);
   const [clientSearchValue,setClientSearchValue] = useState('');
   const [cartItems,setCartItems] = useState([]);
+  const producstPerPage = 18;
 
   useEffect(()=>{
     if(localStorage.getItem('token'))
@@ -41,6 +43,14 @@ export default function App() {
           });
           setCartItems(items);
         }
+
+        if(res.data.amountOfProducts)
+        {
+          const pages = Math.ceil(Number(res.data.amountOfProducts / producstPerPage));
+          setAmountOfPages(pages);
+          //console.log(pages);
+        }
+
         setUser(res.data.user);
       })
     }
@@ -48,7 +58,7 @@ export default function App() {
 
 
   return (
-    <UserContext.Provider value={{user,setUser,cartItems,setCartItems,clientSearchValue,setClientSearchValue}}>
+    <UserContext.Provider value={{user,setUser,cartItems,setCartItems,clientSearchValue,setClientSearchValue,amountOfPages,setAmountOfPages}}>
       <BrowserRouter>
       <ToastContainer />
        <Header/> 

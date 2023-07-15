@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { footerBackgroundColor } from "../Colors/colors";
 
 export default function Footer() {
     return (
@@ -39,7 +40,7 @@ export default function Footer() {
 const FooterContainer = styled.footer`
     height: 90px;
     width: 100%;
-    background-color: lightgray;
+    background-color: ${footerBackgroundColor};
 
     display: flex;
     overflow: hidden;
