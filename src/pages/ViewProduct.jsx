@@ -226,6 +226,8 @@ const SCProduct = styled.div`
 
         p{
             margin-top: 10px;
+            line-height: 20px;
+            margin-bottom: 20px;
         }
     }
 
