@@ -31,6 +31,11 @@ export default function App() {
   const producstPerPage = 18;
 
   useEffect(()=>{
+    getUserInfo();
+  },[]);
+
+  function getUserInfo()
+  {
     if(localStorage.getItem('token'))
     {
       axios.get(`${import.meta.env.VITE_API_URL}/info-usuario`,{headers:{Authorization:localStorage.getItem('token')}})
@@ -56,13 +61,24 @@ export default function App() {
         }
 
         setUser(res.data.user);
-      })
+      }).catch(()=>{
+        alert('Erro ao buscar informações do usuário!')
+      });
     }
-  },[]);
+
+    axios.get(`${import.meta.env.VITE_API_URL}/amount-of-products`)
+    .then((res) => {
+      if(res.data.amount)
+      {
+        const pages = Math.ceil(Number(res.data.amount / producstPerPage));
+        setAmountOfPages(pages == 0 ? 1 : pages);
+      }
+    })
+  }
 
 
   return (
-    <UserContext.Provider value={{user,setUser,cartItems,setCartItems,clientSearchValue,setClientSearchValue,amountOfPages,setAmountOfPages}}>
+    <UserContext.Provider value={{user,setUser,cartItems,setCartItems,clientSearchValue,setClientSearchValue,amountOfPages,setAmountOfPages,getUserInfo}}>
       <BrowserRouter>
       <ToastContainer />
        <Header/> 

@@ -12,7 +12,7 @@ export default function Home(){
 
     const [allProducts,setAllProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const {clientSearchValue,amountOfPages,setClientSearchValue} = useContext(UserContext);
+    const {clientSearchValue,amountOfPages,setClientSearchValue,getUserInfo} = useContext(UserContext);
     const [currentPage,setCurrentPage] = useState(1);
     const [currentBanner, setCurrentBanner] = useState(0);
     const location = useLocation();
@@ -27,6 +27,7 @@ export default function Home(){
         'https://http2.mlstatic.com/D_NQ_702369-MLA70504685369_072023-OO.webp',
       ];
     useEffect(()=>{
+        getUserInfo();
         const queryParams = new URLSearchParams(location.search);
         const searchParam = queryParams.get('search');
         if(searchParam && searchParam != ''){
