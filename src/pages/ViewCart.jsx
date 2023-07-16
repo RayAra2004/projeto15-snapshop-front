@@ -95,6 +95,10 @@ export default function ViewCart() {
         navigate(`/visualizar-produto/${prod._id}`, { state: { product: prod } });
     }
 
+    function buyAll(){
+        navigate('/comprar-carrinho', { state: {products}});
+    }
+
     return (
         <SCMyProducts>
             <SCProducts>
@@ -153,6 +157,9 @@ export default function ViewCart() {
                 )}
                 {!products && <p className="loading">Carregando...</p>}
             </SCProducts>
+            <SCBuyAllProducts>
+                <button onClick={() => buyAll()}>Comprar Tudo</button>
+            </SCBuyAllProducts>
         </SCMyProducts>
     );
 }
@@ -382,5 +389,24 @@ const SCActions = styled.div`
 
     .delete{
         margin-right: 10px;
+    }
+`
+
+const SCBuyAllProducts = styled.div`
+    margin-left: 20px;
+
+    button{
+        border: none;
+        margin-top: 30px;
+        background-color: #0ce50c;
+        width: 200px;
+        height: 50px;
+        border-radius: 6px;
+        color: white;
+        font-size: 20px;
+        font-weight: 800;
+        margin-left: 35px;
+        cursor: pointer;
+        font-family: 'Mulish', sans-serif;
     }
 `

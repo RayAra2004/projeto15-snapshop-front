@@ -19,6 +19,7 @@ import SignIn from './pages/SignIn';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import axios from 'axios';
+import BuyCart from './pages/BuyCart';
 
 
 export default function App() {
@@ -78,6 +79,7 @@ export default function App() {
           <Route path="/carrinho" element={<ViewCart />} />
           <Route path="/minhas-compras" element={<MyPurchases />} />
           <Route path="/meus-produtos" element={<MyProducts />} />
+          <Route path="/comprar-carrinho" element={<BuyCart/>}/>
         </Routes>
         
       </BrowserRouter>
