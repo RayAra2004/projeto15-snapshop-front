@@ -71,7 +71,7 @@ export default function MyPurchases() {
                     }
                     else
                     {
-                        const totalItems =  somarMatriz(product.info.amount);
+                        const totalItems = somarMatriz(product.info.amount);
                         
                         return (
                             <CompostPurchase key={uuidv4()}>

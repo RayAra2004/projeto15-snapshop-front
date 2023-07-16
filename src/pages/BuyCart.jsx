@@ -10,11 +10,14 @@ import { v4 as uuidv4 } from 'uuid';
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useContext } from "react";
+import UserContext from "../Contexts/userContext";
 
 export default function BuyCart(){
     const location = useLocation();
     const navigate = useNavigate();
     const {products} = location.state;
+    const {cartItems, setCartItems } = useContext(UserContext);
 
     const [cep, setCep] = useState('');
     const [city, setCity] = useState('');
@@ -44,6 +47,10 @@ export default function BuyCart(){
         headers: {
             "Authorization": `${token}`
         }
+    }
+    function clearCartItems()
+    {
+        //setCartItems([]);
     }
 
     function searchCEP(value) {
@@ -107,7 +114,7 @@ export default function BuyCart(){
 
         axios.post(`${import.meta.env.VITE_API_URL}/comprar`, body, config)
             .then(res => {
-                toast.success( `comprado com sucesso`, {
+                toast.success( `Comprado efetuada!`, {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -117,6 +124,7 @@ export default function BuyCart(){
                     progress: undefined,
                     theme: "colored",
                 });
+                clearCartItems();
                 navigate('/');
             })
             .catch(res => console.log(res))
