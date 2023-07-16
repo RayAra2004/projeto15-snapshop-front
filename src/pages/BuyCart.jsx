@@ -6,6 +6,7 @@ import creditCardIcon from '../assets/credit_card.png';
 import boletoIcon from '../assets/boleto.png';
 import pixIcon from '../assets/pix.png';
 import cardIlus from '../assets/card_ilustration.svg';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function BuyCart(){
     const location = useLocation();
@@ -125,7 +126,7 @@ export default function BuyCart(){
     function calculateTotal(){
         
         let t = 0
-        products.forEach( prod => t += prod.value)
+        products.forEach( prod => t += Number(Number(prod.value) * Number(prod.quantity)))
         setTotal(t)
     }
 
@@ -230,19 +231,20 @@ export default function BuyCart(){
                             products &&
                             products.map(product => {
                             return(
-                                <SCProduct>
+                                <SCProduct key={uuidv4()}>
                                     <img src={product.picture} />
-                                    <h1>{product.name.substring(0,16).trim()}{product.name.length > 16 ? '...' : ''}</h1>
-                                    <div>
+                                    <h1>{product.name.substring(0,14).trim()}{product.name.length > 14 ? '...' : ''}</h1>
+                                    <div className="info">
+                                        <span className="price">R$ {(Number(product.value) * Number(product.quantity)).toFixed(2).toString().replace('.',',')}</span>
                                         <span className="amount">Quantidade: {product.quantity}</span>
-                                    </div>        
+                                    </div>
                                 </SCProduct>
                             )
                             })
                         }                         
                 </SCProducts> 
                 <SCCheckout>
-                        <span className="payment-form">Forma de pagamento: {paymentMethod == 'creditCard' ? 'Crédito' : paymentMethod == 'debitCard' ? 'Débito' : paymentMethod == 'pix' ? 'Pix' : paymentMethod == 'boleto' ? 'Boleto' : ''}</span>
+                        <span className="payment-form">{paymentMethod !== '' ? 'Forma de pagamento: ' : ''} {paymentMethod == 'creditCard' ? 'Crédito' : paymentMethod == 'debitCard' ? 'Débito' : paymentMethod == 'pix' ? 'Pix' : paymentMethod == 'boleto' ? 'Boleto' : 'Selecione a forma de pagamento'}</span>
                         <h2>R${String(Number(total).toFixed(2)).replace('.', ',')}</h2>
                         <button form="form">Finalizar Compra</button>
                 </SCCheckout> 
@@ -474,6 +476,15 @@ const SCContainer = styled.div`
     position: relative;
     max-height: 500px;
     margin-top: 150px;
+    @media (max-width:1060px) {
+        margin-bottom: 220px; 
+        margin-top:0;
+    }
+
+    @media (max-width:650px) {
+         width: 100%;
+         border-radius: 0;
+    }
 `
 
 const SCProducts = styled.div`
@@ -484,11 +495,15 @@ const SCProducts = styled.div`
     align-items: center;
     flex-direction: column;
     border-radius: 20px;
-    max-height: 440px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 5px;
+    height: 330px;
     width: 400px;
     overflow-y: scroll;
     overflow-x: hidden;
-    margin-bottom: 190px;
+    padding: 20px;
+    gap: 10px;
 
     ::-webkit-scrollbar {
         width: 12px;               /* width of the entire scrollbar */
@@ -502,7 +517,7 @@ const SCProducts = styled.div`
     ::-webkit-scrollbar-thumb {
         background-color: ${secondaryColor};    /* color of the scroll thumb */
         border-radius: 20px;       /* roundness of the scroll thumb */
-        border: 0 solid white;  /* creates padding around scroll thumb */
+        border: 2px solid white;  /* creates padding around scroll thumb */
     }
     
 
@@ -513,7 +528,6 @@ const SCProducts = styled.div`
 
     @media (max-width:650px) {
          width: 100%;
-        
          border-radius: 0;
     }
 `
@@ -522,27 +536,30 @@ const SCProduct = styled.div`
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     width: 100%;
-    margin-left: 60px;
-    margin-top: 25px;
-    div{
-        width: 100%;
-        margin-left: 85px;
-        margin-top: -55px;
-        box-sizing: border-box;
+    border-top: 1px solid ${mainColor};
+    padding-top: 10px;
+   &:first-child{
+    border-top: 0;
+   }
+    .info{
+        display: flex;
+        flex-direction: column;
+        
+        justify-content: center;
 
-        span{
-            margin-bottom: 35px;
-            font-size: 15px;
-            font-weight: 600;
+        .price{
+            color: #79f93a;
+            font-weight: bold;
         }
     }
-
+   
     img{
-        width: 70px;
+        width: 50px;
         aspect-ratio: 1;
-        border-radius: 160px;
-        margin-bottom: 20px;
+        border-radius: 50%;
+        border: 1px solid ${mainColor};
         object-fit:cover;
         
         background-image: #FFFFFF;
@@ -550,15 +567,20 @@ const SCProduct = styled.div`
     }
 
     h1{
-        font-size: 28px;
+        font-size: 20px;
         font-weight: 800;
         text-align: center;
-        margin-bottom: 30px;
+        margin-top: 15px;
+
+        @media (max-width:400px) {
+            font-size: 15px;
+        }
     }
 
     .amount{
-        margin-bottom: 20px;
         user-select: none;
+        margin-top: 15px;
+        font-size: 13px;
     }
 
     button{
@@ -588,7 +610,7 @@ const SCProduct = styled.div`
 const SCCheckout = styled.div`
     position: absolute;
     left: 0;
-    bottom: 0;
+    bottom: -41px;
     z-index: 1;
     background-color: white;
     width: 100%;
@@ -596,33 +618,47 @@ const SCCheckout = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 400px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    min-height: 220px;
 
+    @media (max-width:1060px) {
+        bottom: -220px; 
+    }
+
+    @media (max-width:650px) {
+         width: 100%;
+         border-radius: 0;
+    }
+    
     h2{
         font-size: 30px;
         font-weight: 600;
         color: #79f93a;
+        font-family: 'Mulish', sans-serif;
     }
 
     span{
+        margin-top: 10px;
         margin-bottom: 35px;
         font-size: 20px;
         font-weight: 600;
+        font-family: 'Mulish', sans-serif;
     }
 
     button{
         flex-shrink: 0;
         width: 80%;
         user-select: none;
-        height: 60px;
+        height: 70px;
         margin-top: 30px;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         box-sizing: border-box;
         border: 0;
         border-radius: 5px;
         background-color: #FF69B4;
         font-family: 'Mulish', sans-serif;
-        font-size: 15px;
+        font-size: 25px;
         font-weight: 700;
         color: #FFFFFF;
         cursor: pointer;
