@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { mainColor, pageBackgroundColor, secondaryColor } from "../Colors/colors";
 import creditCardIcon from '../assets/credit_card.png';
@@ -9,9 +9,11 @@ import cardIlus from '../assets/card_ilustration.svg';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function BuyCart(){
     const location = useLocation();
+    const navigate = useNavigate();
     const {products} = location.state;
 
     const [cep, setCep] = useState('');
@@ -27,6 +29,7 @@ export default function BuyCart(){
     const [nameHolder, setNameHolder] = useState('');
     const [total, setTotal] = useState(0);
     const token = localStorage.getItem('token');
+  
 
     useEffect(() => {
         if (!token) {
@@ -97,14 +100,14 @@ export default function BuyCart(){
        
         let body;
         if (paymentMethod === 'pix' || paymentMethod === 'boleto') {
-            body = {idProducts:[ids],price:total, amount: quantities, cep, city, neighborhood, state, street, number, paymentMethod }
+            body = {idProducts:ids,price:total, amount: quantities, cep, city, neighborhood, state, street, number, paymentMethod }
         } else {
-            body = {idProducts:[ids],price:total, amount: quantities, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
+            body = {idProducts:ids,price:total, amount: quantities, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
         }
 
         axios.post(`${import.meta.env.VITE_API_URL}/comprar`, body, config)
             .then(res => {
-                toast.success( `${name} x${quantity} comprado com sucesso`, {
+                toast.success( `comprado com sucesso`, {
                     position: "top-center",
                     autoClose: 5000,
                     hideProgressBar: false,
