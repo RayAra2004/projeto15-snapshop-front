@@ -97,12 +97,12 @@ export default function BuyProduct() {
     {
         let body;
         if (paymentMethod === 'pix' || paymentMethod === 'boleto') {
-            body = {price:value, amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod }
+            body = {idProducts:[id], price:value, amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod }
         } else {
-            body = {price:value, amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
+            body = {idProducts:[id], price:value, amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
         }
 
-        axios.post(`${import.meta.env.VITE_API_URL}/comprar/${id}`, body, config)
+        axios.post(`${import.meta.env.VITE_API_URL}/comprar`, body, config)
             .then(res => {
                 toast.success( `${name} x${quantity} comprado com sucesso`, {
                     position: "top-center",

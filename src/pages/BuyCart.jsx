@@ -7,6 +7,8 @@ import boletoIcon from '../assets/boleto.png';
 import pixIcon from '../assets/pix.png';
 import cardIlus from '../assets/card_ilustration.svg';
 import { v4 as uuidv4 } from 'uuid';
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 
 export default function BuyCart(){
     const location = useLocation();
@@ -71,7 +73,7 @@ export default function BuyCart(){
         }
 
         Swal.fire({
-            title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Comprar ${name} x${quantity}</span>`,
+            title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Comprar todos os produtos?</span>`,
             showCancelButton: true,
             confirmButtonColor: `${mainColor}`,
             cancelButtonColor: '#c9c9c9',
@@ -79,7 +81,7 @@ export default function BuyCart(){
             cancelButtonText: 'Cancelar',
             width: 300,
             heightAuto: false,
-            imageUrl: picture,
+            imageUrl: '',
             imageWidth: 200,
         }).then((result) => {
             if (result.isConfirmed) {
@@ -90,14 +92,17 @@ export default function BuyCart(){
 
     function buy()
     {
+        const ids = products.map(p => p._id);
+        const quantities = products.map(q => q.quantity);
+       
         let body;
         if (paymentMethod === 'pix' || paymentMethod === 'boleto') {
-            body = {price:value, amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod }
+            body = {idProducts:[ids],price:total, amount: quantities, cep, city, neighborhood, state, street, number, paymentMethod }
         } else {
-            body = {price:value, amount: quantity, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
+            body = {idProducts:[ids],price:total, amount: quantities, cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
         }
 
-        axios.post(`${import.meta.env.VITE_API_URL}/comprar/${id}`, body, config)
+        axios.post(`${import.meta.env.VITE_API_URL}/comprar`, body, config)
             .then(res => {
                 toast.success( `${name} x${quantity} comprado com sucesso`, {
                     position: "top-center",
