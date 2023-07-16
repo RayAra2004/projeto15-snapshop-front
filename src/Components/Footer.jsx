@@ -9,22 +9,22 @@ export default function Footer() {
                     <nav className="nav-footer-navigation">
                         <ul className="footer-items">
                             <li className="footer-item">
-                                <a href="#"  className="link">Trabalhe conosco</a>
+                                <p className="link">Trabalhe conosco</p>
                             </li>
                             <li className="footer-item">
-                                <a href="#"  className="link">Termos e condições</a>
+                                <p className="link">Termos e condições</p>
                             </li>
                             <li className="footer-item">
-                                <a href="#"  className="link">Como cuidamos da sua privacidade</a>
+                                <p className="link">Como cuidamos da sua privacidade</p>
                             </li>
                             <li className="footer-item">
-                                <a href="#" className="link">Acessibilidade</a>
+                                <p className="link">Acessibilidade</p>
                             </li>
                             <li className="footer-item">
-                                <a href="#"  className="link">Contato</a>
+                                <p className="link">Contato</p>
                             </li>
                             <li className="footer-item">
-                                <a href="#"  className="link">Informações sobre seguros</a>
+                                <p className="link">Informações sobre seguros</p>
                             </li>
                         </ul>
                     </nav>
@@ -62,18 +62,22 @@ const FooterContainer = styled.footer`
         display: none;
     }
 
-.link,.secondaryinfo,.copyright{
-    color: black;
-    text-decoration: none;
-    font-family: 'Mulish';
-}
+    .link,.secondaryinfo,.copyright{
+        color: black;
+        text-decoration: none;
+        font-family: 'Mulish';
+    }
 
-.secondaryinfo,.copyright{
-    font-size: 12px;
-}
+    .link{
+        cursor: pointer;
+    }
 
-.footer-items{
-    display: flex;
-    gap: 10px;
-}
+    .secondaryinfo,.copyright{
+        font-size: 12px;
+    }
+
+    .footer-items{
+        display: flex;
+        gap: 10px;
+    }
 `;

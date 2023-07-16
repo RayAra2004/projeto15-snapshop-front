@@ -19,6 +19,7 @@ import SignIn from './pages/SignIn';
 import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import axios from 'axios';
+import BuyCart from './pages/BuyCart';
 
 
 export default function App() {
@@ -63,22 +64,23 @@ export default function App() {
   return (
     <UserContext.Provider value={{user,setUser,cartItems,setCartItems,clientSearchValue,setClientSearchValue,amountOfPages,setAmountOfPages}}>
       <BrowserRouter>
-        <ToastContainer />
-        <Header/> 
-          <Navbar/>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<SignIn />} />
-            <Route path="/cadastro" element={<SignUp />} />
-            <Route path="/visualizar-produto/:id" element={<ViewProduct />} />
-            <Route path="/editar-produto/:id" element={<EditProduct />} />
-            <Route path="/adicionar-produto" element={<AddProduct />} />
-            <Route path="/comprar/:id" element={<BuyProduct />} />
-            <Route path="/editar-usuario" element={<UserProfile />} />
-            <Route path="/carrinho" element={<ViewCart />} />
-            <Route path="/minhas-compras" element={<MyPurchases />} />
-            <Route path="/meus-produtos" element={<MyProducts />} />
-          </Routes>
+      <ToastContainer />
+       <Header/> 
+        <Navbar/>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<SignIn />} />
+          <Route path="/cadastro" element={<SignUp />} />
+          <Route path="/visualizar-produto/:id" element={<ViewProduct />} />
+          <Route path="/editar-produto/:id" element={<EditProduct />} />
+          <Route path="/adicionar-produto" element={<AddProduct />} />
+          <Route path="/comprar/:id" element={<BuyProduct />} />
+          <Route path="/editar-usuario" element={<UserProfile />} />
+          <Route path="/carrinho" element={<ViewCart />} />
+          <Route path="/minhas-compras" element={<MyPurchases />} />
+          <Route path="/meus-produtos" element={<MyProducts />} />
+          <Route path="/comprar-carrinho" element={<BuyCart/>}/>
+        </Routes>
       </BrowserRouter>
     </UserContext.Provider>
   )

@@ -82,6 +82,7 @@ export default function ViewProduct() {
         const itemsFound = cartItems.filter(item => item._id == _id);
        if(itemsFound.length == 0){
             const newCartItem = {name,picture,_id,value,quantity:selectedQuantity};
+//            console.log(newCartItem);
             // ATUALIZAR NO BANCO DE DADOS
             axios.post(`${import.meta.env.VITE_API_URL}/carrinho/${_id}?quantity=${selectedQuantity}`,null,config)
             .then((res)=>{
@@ -275,6 +276,7 @@ const SCProduct = styled.div`
         }
 
         max-width: 300px;
+        max-height: 300px;
         width: 100%;
         object-fit: scale-down;
         box-sizing: border-box;
