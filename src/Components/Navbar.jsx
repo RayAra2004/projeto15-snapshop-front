@@ -49,6 +49,15 @@ export default function Navbar() {
         setShowCartItems(false);
     }
 
+    function showCart()
+    {
+        if(location.pathname !== '/comprar-carrinho' && location.pathname !== '/comprar-carrinho')
+        {
+            setShowCartItems(true); 
+            setShowUserInfo(false);
+        }
+    }
+
    
     return (
         <>
@@ -110,7 +119,7 @@ export default function Navbar() {
                            
                             <BsFillBellFill className="notifications-btn" />
                             <div className="cart">
-                                <BsFillCartFill onClick={() => navigate('/carrinho')} className="cart-btn" onMouseEnter={() => {setShowCartItems(true); setShowUserInfo(false)}} />
+                                <BsFillCartFill onClick={() => navigate('/carrinho')} className="cart-btn" onMouseEnter={showCart} />
                                 <p className="cart-items-amount">{cartItems.length > 0 ? cartItems.length : ''}</p>
                                 {
                                     showCartItems &&

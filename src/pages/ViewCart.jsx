@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default function ViewCart() {
 
     const [products, setProducts] = useState(undefined);
+    const {cartItems, setCartItems } = useContext(UserContext);
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
@@ -31,11 +32,20 @@ export default function ViewCart() {
 
     }, []);
 
+    useEffect(() => {
+       if(cartItems && products && cartItems.length !== products.length)
+       {
+        getProducts();
+       }
+
+    }, [cartItems]);
+
     function getProducts() {
         //TODO: Trocar a roda do banco
         axios.get(`${import.meta.env.VITE_API_URL}/carrinho`, config)
             .then(res => {
                 setProducts(res.data);
+                setCartItems(res.data);
                 //console.log(res.data)
             })
             .catch(res => console.log(res));
@@ -69,6 +79,7 @@ export default function ViewCart() {
                             progress: undefined,
                             theme: "colored",
                         });
+                        
                         setProducts(products.filter(update => update._id !== id));
                         getProducts();
                     })
@@ -96,12 +107,26 @@ export default function ViewCart() {
     }
 
     function buyAll(){
-        navigate('/comprar-carrinho', { state: {products}});
+       if(products)
+       {
+        if(products.length == 1)
+        {
+            navigate(`/comprar/${products[0]._id}`,{state:{name:products[0].name , quantity:products[0].quantity,value:products[0].value, picture:products[0].picture }});
+        }
+        else if(products.length > 1)
+        {
+            navigate('/comprar-carrinho', { state: {products}});
+        }
+       }
     }
 
     return (
         <SCMyProducts>
             <SCProducts>
+                {
+                    products && products.length > 0 &&
+                    <button className="buy-all" onClick={() => buyAll()}>Comprar Tudo</button>
+                }
                 {products && products.length == 0 && <p className="no-purchases">Você não possui itens no carrinho</p>}
                 {products && products.length > 0 && <p className="title"><BsFillCartFill /> Carrinho de compras <BsFillCartFill /></p>}
                 {products && products.map(product => {
@@ -157,9 +182,7 @@ export default function ViewCart() {
                 )}
                 {!products && <p className="loading">Carregando...</p>}
             </SCProducts>
-            <SCBuyAllProducts>
-                <button onClick={() => buyAll()}>Comprar Tudo</button>
-            </SCBuyAllProducts>
+           
         </SCMyProducts>
     );
 }
@@ -258,6 +281,20 @@ const SCProducts = styled.div`
         transform: translate(-50%,-50%);
         font-size: 20px;
         white-space: nowrap;
+    }
+
+    .buy-all{
+        border: none;
+        margin-bottom: 30px;
+        background-color: #0ce50c;
+        width: 100%;
+        height: 50px;
+        border-radius: 6px;
+        color: white;
+        font-size: 20px;
+        font-weight: 800;
+        cursor: pointer;
+        font-family: 'Mulish', sans-serif;
     }
 `
 
@@ -389,24 +426,5 @@ const SCActions = styled.div`
 
     .delete{
         margin-right: 10px;
-    }
-`
-
-const SCBuyAllProducts = styled.div`
-    margin-left: 20px;
-
-    button{
-        border: none;
-        margin-top: 30px;
-        background-color: #0ce50c;
-        width: 200px;
-        height: 50px;
-        border-radius: 6px;
-        color: white;
-        font-size: 20px;
-        font-weight: 800;
-        margin-left: 35px;
-        cursor: pointer;
-        font-family: 'Mulish', sans-serif;
     }
 `
