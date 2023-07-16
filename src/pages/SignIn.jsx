@@ -9,6 +9,7 @@ import { useContext } from "react";
 import UserContext from "../Contexts/userContext";
 import { GoogleLogin } from '@react-oauth/google';
 import jwt_decode from "jwt-decode";
+import { toast } from "react-toastify";
 
 export default function SignIn(){
     const [form, setForm] = useState({email: "", password: ""})
@@ -38,7 +39,16 @@ export default function SignIn(){
         .catch(err => {
             if(!googleObj)
             {
-                alert(err.response.data);
+                toast.error(err.response.data, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                });
             }
             else
             {
@@ -50,7 +60,16 @@ export default function SignIn(){
                         login(googleObj.email,googleObj.sub,null);
                     })
                     .catch(err => {
-                        alert(err.response.data);
+                        toast.error(err.response.data, {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: false,
+                            progress: undefined,
+                            theme: "colored",
+                        });
                         setIsLoading(false);
                     })
                 }
@@ -102,7 +121,16 @@ export default function SignIn(){
                         login(googleObj.email,googleObj.sub,googleObj);
                     }}
                     onError={() => {
-                        alert('Falha ao logar com google');
+                        toast.error( 'Falha ao logar com o google!', {
+                            position: "top-center",
+                            autoClose: 5000,
+                            hideProgressBar: true,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: false,
+                            progress: undefined,
+                            theme: "colored",
+                        });
                     }}
                     size="large"
                     useOneTap

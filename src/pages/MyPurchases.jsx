@@ -68,7 +68,7 @@ export default function MyPurchases() {
                                     <p>Produto Indisponível</p>
                                 </div>
                                 <div className="numbers">
-                                    <span>R$ {product.info.price}</span>
+                                    <span>R$ {product.info.price.toFixed(2).toString().replace('.',',')}</span>
                                     <p className="quant">Quantidade:{product.info.amount}</p>
                                 </div>
                             </div>
@@ -179,6 +179,7 @@ const Purchase = styled.div`
             gap: 10px;
             width: auto;
             span{
+                font-size: 25px;
                 @media (max-width:459px) {
                     font-size: 20px;
                 }

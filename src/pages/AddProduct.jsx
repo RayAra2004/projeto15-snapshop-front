@@ -15,7 +15,6 @@ export default function AddProduct() {
     const [pValueRef,setPValueRef] =useState('');
     const [stockRef,setStockRef] =useState('');
     const descriptionRef = useRef();
-
     const categoryRef = useRef();
     const pictureRef = useRef();
     const isNewRef = useRef();
@@ -32,6 +31,15 @@ export default function AddProduct() {
             return;
         }
     },[])
+
+    
+    useEffect(()=>{
+        if(invalidImage)
+        {
+            pictureRef.current.focus();
+            pictureRef.current.select();
+        }
+      },[invalidImage])
 
     async function validarUrlImagem(url) {
         return new Promise((resolve, reject) => {
@@ -102,8 +110,17 @@ export default function AddProduct() {
                 navigate('/meus-produtos');
             })
             .catch(err => {
-                console.log(err); 
-                alert('Erro ao cadastrar produto, olhe o console para mais informações!')
+                console.log(err);
+                toast.error('Erro ao cadastrar produto, olhe o console para mais informações!', {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                });
                 setIsLoading(false);
             })
     }
@@ -174,7 +191,7 @@ export default function AddProduct() {
                         </div>
                         <div>
                             <label htmlFor="ppicture">Foto do produto</label>
-                            <Input onChange={()=> setInvalidImage(false)} className={invalidImage ? 'invalid' : ''} type="text" required id="ppicture" name="ppicture" ref={pictureRef} placeholder="e.g: https://photo.jpg" max={8} />
+                            <Input onChange={()=> setInvalidImage(false)}  className={invalidImage ? 'invalid' : ''} type="text" required id="ppicture" name="ppicture" ref={pictureRef} placeholder="e.g: https://photo.jpg" max={8} />
                         </div>
                     </div>
                     <button disabled={isLoading} className="create-product">{isLoading ? <ThreeDots type="ThreeDots" color="#FFFFFF" height={20} width={40} /> : "Criar Produto"}</button>

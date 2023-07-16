@@ -74,7 +74,16 @@ export default function EditProduct() {
             })
             .catch(err => {
                 console.log(err);
-                alert('Erro ao editar produto, olhe o console para mais informações!')
+                toast.error(`Erro ao editar produto ${err.response.data} olhe o console para mais informações!`, {
+                    position: "bottom-left",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                });
                 setIsLoading(false);
             })
     }

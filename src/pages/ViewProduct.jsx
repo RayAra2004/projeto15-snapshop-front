@@ -275,6 +275,7 @@ const SCProduct = styled.div`
         }
 
         max-width: 300px;
+        max-height: 300px;
         width: 100%;
         object-fit: scale-down;
         box-sizing: border-box;
