@@ -7,6 +7,8 @@ import { ThreeDots } from "react-loader-spinner"
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useWindowSize } from "@uidotdev/usehooks";
+import { useRef } from "react";
+import { useEffect } from "react";
 
 
 export default function SignUp(){
@@ -16,6 +18,8 @@ export default function SignUp(){
     const [invalidPassword,setInvalidPassword] = useState(false);
     const size = useWindowSize();
     const navigate = useNavigate();
+    const refPhoto = useRef();
+    const refPassword = useRef();
 
     async function validarUrlImagem(url) {
         return new Promise((resolve, reject) => {
@@ -30,12 +34,44 @@ export default function SignUp(){
         });
       }
 
+      useEffect(()=>{
+        if(invalidPassword)
+        {
+            refPassword.current.focus();
+            refPassword.current.select();
+            return;
+        }
+        
+        if(invalidImage)
+        {
+            refPhoto.current.focus();
+            refPhoto.current.select();
+        }
+       
+      },[invalidImage,invalidPassword])
+
     function handleForm(e) {
         setForm({...form, [e.target.name]: e.target.value})
     }
     async function submitForm(e){
-        e.preventDefault()
+        e.preventDefault();
         setIsLoading(true);
+
+        if(form.password !== form.confirmPassword){
+            setInvalidPassword(true);
+            toast.error( "Senhas inseridas são incompatíveis.", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
+            setIsLoading(false);
+            return;
+        }
 
         let valid = true;
 
@@ -63,33 +99,25 @@ export default function SignUp(){
             return;
         }
 
-        if(form.password !== form.confirmPassword){
-            setInvalidPassword(true);
-            toast.error( "Senhas inseridas são incompatíveis.", {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-                theme: "colored",
-            });
-            setIsLoading(false);
-            return;
-        }
-
-        delete form.confirmPassword
-
         axios
-            .post(`${import.meta.env.VITE_API_URL}/cadastro`, form)
+            .post(`${import.meta.env.VITE_API_URL}/cadastro`, {name:form.name, email:form.email, password: form.password, photo:form.photo})
             .then(res => {
                 setIsLoading(false)
                 navigate(`/login`)
                 })
             .catch(err => 
-                alert(err.response),
-                setIsLoading(false)
+                toast.error( err.response.data, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                }),
+                setIsLoading(false),
+                form.confirmPassword == form.password
             )
     }
 
@@ -149,6 +177,7 @@ export default function SignUp(){
                         value={form.confirmPassword}
                         onChange={(e)=> {handleForm(e); setInvalidPassword(false);}}
                         disabled={isLoading}
+                        ref={refPassword}
                     />
                     <label htmlFor="photo">Foto de usuário</label>
                     <Input 
@@ -161,6 +190,7 @@ export default function SignUp(){
                         onChange={(e)=> {handleForm(e); setInvalidImage(false);}}
                         disabled={isLoading}
                         className={invalidImage ? 'invalid' : ''}
+                        ref={refPhoto}
                     />
                     <Button type="submit" disabled={isLoading}>
                         {isLoading ? <ThreeDots type="ThreeDots" color="#FFFFFF" height={20} width={40} /> : "Cadastro"}
@@ -193,6 +223,10 @@ const Body = styled.div`
         justify-content: flex-start;
         margin-top: ${(props)=> props.height > 700 ? '160px' : '30px'};
         gap: 50px;
+    }
+
+    @media (max-height:700px) {
+       min-height: 700px;
     }
 `
 const Container = styled.div`
@@ -292,6 +326,10 @@ const SideBarr = styled.div`
         width: 100%;
     }
 
+    @media (max-height:700px) {
+        width: 0;
+    }
+
     @media (max-width:924px) {
         margin-right: 0;
     }
@@ -311,6 +349,12 @@ const SideBarr = styled.div`
         transform:${(props)=> props.height < 700 ? 'translateX(50%)' : 'normal'};
         white-space: nowrap;
         z-index: ${(props)=> props.height < 700? '1' : '0'};
+
+        @media (max-width:300px) {
+            font-size: 30px;
+            top: 25px;
+            right:50%;
+        }
     }
 
     & img{

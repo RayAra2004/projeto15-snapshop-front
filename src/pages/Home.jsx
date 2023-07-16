@@ -7,6 +7,7 @@ import { useContext } from "react";
 import UserContext from "../Contexts/userContext";
 import { mainColor } from "../Colors/colors";
 import { useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 export default function Home(){
 
     const [allProducts,setAllProducts] = useState([]);
@@ -28,13 +29,8 @@ export default function Home(){
     useEffect(()=>{
         const queryParams = new URLSearchParams(location.search);
         const searchParam = queryParams.get('search');
-        if(searchParam != '')
-        {
+        if(searchParam && searchParam != ''){
             setClientSearchValue(searchParam);
-        }
-
-        if(!clientSearchValue){
-            setClientSearchValue ('');
         }
 
         setIsLoading(true);
@@ -45,7 +41,16 @@ export default function Home(){
         })
         .catch(err => {
             console.log(err); 
-            alert('Erro ao buscar produtos, olhe o console para mais info!')
+            toast.error( `Erro ao buscar produtos, ${err.response.data} olhe o console para mais info!`, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "colored",
+            });
             setIsLoading(false);
         })
     },[]);
@@ -91,7 +96,16 @@ export default function Home(){
             })
             .catch(err => {
                 console.log(err); 
-                alert('Erro ao buscar produtos, olhe o console para mais info!')
+                toast.error( `Erro ao buscar produtos, ${err.response.data} olhe o console para mais info!`, {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                    theme: "colored",
+                });
                 setIsLoading(false);
             })
         }
