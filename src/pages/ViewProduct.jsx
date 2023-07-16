@@ -29,7 +29,7 @@ export default function ViewProduct() {
     function updateQuantity() {
         if (stock) {
             if (selectedQuantity >= stock) {
-                selectedQuantity(stock);
+                setSelectedQuantity(stock);
             }
             else if (selectedQuantity < 1) {
                 setSelectedQuantity(1);

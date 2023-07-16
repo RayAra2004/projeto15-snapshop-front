@@ -144,7 +144,7 @@ export default function ViewCart() {
                                 </div>
                                 <div className="right">
                                     <div className="values">
-                                        <span className="value">R${String(Number(product.value).toFixed(2)).replace('.', ',')}</span>
+                                        <span className="value">R${String(Number(product.value * product.quantity).toFixed(2)).replace('.', ',')}</span>
                                         {/* <span className="stock">Estoque:{product.stock}</span> */}
                                     </div>
                                     <SCActions>

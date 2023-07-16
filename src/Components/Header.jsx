@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { headerColor, mainColor } from "../Colors/colors.js";
-import favicon from "../assets/favicon.png"
+import favicon from "../assets/new-logo.png"
 import { BsSearch } from 'react-icons/bs';
 import { useLocation, useNavigate } from "react-router";
 import banner from '../assets/banner.png'
@@ -132,16 +132,18 @@ const Logo = styled.div`
 
     .favicon{
         transition: all 200ms;
-        width: 60px;
+        width: 50px;
+        margin-right: 10px;
+        margin-left: 10px;
         @media (max-width:840px) {
             position: fixed;
             left: 10px;
-            top: -5px;
+            top: 10px;
         }
 
         @media (max-width:500px) {
             left: 10px;
-            top: 10px;
+            top: 15px;
             width: 40px;
         }
        
