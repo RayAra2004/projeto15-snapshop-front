@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import axios from 'axios';
 import BuyCart from './pages/BuyCart';
+import Contact from './pages/Contact';
 
 
 export default function App() {
@@ -96,6 +97,7 @@ export default function App() {
           <Route path="/minhas-compras" element={<MyPurchases />} />
           <Route path="/meus-produtos" element={<MyProducts />} />
           <Route path="/comprar-carrinho" element={<BuyCart/>}/>
+          <Route path="/contato" element={<Contact/>}/>
         </Routes>
       </BrowserRouter>
     </UserContext.Provider>

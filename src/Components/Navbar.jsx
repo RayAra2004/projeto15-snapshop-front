@@ -88,7 +88,7 @@ export default function Navbar() {
                                </>
                             }
                             <Navbutton title="Contato">
-                                {size.width < 800 ? <AiFillPhone/> : <p>Contato</p>}
+                                {size.width < 800 ? <AiFillPhone/> : <p onClick={()=> navigate('/contato')}>Contato</p>}
                             </Navbutton>
                         </div>
 

@@ -18,7 +18,7 @@ export default function ProductItem(props)
             <img src={picture} alt={name} />
             <p className="value">R$ {value.toFixed(2).toString().replace('.',',')}</p>
             <p className="installments"><span>em </span>10x de R$ {(value.toFixed(2) / 10).toFixed(2).toString().replace('.',',')} sem juros</p>
-            { value > 79.90 && <strong className="shipment">Frete grátis</strong>}
+            { value > 79.90 && <strong title="Frete grátis" className="shipment">Frete grátis</strong>}
             <p className="name">{name.substring(0,100).trim()}{name.length > 99 ? '...' : ''}</p>
         </ProductContainer>
     );
@@ -67,10 +67,6 @@ const ProductContainer = styled.div`
 
     &:hover{
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
-
-        img{
-            
-        }
     }
 
     p,strong{

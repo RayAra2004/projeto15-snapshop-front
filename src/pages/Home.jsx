@@ -9,24 +9,16 @@ import { mainColor } from "../Colors/colors";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import LoadingComponent from "../Components/LoadingComponent";
+import BannerComponent from "../Components/BannerComponent";
+import { orderByName } from "../Utils/utils";
 export default function Home(){
 
     const [allProducts,setAllProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const {clientSearchValue,amountOfPages,setClientSearchValue,getUserInfo} = useContext(UserContext);
     const [currentPage,setCurrentPage] = useState(1);
-    const [currentBanner, setCurrentBanner] = useState(0);
     const location = useLocation();
-    const banners = [
-        'https://http2.mlstatic.com/D_NQ_880633-MLA70477554913_072023-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_603228-MLA70502856957_072023-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_969639-MLA70502889119_072023-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_687470-MLA70502996705_072023-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_613294-MLA70502998531_072023-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_605511-MLA70477564256_072023-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_727681-MLA70477708062_072023-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_702369-MLA70504685369_072023-OO.webp',
-      ];
+   
     useEffect(()=>{
         getUserInfo();
         const queryParams = new URLSearchParams(location.search);
@@ -57,32 +49,6 @@ export default function Home(){
         })
     },[]);
 
-    function orderByName(array) {
-        if (array) {
-          return array.sort((a, b) => {
-            if (a.name.toLowerCase() < b.name.toLowerCase()) {
-              return -1;
-            } else if (a.name.toLowerCase() > b.name.toLowerCase()) {
-              return 1;
-            } else {
-              return 0;
-            }
-          });
-        }else{
-            return null;
-        }
-        
-      }
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-          setCurrentBanner((prevBanner) =>
-            (prevBanner + 1) % banners.length
-          );
-        }, 5000);
-    
-        return () => clearInterval(interval);
-      }, []);
     
 
     function changePage(amount)
@@ -115,17 +81,7 @@ export default function Home(){
 
     return(
         <PageContainer>
-            <div className="banner-slider">
-                {banners.map((banner, index) => (
-                    <img
-                    key={index}
-                    src={banner}
-                    alt={`Banner ${index + 1}`}
-                    className={index === currentBanner ? 'active' : ''}
-                    decoding="async"
-                    />
-                ))}
-            </div>
+            <BannerComponent/>
             {
                 <ProductsContainer>
                     {
@@ -153,17 +109,14 @@ export default function Home(){
 }
 
 const HomePageController = styled.div`
-
     display: flex;
     justify-content: center;
     gap: 10px;
     align-items: center;
-    font-family: 'Mulish', sans-serif;
     color: black;
     margin-bottom: 10px;
 
     button{
-        transition: all 200ms;
         border: 0;
         background:0;
         cursor: pointer;
@@ -171,13 +124,12 @@ const HomePageController = styled.div`
         font-weight: bold;
         font-size: 20px;
         &:hover{
-
+            color: lightblue;
         }
     }
 `;
 
 const PageContainer = styled.div`
-
     width: 100%;
     height: auto;
     min-height: 100%;
@@ -186,30 +138,9 @@ const PageContainer = styled.div`
     justify-content: center;
     align-items: center;
     background-color: white;
-
-   
-
-    .banner-slider {
-        position: relative;
-        width: 100%;
-        height: 300px;
-        overflow: hidden;
-        margin-top: 120px;
-        max-width: 100%;
-       
-    }
-
-    .banner-slider img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        opacity: 0;
-        transition: opacity 0.5s ease-in-out;
-    }
-
-    .banner-slider img.active {
-        opacity: 1;
+    *{
+        transition: all 200ms;
+        font-family: 'Mulish', sans-serif;
     }
 `;
 
