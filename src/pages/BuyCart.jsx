@@ -16,7 +16,7 @@ import UserContext from "../Contexts/userContext";
 export default function BuyCart(){
     const location = useLocation();
     const navigate = useNavigate();
-    const {products} = location.state;
+    const {products} = location.state ? location.state : [];
     const {cartItems, setCartItems } = useContext(UserContext);
 
     const [cep, setCep] = useState('');
@@ -35,7 +35,7 @@ export default function BuyCart(){
   
 
     useEffect(() => {
-        if (!token) {
+        if (!token || !location.state) {
             navigate('/');
             return;
         }

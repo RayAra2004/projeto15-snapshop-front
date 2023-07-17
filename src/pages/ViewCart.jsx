@@ -165,7 +165,7 @@ export default function ViewCart() {
                             <SCProduct key={uuidv4()}>
                                 <div className="left">
                                     <div className="image">
-                                        <img src='' alt='' />
+                                        <img src='https://cdn-icons-png.flaticon.com/512/5372/5372351.png' alt='' />
                                         <p className="quantity">--</p>
                                     </div>
                                     <div className="name-desc">
