@@ -8,11 +8,12 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from 'uuid';
+import LoadingComponent from "../Components/LoadingComponent";
 
 export default function ViewCart() {
 
     const [products, setProducts] = useState(undefined);
-    const {cartItems, setCartItems } = useContext(UserContext);
+    const { cartItems, setCartItems } = useContext(UserContext);
     const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
@@ -27,16 +28,16 @@ export default function ViewCart() {
             navigate('/');
             return;
         }
-
+        scrollToElement();
         getProducts();
 
     }, []);
 
     useEffect(() => {
-       if(cartItems && products && cartItems.length !== products.length)
-       {
-        getProducts();
-       }
+        if (cartItems && products && cartItems.length !== products.length) {
+            
+            getProducts();
+        }
 
     }, [cartItems]);
 
@@ -49,6 +50,14 @@ export default function ViewCart() {
                 //console.log(res.data)
             })
             .catch(res => console.log(res));
+    }
+
+    function scrollToElement() {
+       const element = document.getElementById("213jklhlkasdnjkasdasd");
+       if(element)
+       {
+        element.scrollIntoView();
+       }
     }
 
 
@@ -79,7 +88,7 @@ export default function ViewCart() {
                             progress: undefined,
                             theme: "colored",
                         });
-                        
+
                         setProducts(products.filter(update => update._id !== id));
                         getProducts();
                     })
@@ -106,18 +115,15 @@ export default function ViewCart() {
         navigate(`/visualizar-produto/${prod._id}`, { state: { product: prod } });
     }
 
-    function buyAll(){
-       if(products)
-       {
-        if(products.length == 1)
-        {
-            navigate(`/comprar/${products[0]._id}`,{state:{name:products[0].name , quantity:products[0].quantity,value:products[0].value, picture:products[0].picture }});
+    function buyAll() {
+        if (products) {
+            if (products.length == 1) {
+                navigate(`/comprar/${products[0]._id}`, { state: { name: products[0].name, quantity: products[0].quantity, value: products[0].value, picture: products[0].picture } });
+            }
+            else if (products.length > 1) {
+                navigate('/comprar-carrinho', { state: { products } });
+            }
         }
-        else if(products.length > 1)
-        {
-            navigate('/comprar-carrinho', { state: {products}});
-        }
-       }
     }
 
     return (
@@ -125,7 +131,7 @@ export default function ViewCart() {
             <SCProducts>
                 {
                     products && products.length > 0 &&
-                    <button className="buy-all" onClick={() => buyAll()}>Comprar Tudo</button>
+                    <button id="213jklhlkasdnjkasdasd" className="buy-all" onClick={() => buyAll()}>Comprar Tudo</button>
                 }
                 {products && products.length == 0 && <p className="no-purchases">Você não possui itens no carrinho</p>}
                 {products && products.length > 0 && <p className="title"><BsFillCartFill /> Carrinho de compras <BsFillCartFill /></p>}
@@ -171,7 +177,7 @@ export default function ViewCart() {
                                         <span className="value"></span>
                                     </div>
                                     <SCActions>
-                                        <BsFillTrashFill className="delete"/>
+                                        <BsFillTrashFill className="delete" />
                                     </SCActions>
                                 </div>
                             </SCProduct>
@@ -180,9 +186,9 @@ export default function ViewCart() {
                 }
 
                 )}
-                {!products && <p className="loading">Carregando...</p>}
+                {!products && <LoadingComponent glass={true} color="white" />}
             </SCProducts>
-           
+
         </SCMyProducts>
     );
 }
@@ -272,7 +278,7 @@ const SCProducts = styled.div`
     @media (max-width:600px) {
         max-width: 100%;
     }
-    .no-purchases,.loading{
+    .no-purchases{
         color: white;
         font-family: 'Mulish', sans-serif;
         position: fixed;
@@ -295,6 +301,14 @@ const SCProducts = styled.div`
         font-weight: 800;
         cursor: pointer;
         font-family: 'Mulish', sans-serif;
+        transition: all 200ms;
+        @media (max-width:600px) {
+           width: 95%;
+        }
+        &:hover{
+            color: #0ce50c;
+            background-color: white;
+        }
     }
 `
 
@@ -416,15 +430,12 @@ const SCActions = styled.div`
     box-sizing: border-box;
     .delete{
         font-size: 25px;
+        margin-right: 10px;
         cursor: pointer;
         color: ${mainColor};
         transition: all 200ms;
         &:hover{
             color: #DDA0DD;
         }
-    }
-
-    .delete{
-        margin-right: 10px;
     }
 `

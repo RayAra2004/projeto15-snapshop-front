@@ -8,6 +8,7 @@ import UserContext from "../Contexts/userContext";
 import { mainColor } from "../Colors/colors";
 import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingComponent from "../Components/LoadingComponent";
 export default function Home(){
 
     const [allProducts,setAllProducts] = useState([]);
@@ -136,7 +137,7 @@ export default function Home(){
                         })
                     }
                     {
-                        isLoading && <p className="loading">Carregando..</p>
+                        isLoading && <LoadingComponent glass={true}/>
                     }
                 </ProductsContainer>
             }
@@ -182,6 +183,8 @@ const PageContainer = styled.div`
     min-height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: white;
 
    
@@ -218,19 +221,9 @@ const ProductsContainer = styled.div`
     gap: 20px;
     margin-top: 30px;
     height: auto;
+    max-width: 1300px;
     flex-direction: row;
     margin-bottom: 120px;
-
-    .loading{
-        color: ${mainColor};
-        font-family: 'Mulish', sans-serif;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        font-size: 20px;
-        white-space: nowrap;
-    }
 
     @media (max-width:440px) {
         margin-bottom: 180px;

@@ -28,7 +28,7 @@ export default function App() {
   const [amountOfPages,setAmountOfPages] = useState(1);
   const [clientSearchValue,setClientSearchValue] = useState('');
   const [cartItems,setCartItems] = useState([]);
-  const producstPerPage = 18;
+  const producstPerPage = 20;
 
   useEffect(()=>{
     getUserInfo();

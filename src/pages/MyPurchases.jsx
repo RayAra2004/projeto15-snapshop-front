@@ -6,6 +6,7 @@ import UserContext from "../Contexts/userContext";
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 import { BiSolidTruck } from "react-icons/bi";
+import LoadingComponent from "../Components/LoadingComponent";
 
 
 export default function MyPurchases() {
@@ -43,7 +44,7 @@ export default function MyPurchases() {
       }
 
     function renderProducts() {
-        if (products === undefined) return <p>Carregando...</p>
+        if (products === undefined) return <LoadingComponent color="white"/>
         if (products && products.length == 0) return <p className="no-purchases">Você não possui compras</p>
         return (
             products.map(product => {

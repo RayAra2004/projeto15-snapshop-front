@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { v4 as uuidv4 } from 'uuid';
 import illustration from '../assets/my_products.svg';
+import LoadingComponent from "../Components/LoadingComponent";
 
 export default function MyProducts() {
 
@@ -132,7 +133,7 @@ export default function MyProducts() {
                         </div>
                     </SCProduct>
                 )}
-                {!products && <p className="loading">Carregando...</p>}
+                {!products && <LoadingComponent color={'white'}/>}
             </SCProducts>
 
         </SCMyProducts>
@@ -203,17 +204,6 @@ const SCProducts = styled.div`
     box-sizing: border-box;
     max-width: 575px;
     width: 100%;
-
-    .loading{
-        color: white;
-        font-family: 'Mulish', sans-serif;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%,-50%);
-        font-size: 20px;
-        white-space: nowrap;
-    }
 `
 
 const SCProduct = styled.div`
