@@ -131,7 +131,7 @@ export default function EditProduct() {
                         </div>
                     </div>
                     <label htmlFor="pdesc">Descrição</label>
-                    <textarea type="text" required id="pdesc" name="pdesc" ref={descriptionRef} placeholder="e.g: O produto contém: 1 furadeira bosch.." />
+                    <textarea type="text" required id="pdesc" maxLength={4000} name="pdesc" ref={descriptionRef} placeholder="e.g: O produto contém: 1 furadeira bosch.." />
 
                     <div className="bottom">
                         <div>

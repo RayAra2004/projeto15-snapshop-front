@@ -10,6 +10,9 @@ import { useState } from "react";
 import EditUser from "../Components/EditUser";
 import { useEffect } from "react";
 import axios from "axios";
+import { useContext } from "react";
+import UserContext from "../Contexts/userContext";
+import { useNavigate } from "react-router-dom";
 
 export default function UserProfile(){
     const [isClicked, setIsClicked] = useState(false)
@@ -19,8 +22,16 @@ export default function UserProfile(){
     const [cities, setCities] = useState("")
     const [genders, setGenders] = useState("")
     const [updatedUser, setUpdatedUser] = useState(false)
-
+    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
     useEffect(() => {
+        
+        if(!user || !localStorage.getItem('token'))
+        {
+            navigate('/');
+            return;
+        }
+
         axios.get(`${import.meta.env.VITE_API_URL}/info-usuario`,{headers:{Authorization:localStorage.getItem('token')}})
         .then((res)=>{
             //console.log(res.data.user)
