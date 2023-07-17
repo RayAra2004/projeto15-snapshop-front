@@ -64,7 +64,7 @@ export default function ViewCart() {
     function deleteProduct(e, id, name, picture) {
         e.stopPropagation();
         Swal.fire({
-            title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Remover ${name} do banco de dados?</span>`,
+            title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Remover ${name} do carrinho?</span>`,
             showCancelButton: true,
             confirmButtonColor: '#c9c9c9',
             cancelButtonColor: `${mainColor}`,
@@ -78,7 +78,7 @@ export default function ViewCart() {
             if (result.isConfirmed) {
                 axios.delete(`${import.meta.env.VITE_API_URL}/carrinho/${id}`, config)
                     .then(res => {
-                        toast.info(`${name} removido do banco de dados!`, {
+                        toast.info(`${name} removido do carrinho!`, {
                             position: "top-center",
                             autoClose: 2000,
                             hideProgressBar: true,
@@ -94,7 +94,7 @@ export default function ViewCart() {
                     })
                     .catch(res => {
                         console.log(res.data);
-                        toast.error(`Falha ao remover ${name} do banco de dados!`, {
+                        toast.error(`Falha ao remover ${name} do carrinho!`, {
                             position: "top-center",
                             autoClose: 2000,
                             hideProgressBar: true,

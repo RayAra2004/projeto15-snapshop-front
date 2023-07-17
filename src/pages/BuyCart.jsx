@@ -234,7 +234,7 @@ export default function BuyCart(){
                         </div>
                         <div>
                             <label htmlFor="expiration">Vencimento</label>
-                            <input id="expiration" name="expiration" type="date" placeholder="MM/AA" value={expiration} onChange={e => setExpiration(e.target.value)} required={paymentMethod == 'creditCard' || paymentMethod == 'debitCard'} />
+                            <input id="expiration" name="expiration" type="text" placeholder="MM/AA" value={expiration} onChange={e => setExpiration(e.target.value)} required={paymentMethod == 'creditCard' || paymentMethod == 'debitCard'} />
                         </div>
                         <div>
                             <label htmlFor="cvv">CVV</label>

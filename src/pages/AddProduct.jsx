@@ -158,7 +158,7 @@ export default function AddProduct() {
                         </div>
                     </div>
                     <label htmlFor="pdesc">Descrição</label>
-                    <textarea autoComplete="description" type="text" required id="pdesc" name="pdesc" ref={descriptionRef} maxLength={2000} minLength={0} placeholder="e.g: O produto contém: 1 furadeira bosch.." />
+                    <textarea autoComplete="description" type="text" required id="pdesc" name="pdesc" ref={descriptionRef} maxLength={4000} minLength={0} placeholder="e.g: O produto contém: 1 furadeira bosch.." />
 
                     <div className="bottom">
                         <div>
