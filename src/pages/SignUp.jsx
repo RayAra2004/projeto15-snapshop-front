@@ -55,6 +55,7 @@ export default function SignUp(){
     }
     async function submitForm(e){
         e.preventDefault();
+        if(isLoading) return;
         setIsLoading(true);
 
         if(form.password !== form.confirmPassword){

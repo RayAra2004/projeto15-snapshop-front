@@ -11,7 +11,7 @@ import LoadingComponent from "../Components/LoadingComponent";
 
 export default function MyPurchases() {
     const [products, setProducts] = useState(undefined);
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
 
@@ -23,7 +23,7 @@ export default function MyPurchases() {
 
     useEffect(() => {
 
-        if (!token) {
+        if (!token || !user) {
             navigate('/');
             return;
         }

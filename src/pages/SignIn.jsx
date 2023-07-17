@@ -27,6 +27,7 @@ export default function SignIn(){
 
     function login(email,password,googleObj)
     {
+        if(isLoading) return;
         setIsLoading(true);
         axios
         .post(`${import.meta.env.VITE_API_URL}/login`, {email,password})

@@ -32,6 +32,7 @@ export default function BuyCart(){
     const [nameHolder, setNameHolder] = useState('');
     const [total, setTotal] = useState(0);
     const token = localStorage.getItem('token');
+    const [inBuyProcess,setInBuyProcess] = useState(false);
   
 
     useEffect(() => {
@@ -41,13 +42,14 @@ export default function BuyCart(){
         }
 
         if(products) calculateTotal()
-    }, [])
+    }, []);
 
     const config = {
         headers: {
             "Authorization": `${token}`
         }
     }
+
     function clearCartItems()
     {
         axios.delete(`${import.meta.env.VITE_API_URL}/limpar-carrinho`,config)
@@ -71,6 +73,7 @@ export default function BuyCart(){
 
     function finalizarCompra(e) {
         e.preventDefault();
+        if(inBuyProcess) return;
         if(paymentMethod == '')
         {
             toast.error( 'Selecione um método de pagamento!', {
@@ -107,6 +110,10 @@ export default function BuyCart(){
 
     function buy()
     {
+        if(inBuyProcess) return;
+
+        setInBuyProcess(true);
+        
         const ids = products.map(p => p._id);
         const quantities = products.map(q => q.quantity);
        
@@ -131,8 +138,12 @@ export default function BuyCart(){
                 });
                 clearCartItems();
                 navigate('/');
+                setInBuyProcess(false);
             })
-            .catch(res => console.log(res))
+            .catch(res => {
+                console.log(res);
+                setInBuyProcess(false);
+            })
     }
 
     function fillIn(v) {
@@ -267,7 +278,7 @@ export default function BuyCart(){
                 <SCCheckout>
                         <span className="payment-form">{paymentMethod !== '' ? 'Forma de pagamento: ' : ''} {paymentMethod == 'creditCard' ? 'Crédito' : paymentMethod == 'debitCard' ? 'Débito' : paymentMethod == 'pix' ? 'Pix' : paymentMethod == 'boleto' ? 'Boleto' : 'Selecione a forma de pagamento'}</span>
                         <h2>R${String(Number(total).toFixed(2)).replace('.', ',')}</h2>
-                        <button form="form">Finalizar Compra</button>
+                        <button form="form">{inBuyProcess ? 'Processando..' : 'Finalizar Compra'}</button>
                 </SCCheckout> 
             </SCContainer>            
         </SCBuy>

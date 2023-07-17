@@ -15,7 +15,8 @@ import LoadingComponent from "../Components/LoadingComponent";
 export default function MyProducts() {
 
     const [products, setProducts] = useState(undefined);
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
+    const [deleting,setDeleting] = useState(false);
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const config = {
@@ -25,7 +26,7 @@ export default function MyProducts() {
     }
 
     useEffect(() => {
-        if (!token) {
+        if (!token || !user) {
             navigate('/');
             return;
         }
@@ -45,6 +46,8 @@ export default function MyProducts() {
 
     function deleteProduct(id, picture, name, e) {
         e.stopPropagation();
+        if(deleting) return;
+        setDeleting(true);
         Swal.fire({
             title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Remover ${name} do banco de dados?</span>`,
             showCancelButton: true,
@@ -72,9 +75,11 @@ export default function MyProducts() {
                         });
                         setProducts(products.filter(update => update._id !== id));
                         getProducts();
+                        setDeleting(false);
                     })
                     .catch(res => {
                         console.log(res.data);
+                        setDeleting(false);
                         toast.error(`Falha ao remover ${name} do banco de dados!`, {
                             position: "top-center",
                             autoClose: 2000,
