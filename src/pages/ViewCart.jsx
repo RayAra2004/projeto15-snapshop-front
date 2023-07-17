@@ -14,7 +14,8 @@ export default function ViewCart() {
 
     const [products, setProducts] = useState(undefined);
     const { cartItems, setCartItems } = useContext(UserContext);
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
+    const [deleting,setDeleting] = useState(false);
     const navigate = useNavigate();
     const token = localStorage.getItem('token');
     const config = {
@@ -24,7 +25,7 @@ export default function ViewCart() {
     }
 
     useEffect(() => {
-        if (!token) {
+        if (!token || !user) {
             navigate('/');
             return;
         }
@@ -63,6 +64,8 @@ export default function ViewCart() {
 
     function deleteProduct(e, id, name, picture) {
         e.stopPropagation();
+        if(deleting) return;
+        setDeleting(true);
         Swal.fire({
             title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Remover ${name} do carrinho?</span>`,
             showCancelButton: true,
@@ -88,12 +91,13 @@ export default function ViewCart() {
                             progress: undefined,
                             theme: "colored",
                         });
-
+                        setDeleting(false);
                         setProducts(products.filter(update => update._id !== id));
                         getProducts();
                     })
                     .catch(res => {
                         console.log(res.data);
+                        setDeleting(false);
                         toast.error(`Falha ao remover ${name} do carrinho!`, {
                             position: "top-center",
                             autoClose: 2000,

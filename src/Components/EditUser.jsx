@@ -14,7 +14,8 @@ export default function EditUser({ setIsClicked, setUpdatedUser, updatedUser, fo
     }
 
     function onSubmit(e) {
-        e.preventDefault()
+        e.preventDefault();
+        if(isLoading) return;
         setIsLoading(true);
 
         axios

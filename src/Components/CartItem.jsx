@@ -6,9 +6,12 @@ import styled from "styled-components";
 import { BsFillTrashFill } from "react-icons/bs";
 import { mainColor } from "../Colors/colors";
 import axios from "axios";
+import { useState } from "react";
 
 export default function CartItem({item}) {
     const {cartItems, setCartItems } = useContext(UserContext);
+    const [deleting,setDeleting] = useState(false);
+    
     const config = {
         headers: {
             "Authorization": localStorage.getItem('token')
@@ -16,6 +19,8 @@ export default function CartItem({item}) {
     }
 
     function remove() {
+        if(deleting) return;
+        setDeleting(true);
         Swal.fire({
             title: `<span style="font-family: 'Mulish', sans-serif;font-size: 20px;color:black">Remover ${item.name} do carrinho?</span>`,
             showCancelButton: true,
@@ -33,6 +38,7 @@ export default function CartItem({item}) {
                 axios.delete(`${import.meta.env.VITE_API_URL}/carrinho/${item._id}`,config)
                 .then((res) =>{
                     setCartItems(newCartItems);
+                    setDeleting(false);
                     toast.info( `${item.name} removido do carrinho com sucesso!`, {
                         position: "top-center",
                         autoClose: 2000,
@@ -46,6 +52,7 @@ export default function CartItem({item}) {
                 })
                 .catch((error)=>{
                     console.log(error);
+                    setDeleting(false);
                     toast.error(`Falha ao remover ${item.name} do carrinho!`, {
                         position: "top-center",
                         autoClose: 2000,

@@ -30,6 +30,7 @@ export default function BuyProduct() {
     const { user } = useContext(UserContext);
     const token = localStorage.getItem('token');
     const location = useLocation();
+    const [inBuyProcess,setInBuyProcess] = useState(false);
 
     const { name, value, picture, quantity } = location.state ? location.state : {name:'',value:0,picture:'',quantity:0};
 
@@ -59,6 +60,7 @@ export default function BuyProduct() {
 
     function finalizarCompra(e) {
         e.preventDefault();
+        if(inBuyProcess) return;
         if(paymentMethod == '')
         {
             toast.error( 'Selecione um método de pagamento!', {
@@ -95,6 +97,10 @@ export default function BuyProduct() {
 
     function buy()
     {
+        if(inBuyProcess) return;
+
+        setInBuyProcess(true);
+        
         let body;
         
         if (paymentMethod === 'pix' || paymentMethod === 'boleto') {
@@ -116,8 +122,12 @@ export default function BuyProduct() {
                     theme: "colored",
                 });
                 navigate('/');
+                setInBuyProcess(false);
             })
-            .catch(res => console.log(res))
+            .catch(res => {
+                console.log(res);
+                setInBuyProcess(false);
+            })
     }
 
     function fillIn(v) {
@@ -231,7 +241,7 @@ export default function BuyProduct() {
                 <span className="amount">Quantidade: {quantity}</span>
                 {paymentMethod !== '' && <span className="payment-form">Forma de pagamento: {paymentMethod == 'creditCard' ? 'Crédito' : paymentMethod == 'debitCard' ? 'Débito' : paymentMethod == 'pix' ? 'Pix' : paymentMethod == 'boleto' ? 'Boleto' : ''}</span>}
                 <h2>R${String(Number(value * quantity).toFixed(2)).replace('.', ',')}</h2>
-                <button form="form">Finalizar Compra</button>
+                <button form="form">{inBuyProcess ? 'Processando..' : 'Finalizar Compra'}</button>
             </SCProduct>
         </SCBuy>
     );

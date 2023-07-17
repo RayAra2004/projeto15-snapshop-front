@@ -56,6 +56,7 @@ export default function AddProduct() {
 
       async function createProduct(e) {
         e.preventDefault();
+        if(isLoading) return;
         setIsLoading(true);
         let valid = true;
 

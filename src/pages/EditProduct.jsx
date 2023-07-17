@@ -44,6 +44,8 @@ export default function EditProduct() {
 
     function editProduct(e) {
         e.preventDefault();
+        if(isLoading) return;
+        
         setIsLoading(true);
 
         const newProduct = {
