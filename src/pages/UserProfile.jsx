@@ -23,7 +23,7 @@ export default function UserProfile(){
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL}/info-usuario`,{headers:{Authorization:localStorage.getItem('token')}})
         .then((res)=>{
-            console.log(res.data.user)
+            //console.log(res.data.user)
             const {photo, userName, state, city, gender} =  res.data.user;
             setFoto(photo);
             setNameUser(userName);
@@ -69,18 +69,32 @@ export default function UserProfile(){
 
 const Container = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content:center;
     align-items: center;
+    gap: 10px;
     padding-top: 150px;
     box-sizing: border-box;
     background-color: #FFFFFF;
     height: 100%;
+
+    *{
+        transition: all 200ms;
+    }
+
+    @media (max-width:820px) {
+        flex-direction: column;
+    }
 `
 
 const LogoDateFile = styled.img`
     width: 250px;
     margin-top: 50px;
     padding-left: 100px;
+    @media (max-width:420px) {
+       width: 0;
+       margin: 0;
+       padding: 0;
+    }
 `
 
 const Profile = styled.div`
@@ -90,14 +104,26 @@ const Profile = styled.div`
     width: 400px;
     height: 450px;
     background-color: #FFE4E1;
-    margin-right: 200px;
+    margin-right: 20px;
     box-sizing: border-box;
     border: 1px solid ${secondaryColor};
     border-radius: 10px;
+    padding: 20px;
+    min-width: 280px;
+    @media (max-width:820px) {
+        margin-right: 0;
+    }
+
+    @media (max-width:405px) {
+        width: 100%;
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+    }
 `
 
 const Button = styled.button`
-    width: 300px;
+    width: 100%;
     height: 35px;
     border: 0;
     border-radius: 5px;
@@ -106,9 +132,14 @@ const Button = styled.button`
     font-size: 15px;
     font-weight: 700;
     color: #FFFFFF;
-    margin-top: 35px;
+    margin-top: 15px;
     cursor: pointer;
     transition: all 200ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-shrink: 0;
     &:hover{
         color: ${secondaryColor};
         background-color: white;
@@ -126,8 +157,17 @@ const ProfilePicture = styled.img`
 
 const Banner = styled.div`
     width: 500px;
-    margin-left: 150px;
+    margin-left: 20px;
     box-sizing: border-box;
+    @media (max-width:820px) {
+        margin-left: 0;
+    }
+
+    @media (max-width:515px) {
+        width: 100%;
+    }
+
+    
 
     & h1{
         font-family: 'Mulish', sans-serif;

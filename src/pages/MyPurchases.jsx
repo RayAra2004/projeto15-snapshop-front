@@ -6,6 +6,7 @@ import UserContext from "../Contexts/userContext";
 import axios from "axios";
 import { v4 as uuidv4 } from 'uuid';
 import { BiSolidTruck } from "react-icons/bi";
+import LoadingComponent from "../Components/LoadingComponent";
 
 
 export default function MyPurchases() {
@@ -30,7 +31,6 @@ export default function MyPurchases() {
         axios.get(`${import.meta.env.VITE_API_URL}/minhas-compras`, config)
             .then(res => {
                 setProducts(res.data);
-                console.log(res.data);
             })
             .catch(res => console.log(res));
     }, []);
@@ -44,7 +44,7 @@ export default function MyPurchases() {
       }
 
     function renderProducts() {
-        if (products === undefined) return <p>Carregando...</p>
+        if (products === undefined) return <LoadingComponent color="white"/>
         if (products && products.length == 0) return <p className="no-purchases">Você não possui compras</p>
         return (
             products.map(product => {
@@ -82,7 +82,7 @@ export default function MyPurchases() {
                                             {
                                                 product.buys.map((b,index)=> {
                                                     return (
-                                                        <p className="mini-name">
+                                                        <p  key={uuidv4()} className="mini-name">
                                                             {b.name.substring(0, 10).trim()}{b.name.length > 10 ? '...' : ''}
                                                             <span className="mini-amount">{product.info.amount[index]}</span> 
                                                         </p>
@@ -93,7 +93,7 @@ export default function MyPurchases() {
                                     </div>
                                     <div className="numbers">
                                         <span>R$ {String(Number(product.info.price ? product.info.price : product.value).toFixed(2)).replace('.', ',')}</span>
-                                        <p className="quant">Quantidade: {totalItems}</p>
+                                        <p className="quant">{totalItems} itens</p>
                                     </div>
                                 </div>
                                 <div className="secondary">
@@ -350,7 +350,7 @@ const Purchase = styled.div`
             span{
                 font-size: 25px;
                 @media (max-width:459px) {
-                    font-size: 20px;
+                    font-size: 15px;
                 }
             }
         }
@@ -383,8 +383,8 @@ const Purchase = styled.div`
 
     img{
         width: 70px;
-        max-width: 130px;
-        height: 70px;
+        object-fit: cover;
+        aspect-ratio: 1;
         border-radius: 50%;
         margin-right: 15px;
         border: 1px solid ${secondaryColor};

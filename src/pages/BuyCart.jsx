@@ -50,7 +50,12 @@ export default function BuyCart(){
     }
     function clearCartItems()
     {
-        //setCartItems([]);
+        axios.delete(`${import.meta.env.VITE_API_URL}/limpar-carrinho`,config)
+        .then((res)=>{
+            setCartItems([]);
+        }).catch((err)=>{
+            console.log(err);
+        })
     }
 
     function searchCEP(value) {

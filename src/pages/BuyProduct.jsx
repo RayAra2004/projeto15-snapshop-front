@@ -96,10 +96,11 @@ export default function BuyProduct() {
     function buy()
     {
         let body;
+        
         if (paymentMethod === 'pix' || paymentMethod === 'boleto') {
-            body = {idProducts:[id], price:value, amount: [quantity], cep, city, neighborhood, state, street, number, paymentMethod }
+            body = {idProducts:[id], price:value * quantity, amount: [quantity], cep, city, neighborhood, state, street, number, paymentMethod }
         } else {
-            body = {idProducts:[id], price:value, amount: [quantity], cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
+            body = {idProducts:[id], price:value * quantity, amount: [quantity], cep, city, neighborhood, state, street, number, paymentMethod, cardNumber, expiration, cvv, nameHolder }
         }
 
         axios.post(`${import.meta.env.VITE_API_URL}/comprar`, body, config)
@@ -229,7 +230,7 @@ export default function BuyProduct() {
                 <h1>{name.substring(0,20).trim()}{name.length > 20 ? '...' : ''}</h1>
                 <span className="amount">Quantidade: {quantity}</span>
                 {paymentMethod !== '' && <span className="payment-form">Forma de pagamento: {paymentMethod == 'creditCard' ? 'Crédito' : paymentMethod == 'debitCard' ? 'Débito' : paymentMethod == 'pix' ? 'Pix' : paymentMethod == 'boleto' ? 'Boleto' : ''}</span>}
-                <h2>R${String(Number(value).toFixed(2)).replace('.', ',')}</h2>
+                <h2>R${String(Number(value * quantity).toFixed(2)).replace('.', ',')}</h2>
                 <button form="form">Finalizar Compra</button>
             </SCProduct>
         </SCBuy>

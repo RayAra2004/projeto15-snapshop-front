@@ -1,10 +1,9 @@
 import styled from "styled-components";
 import { headerColor, mainColor } from "../Colors/colors.js";
-import favicon from "../assets/favicon.png"
+import favicon from "../assets/new-logo.png"
 import { BsSearch } from 'react-icons/bs';
 import { useLocation, useNavigate } from "react-router";
 import banner from '../assets/banner.png'
-import { useRef } from "react";
 import { useWindowSize } from "@uidotdev/usehooks";
 import { useContext } from "react";
 import UserContext from "../Contexts/userContext.js";
@@ -18,9 +17,14 @@ export default function Header() {
     const size = useWindowSize();
     const {clientSearchValue,setClientSearchValue} = useContext(UserContext);
  
-    function search()
+    function search(e)
     {
-        console.log(searchRef.current.value);
+       e.preventDefault();
+       
+        if(location.pathname !== '/')
+        {
+            navigate(`/?search=${clientSearchValue}`);
+        }
     }
 
     return (
@@ -34,9 +38,9 @@ export default function Header() {
 
                 {location.pathname !== '/cadastro' && location.pathname !== '/login' && location.pathname !== '/adicionar-produto' && 
 
-                    <SearchBar>
-                        <input value={clientSearchValue} onChange={(e)=> setClientSearchValue(e.target.value)} type="text" placeholder={size.width < 500 ? 'Buscar produtos...' : "Buscar produtos, marcas e muito mais…"} />
-                        <BsSearch onClick={search} className="search-icon" />
+                    <SearchBar onSubmit={search}>
+                        <input name="snap-search" id="snap-search" value={clientSearchValue} onChange={(e)=> setClientSearchValue(e.target.value)} type="text" placeholder={size.width < 500 ? 'Buscar produtos...' : "Buscar produtos, marcas e muito mais…"} />
+                        <BsSearch type="button" onClick={search} className="search-icon" />
                     </SearchBar>
                 }
 
@@ -84,7 +88,7 @@ const HeaderContainer = styled.header`
     }
 `;
 
-const SearchBar = styled.div`
+const SearchBar = styled.form`
 
     display: flex;
     align-items: center;
@@ -132,16 +136,18 @@ const Logo = styled.div`
 
     .favicon{
         transition: all 200ms;
-        width: 60px;
+        width: 50px;
+        margin-right: 10px;
+        margin-left: 10px;
         @media (max-width:840px) {
             position: fixed;
             left: 10px;
-            top: -5px;
+            top: 10px;
         }
 
         @media (max-width:500px) {
             left: 10px;
-            top: 10px;
+            top: 15px;
             width: 40px;
         }
        
