@@ -55,11 +55,11 @@ export default function MyPurchases() {
                             <Purchase key={uuidv4()}>
                                 <div className="main">
                                     <div className="image-and-name">
-                                        <img src={product.buys[0].picture} alt={product.name} />
-                                        <p>{product.buys[0].name.substring(0, 10).trim()}{product.buys[0].name.length > 10 ? '...' : ''}</p>
+                                        <img src={product.buys[0] ? product.buys[0].picture : 'https://cdn-icons-png.flaticon.com/512/5372/5372351.png'} alt={product.buys[0] ? product.buys[0].name : 'Indisponível'} />
+                                        <p>{product.buys[0] ? product.buys[0].name.substring(0, 10).trim() : 'Produto indisponível'}{product.buys[0] && product.buys[0].name.length > 10 ? '...' : ''}</p>
                                     </div>
                                     <div className="numbers">
-                                        <span>R$ {String(Number(product.info.price ? product.info.price : product.value).toFixed(2)).replace('.', ',')}</span>
+                                        <span>R$ {String(Number(product.info.price ? product.info.price : product ? product.value : '0').toFixed(2)).replace('.', ',')}</span>
                                         <p className="quant">Quantidade:{product.info.amount}</p>
                                     </div>
                                 </div>
@@ -71,20 +71,21 @@ export default function MyPurchases() {
                     }
                     else
                     {
+                        // Amount is an array of numbers
                         const totalItems = somarMatriz(product.info.amount);
                         
                         return (
                             <CompostPurchase key={uuidv4()}>
                                 <div className="main">
                                     <div className="image-and-name">
-                                        <img src={product.buys[0].picture} alt={product.name} />
+                                        <img src={product.buys[0] ? product.buys[0].picture : 'https://cdn-icons-png.flaticon.com/512/5372/5372351.png'} alt={product.buys[0] ? product.buys[0].name : 'Indisponível'} />
                                         <div className="names">
                                             {
                                                 product.buys.map((b,index)=> {
                                                     return (
                                                         <p  key={uuidv4()} className="mini-name">
-                                                            {b.name.substring(0, 10).trim()}{b.name.length > 10 ? '...' : ''}
-                                                            <span className="mini-amount">{product.info.amount[index]}</span> 
+                                                            {b ? b.name.substring(0, 10).trim() : 'Indisponível'}{b && b.name && b.name.length > 10 ? '...' : ''}
+                                                            <span className="mini-amount">{product.info && product.info.amount && product.info.amount[index]}</span> 
                                                         </p>
                                                     );
                                             })
@@ -102,26 +103,6 @@ export default function MyPurchases() {
                             </CompostPurchase>
                         );
                     }
-                }
-                else
-                {
-                    return (
-                        <Purchase key={uuidv4()}>
-                            <div className="main">
-                                <div className="image-and-name">
-                                    <img src='https://cdn-icons-png.flaticon.com/512/5372/5372351.png' alt='' />
-                                    <p>Produto Indisponível</p>
-                                </div>
-                                <div className="numbers">
-                                    <span>R$ {product.info.price.toFixed(2).toString().replace('.',',')}</span>
-                                    <p className="quant">Quantidade:{product.info.amount}</p>
-                                </div>
-                            </div>
-                            <div className="secondary">
-                                <p className="adress"><BiSolidTruck className="truck" /> {`${product.info.street} ${product.info.number} - ${product.info.neighborhood} - ${product.info.city},${product.info.state}`.substring(0, 40)}...</p>
-                            </div>
-                        </Purchase>
-                    );
                 }
             }
             )

@@ -31,10 +31,10 @@ export default function BuyProduct() {
     const token = localStorage.getItem('token');
     const location = useLocation();
 
-    const { name, value, picture, quantity } = location.state;
+    const { name, value, picture, quantity } = location.state ? location.state : {name:'',value:0,picture:'',quantity:0};
 
     useEffect(() => {
-        if (!token) {
+        if (!token || !location.state) {
             navigate('/');
             return;
         }
