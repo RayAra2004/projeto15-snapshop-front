@@ -136,10 +136,8 @@ export default function SignIn(){
                     size="large"
                     useOneTap
                     auto_select
-                    context="signin"
-                    width="315"
-                    state_cookie_domain="google-snapshop"
-                    prompt_parent_id="s1j89281h168egdsadjkh712"
+                    
+                   
                     ux_mode="popup"
                 />
                 <Link to={"/cadastro"}>
